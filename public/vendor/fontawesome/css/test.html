@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo completo Font Awesome</title>
+<link rel="stylesheet" href="all.min.css">
+    <style>
+        * { box-sizing: border-box;}
+        .custom-dropdown {
+            position: relative; /* ancla el menú al botón */
+            display: inline-block;
+        }
+        .dropdown-btn {padding: 0.5rem 1rem; background: #eee; border-radius: 6px; cursor: pointer; width: 150px;}
+        .dropdown-list {
+            position: absolute;
+            top: 100%; /* justo debajo del botón */
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 150px;
+            z-index: 9999; /* 👈 hace que esté por encima de todo */
+        }
+        .dropdown-list button {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .dropdown-list li:hover {background: #f0f0f0;}
+        .hidden {display: none;}
+    </style>
+</head>
+<body>
+    <header style="background: #ddd; padding: 1rem;">
+        <nav>
+            <div class="custom-dropdown">
+                <button class="dropdown-btn">USUARIO</button>
+                <ul class="dropdown-list hid1den">
+                    <button class="option-btn perfil">Perfil</button>
+                    <button class="option-btn estadisticas">Estadísticas</button>
+                    <button class="option-btn configuracion">Configuración</button>
+                    <button class="option-btn cuentas">Cuentas</button>
+                    <button class="option-btn documentacion">Documentación</button>
+                    <button class="option-btn cerrar-sesion">Cerrar Sesión</button>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section style="padding: 3rem; background: #fafafa; position: relative;">
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <p>Contenido de la página...</p>
+        <div style="position: fixed; background-color: red; width: 100px; height: 100px; right: 50px; bottom: 50px;">
+            DIV
+        </div>
+
+    </section>
+    <script>
+        const btn = document.querySelector(".dropdown-btn");
+        const list = document.querySelector(".dropdown-list");
+
+
+        btn.addEventListener("click", () => {
+            list.classList.toggle("hidden");
+        });
+
+        list.addEventListener("click", (e) => {
+            if(e.target.classList.contains('option-btn')) {
+                btn.textContent = e.target.textContent;
+                list.classList.toggle("hidden");
+            }
+        });
+
+        // Cierra el menú si hacés click fuera
+        document.addEventListener("click", (e) => {
+            if (!btn.contains(e.target) && !list.contains(e.target)) {
+                list.classList.add("hidden");
+            }
+        });
+    </script>
+</body>
+</html>

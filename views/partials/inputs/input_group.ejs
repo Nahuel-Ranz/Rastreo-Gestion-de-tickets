@@ -1,0 +1,44 @@
+<!--
+    data = {
+        property,
+        type,
+        required
+    }
+-->
+
+<div
+    id="<%= data.property %>_group"
+    class="<%= data.property %>_group"
+>
+    <label
+        for="<%= data.property %>_input"
+        id="<%= data.property %>_label"
+        class="<%= data.property %>_label"
+    >
+        <%= data.property === 'dni'
+        ? 'DNI N°'
+        : data.property.charAt(0).tuUpperCase()+ data.property.slide(1); %>
+    </label>
+    <div
+        id="<%= data.property %>_input_group"
+        class="<%= data.property_input_group"
+    >
+        <input
+            type="<%= data.type"
+            id="<%= data.property %>_input"
+            class="<%= data.property %>_input"
+        >
+        <i class="fas fa-"></i>
+    </div>
+</div>
+
+<!---->
+<div id="name_group" class="name_group">
+    <label for="name_input" id="name_label" class="name_label">Nombre</label>
+    <div id="name_input_icon" class="name_input_icon">
+        <input type="text" id="name_input" class="name_input" required/>
+        <i></i>
+    </div>
+    <p></p>
+</div>
+<!---->

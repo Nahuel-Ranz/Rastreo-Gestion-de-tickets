@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="/styles/tickets/ticket_collector.css" />
+<link rel="stylesheet" href="/styles/tickets/ticket_card.css" />
+
+<div id="ticket_collector" class="ticket_collector">
+    <% requests.forEach(task => { %>
+        <%- include('tickets/ticket', { task }); %>
+    <% }); %>
+    <div id="new_task" class="new_task">
+        <button>Agregar una nueva tarea</button>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div id="ticket_container" class="ticket_container">
+    <div id="task_and_time" class="task_and_time">
+        <p>Tarea N°: <%= task.id %></p>
+        <div id="date_and_hour" class="date_and_hour">
+            <p>Fecha de solicitud: <%= task.fecha %></p>
+            <p>Hora: <%= task.hora %></p>
+        </div>
+    </div>
+    <div id="requester" class="requester">
+        <p>Solicitante: <%= task.solicitante %></p>
+        <button type="button">>> Más detalles ...</button>
+    </div>
+    <div id="requester_origin" class="requester_origin">
+        <p>Procedencia: <%= task.procedencia %></p>
+        <button type="button">>> Más detalles ...</button>
+    </div>
+    <div id="task_details" class="task_details">
+        <p><%= task.detalles_solicitud %></p>
+    </div>
+    <div id="task_state_and_button">
+        <p>Estado: <%= task.estado %></p>
+        <button type="button">Iniciar</button>
+    </div>
+</div>
