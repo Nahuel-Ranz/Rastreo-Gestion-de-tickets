@@ -1,0 +1,40 @@
+#footer {
+    background-color: var(--primary-color);
+    width: var(--full-width-parent);
+    min-width: var(--min-width);
+    position: relative;
+    bottom: 0;
+
+    #utn-frre-group {
+        width: var(--full-width-parent);
+        justify-content: start;
+
+        @media(max-width:520px){
+            flex-direction: column;
+            align-items: center;
+            p { text-align: center;}
+        }
+    }
+
+    #seu-group {
+        width: 80%;
+
+        @media(max-width:520px){
+            flex-direction: column;
+            width: var(--full-width-parent);
+            p { text-align: center;}
+        }
+    }
+
+    p {
+        color: var(--primary-font-color);
+        font-family: var(--global-fonts);
+        font-size: 14px;
+    }
+
+    @media(max-width:920px){
+        flex-direction:column;
+        gap: 20px;
+        align-items: start;
+    }
+}

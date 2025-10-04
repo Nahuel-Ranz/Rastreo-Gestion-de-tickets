@@ -1,0 +1,47 @@
+:root {
+    /* ------------ all colors ------------ */
+    /* page colors*/
+    --primary-color: #000;
+    --secondary-color: #444;
+    --tertiary-color: #888;
+    
+    --primary-font-color: #fff;
+    --secondary-font-color: #999;
+    --tertiary-font-color: #555;
+    --message-error: #f00;
+    
+    --border-primary-color: #999;
+    --border-secondary-color: #ccc;
+    --border-tertiary-color: #fff;
+
+    
+    /* button colors*/
+    --button-background-color: #8f9299;
+    --button-border-color: #343434;
+    
+    --shadow: #dcdcdc;
+
+    /* ticket status */
+    --status-not-seen: #1d4ed8;
+    --status-seen: #6b7280;
+    --status-missing-info: #d97706;
+    
+    --status-pending: #ca8a04;
+    --status-in-execution: #1e40af;
+    --status-completed: #15803d;
+    --status-canceled: #485563;
+    --status-not-done: #b91c1c;
+    
+    /* spaces */
+    --space-among-elements: 5%;
+    --horizontal-padding: 3%;
+    --vertical-padding: 1%;
+    --full-width-parent: 100%;
+    --font-size: 1.1em;
+    --image-height: 100px;
+    --icon-size:40px;
+    --min-width: 350px;
+    --radius: 25%;
+
+    --global-fonts: "Arial", "Helvetica", sans-serif;
+}

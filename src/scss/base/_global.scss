@@ -1,0 +1,27 @@
+// layout
+.flexRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-among-elements);
+}
+.flexColumn {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-among-elements);
+}
+
+// visibility
+.hidden { display:none;}
+
+.hp {
+    padding-left: var(--horizontal-padding);
+    padding-right: var(--horizontal-padding);
+}
+
+.vp {
+    padding-top: var(--vertical-padding);
+    padding-bottom: var(--vertical-padding);
+}

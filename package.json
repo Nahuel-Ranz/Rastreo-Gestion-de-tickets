@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "concurrently \"sass --watch public/scss/main.scss public/css/bundle.css --no-source-map --style=compressed\" \"nodemon app.js\"",
-    "build": "sass public/scss/main.scss public/css/bundle.css --no-source-map --style=compressed && node app.js"
+    "dev": "concurrently \"sass --watch src/scss/styles.scss public/css/styles.min.css --no-source-map --style=compressed\" \"nodemon app.js\"",
+    "build": "sass src/scss/styles.scss public/css/styles.min.css --no-source-map --style=compressed && node app.js"
   },
   "keywords": [],
   "author": "",

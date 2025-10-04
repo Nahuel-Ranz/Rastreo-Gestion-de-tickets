@@ -8,12 +8,12 @@ router.use((req, res) => {
     });
 });
 
-router.use((err, req, res, next) => {
+/*router.use((err, req, res, next) => {
     console.error(err.stack);
     res.render(500).render('pages/errors/500', {
         title: 'ERROR 500',
         subtitle: 'Inconvenientes con el Servidor'
     });
-});
+});*/
 
 module.exports = router;

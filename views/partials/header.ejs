@@ -1,9 +1,29 @@
-<header>
-    <img src="media/rgt-white.png" alt="UTN-LOGO">
-    <nav>
-        <a href="#"><!--<i class="fas fa-bell(notification ? '' : '-slash')>"--></a>
-        <a href="#">Pendientes</a>
-        <a href="#">Cola de ejecución</a>
-        <a href="#">Usuario</a>
+<header id="header" class="flexRow hp vp">
+    <img src="media/rgt-white.png" alt="UTN-LOGO" >
+    <nav id="nav_header" class="flexRow">
+        <div id="notifications_group" class="dropdown">
+            <i class="far fa-bell-slash dropdownSelector flexRow"></i>
+            <div id="notifications" class="hidden dropdownList">
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+            </div>
+        </div>
+        <a href="#" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
+        <a href="#" class="nav_font_color_fontSize">COLA DE EJECUCIÓN</a>
+        <div id="perfil_group" class="dropdown">
+            <button type="button" class="flexRow nav_font_color_fontSize dropdownSelector" name="radius">
+                USUARIO
+                <i class="far fa-user-circle flexRow"></i>
+            </button>
+            <div id="notifications" class="hidden dropdownList">
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+                <a href="#">Ticket N°234: Se solicita información</a>
+            </div>
+        </div>
     </nav>
 </header>

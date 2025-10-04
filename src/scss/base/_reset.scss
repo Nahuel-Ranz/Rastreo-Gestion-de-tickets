@@ -1,0 +1,21 @@
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+}
+
+ul, ol { list-style: none;}
+a { text-decoration: none;}
+img, video {
+    max-height: 50px;
+    width:auto;
+    display: block;
+}
+
+button, input, textarea, select {
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+}

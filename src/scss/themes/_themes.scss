@@ -1,27 +1,7 @@
-:root {
-    --primary-color: #000;
-    --secondary-color: #444;
-    --tertiary-color: #888;
-
-    --shadow: #dcdcdc;
-
-    --border-primary-color: #999;
-    --border-secondary-color: #ccc;
-    --border-secondary-color: #fff;
+[data-theme="dark"] {
     
-    --status-not-seen: #1d4ed8;
-    --status-seen: #6b7280;
-    --status-missing-info: #d97706;
-
-    --status-pending: #ca8a04;
-    --status-in-execution: #1e40af;
-    --status-completed: #15803d;
-    --status-canceled: #485563;
-    --status-not-done: #b91c1c;
 }
-
 [data-theme="light"] {}
-[data-theme="dark"] {}
 [data-theme="ocean"] {}
 [data-theme="autumn"] {}
 [data-theme="winter"] {}

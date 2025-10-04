@@ -1,0 +1,27 @@
+#header {
+    background-color: var(--primary-color);
+    width: var(--full-width-parent);
+    min-width: var(--min-width);
+    position:fixed;
+    top:0;
+    
+    #nav_header{
+        width: var(--full-width-parent);
+        justify-content: end;
+    }
+
+    @media(max-width:800px){
+        flex-direction:column;
+        gap: 20px;
+        #nav_header {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+}
+
+.nav_font_color_fontSize{
+    font-family: var(--global-fonts);
+    font-size: 18px;
+    color: var(--primary-font-color);
+}

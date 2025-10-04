@@ -1,7 +1,17 @@
-@import "../../public/vendor/fontawesome/css/all.min.css";
 // variables
-// helpers
-// layouts
+@import 'variables';
+
+// base
+@import 'base/reset';
+@import 'base/global';
+
 // themes
+@import 'themes/themes';
+
 // components
-// pages
+@import 'components/components';
+
+// layouts
+@import 'layouts/header';
+@import 'layouts/main';
+@import 'layouts/footer';

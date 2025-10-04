@@ -1,0 +1,20 @@
+<!-- id, name, icon_classes, type -->
+
+<button
+	type='<%= type || "button" %>'
+	id="<%= id %>"
+	class="flexRow hp vp"
+>
+	<% if(name) { %>
+		<p><%= name %></p>
+	<% } %>
+	<% if(icon_classes) { %>
+		<i class="<%= icon_classes %>"></i>
+	<% } %>
+</button>
+
+<!--
+    <button><p></p></button> ||
+    <button><i></i></button> ||
+    <button><p></p><i></i></button>
+-->
