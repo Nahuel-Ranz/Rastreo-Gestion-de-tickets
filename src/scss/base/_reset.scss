@@ -9,13 +9,19 @@
 ul, ol { list-style: none;}
 a { text-decoration: none;}
 img, video {
-    max-height: 50px;
+    height: 50px;
     width:auto;
-    display: block;
 }
 
-button, input, textarea, select {
+button, input, textarea, select, option {
     outline: none;
     background-color: transparent;
     cursor: pointer;
+    font-size: var(--font-size);
+    font-family: var(--global-fonts);
+}
+p, h1, h2, h3, h4, h5, h6, a, li, option {
+    font-size: var(--font-size);
+    font-family: var(--global-fonts);
+    text-align: center;
 }

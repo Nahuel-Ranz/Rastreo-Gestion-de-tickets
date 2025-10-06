@@ -1,11 +1,15 @@
 .dropdown {
     position: relative;
-    display: inline-block;
-    /*.dropdownSelector {
-        
-    }*/
+    .dropdownSelector {   
+    }
     .dropdownList {
         position: absolute;
         top: 100%;
+        background-color: red;
+        * {
+            background-color: var(--primary-color);
+            width: var(--full-width-parent);
+            justify-content: end;
+        }
     }
 }

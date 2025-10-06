@@ -1,12 +1,12 @@
 // variables
 @import 'variables';
 
+// themes
+@import 'themes/themes';
+
 // base
 @import 'base/reset';
 @import 'base/global';
-
-// themes
-@import 'themes/themes';
 
 // components
 @import 'components/components';

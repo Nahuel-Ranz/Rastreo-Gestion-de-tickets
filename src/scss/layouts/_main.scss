@@ -1,4 +1,9 @@
 #main {
     background-color: var(--secondary-color);
     width: var(--full-width-parent);
+    min-width: var(--min-width);
+    flex-wrap: wrap;
+    @media(max-width:720px){
+        flex-direction:column;
+    }
 }

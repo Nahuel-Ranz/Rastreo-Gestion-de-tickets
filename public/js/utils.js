@@ -16,5 +16,16 @@ export function fitToScreen(header, main, footer) {
 
     main.style.marginTop = headerHeight+ "px";
     main.style.minHeight = (vh-(headerHeight+footerHeight))+ "px";
-    main.textContent = main.style.minHeight; // delete this.
+}
+
+// closes all dropdown menus in the page.
+export function closeDropdowns() {
+    document.querySelectorAll('.dropdownList').forEach(list => list.classList.add('hidden'));
+}
+
+// closes all dropdown menus except the one indicated.
+export function closeDropdownsExcept(list) {
+    document.querySelectorAll('.dropdownList').forEach(l => {
+        if(list !== l) l.classList.add('hidden');
+    });
 }

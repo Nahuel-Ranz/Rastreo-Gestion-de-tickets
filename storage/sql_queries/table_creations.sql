@@ -70,6 +70,7 @@ create table Sesiones (
 	id int primary key auto_increment,
     usuario_id int not null,
     dispositivo varchar(15) not null,
+    ip varchar(15) not null,
     so varchar(20) not null,
     navegador varchar(20) not null,
     inicio datetime not null,

@@ -1,29 +1,34 @@
 <header id="header" class="flexRow hp vp">
-    <img src="media/rgt-white.png" alt="UTN-LOGO" >
+    <img src="media/rgt-white.png" alt="UTN-LOGO" id="logo" >
     <nav id="nav_header" class="flexRow">
-        <div id="notifications_group" class="dropdown">
-            <i class="far fa-bell-slash dropdownSelector flexRow"></i>
-            <div id="notifications" class="hidden dropdownList">
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-            </div>
-        </div>
+        <%- include("dropdowns/link-dropdown",{
+            group_id:"nav_notifications",
+            button_id:"button_nav_notifications",
+            list_id:"list_nav_notifications",
+            button:{
+                content:"",
+                icon_classes:"far fa-bell-slash"
+            },
+            data:[{desc:'', icon:'', url:'#'}]
+        }); %>
         <a href="#" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
         <a href="#" class="nav_font_color_fontSize">COLA DE EJECUCIÓN</a>
-        <div id="perfil_group" class="dropdown">
-            <button type="button" class="flexRow nav_font_color_fontSize dropdownSelector" name="radius">
-                USUARIO
-                <i class="far fa-user-circle flexRow"></i>
-            </button>
-            <div id="notifications" class="hidden dropdownList">
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-                <a href="#">Ticket N°234: Se solicita información</a>
-            </div>
-        </div>
+        <%- include("dropdowns/link-dropdown",{
+            group_id:"nav_menu",
+            button_id:"button_nav_menu",
+            list_id:"list_nav_menu",
+            button:{
+                content:"Ranz Aquino",
+                icon_classes:"far fa-user-circle"
+            },
+            data:[
+                {desc:'Perfil', icon:'fas fa-user', url:'#'},
+                {desc:'Estadísticas', icon:'fas fa-chart-line', url:'#'},
+                {desc:'Configuración', icon:'fas fa-gear', url:'#'},
+                {desc:'Notificaciones', icon:'fas fa-envelope', url:'#'},
+                {desc:'Tipos de cuentas', icon:'fas fa-users', url:'#'},
+                {desc:'Cerrar Sesión', icon:'fas fa-right-from-bracket', url:'#'}
+            ]
+        }); %>
     </nav>
 </header>

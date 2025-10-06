@@ -11,7 +11,6 @@
 
         @media(max-width:520px){
             flex-direction: column;
-            align-items: center;
             p { text-align: center;}
         }
     }
@@ -29,7 +28,6 @@
     p {
         color: var(--primary-font-color);
         font-family: var(--global-fonts);
-        font-size: 14px;
     }
 
     @media(max-width:920px){

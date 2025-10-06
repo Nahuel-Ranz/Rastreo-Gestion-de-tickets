@@ -1,9 +1,9 @@
-<!-- id, name, icon_classes, type -->
+<!-- id, name, icon_classes, type, classList -->
 
 <button
-	type='<%= type || "button" %>'
+	type="<%= type || button %>"
 	id="<%= id %>"
-	class="flexRow hp vp"
+	class="flexRow vp hp"
 >
 	<% if(name) { %>
 		<p><%= name %></p>
@@ -12,6 +12,18 @@
 		<i class="<%= icon_classes %>"></i>
 	<% } %>
 </button>
+
+<script type="module">
+	import { radius } from '/js/utils.js';
+	
+	((d) => {
+		const classes = <%- JSON.stringify(classList); %>;
+		const btn = d.getElementById('<%= id %>');
+		
+		btn.classList.add(...classes);
+		radius(btn);
+	})(document);
+</script>
 
 <!--
     <button><p></p></button> ||

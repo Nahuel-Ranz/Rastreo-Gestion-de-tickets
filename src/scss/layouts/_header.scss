@@ -11,8 +11,7 @@
     }
 
     @media(max-width:800px){
-        flex-direction:column;
-        gap: 20px;
+        #logo { display: none;}
         #nav_header {
             flex-direction: column;
             gap: 15px;
@@ -21,7 +20,10 @@
 }
 
 .nav_font_color_fontSize{
-    font-family: var(--global-fonts);
     font-size: 18px;
     color: var(--primary-font-color);
+    &:hover {
+        color: var(--secondary-font-color);
+        font-size: 1.2rem;
+    }
 }
