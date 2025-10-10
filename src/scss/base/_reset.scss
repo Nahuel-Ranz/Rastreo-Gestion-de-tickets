@@ -13,7 +13,7 @@ img, video {
     width:auto;
 }
 
-button, input, textarea, select, option {
+button, input, textarea, select, option, label {
     outline: none;
     background-color: transparent;
     cursor: pointer;
@@ -25,3 +25,11 @@ p, h1, h2, h3, h4, h5, h6, a, li, option {
     font-family: var(--global-fonts);
     text-align: center;
 }
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin:0;
+}
+
+input[type=number] { -moz-appearance: textfield;}

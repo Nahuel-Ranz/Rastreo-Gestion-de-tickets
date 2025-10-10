@@ -1,7 +1,11 @@
 button {
-    border-top: 2px solid var(--border-primary-color);
-    border-left: 2px solid var(--border-primary-color);
-    max-width: var(--min-width);
+    border-top: 3px solid var(--border-primary-color);
+    border-left: 3px solid var(--border-primary-color);
+    border-right: 1px solid var(--border-primary-color);
+    border-bottom: 1px solid var(--border-primary-color);
+
+    width: var(--full-width-parent);
+    * { color: var(--primary-font-color);}
     p { white-space: nowrap;}
 }
 

@@ -1,0 +1,27 @@
+.form{
+    padding-top: 50px;
+    padding-bottom: 30px;
+    background-color: var(--primary-color);
+    width: clamp(350px, 40%, 500px);
+    gap: 20px;
+    color: var(--primary-font-color);
+    h1 {
+        font-size: 24px;
+    }
+
+    #button_group {
+        width: var(--full-width-parent);
+
+        button {
+            padding: 10px;
+        }
+    }
+
+    #link_group {
+        width: var(--full-width-parent);
+        justify-content: space-between;
+        a {
+            font-size: 13px;
+        }
+    }
+}

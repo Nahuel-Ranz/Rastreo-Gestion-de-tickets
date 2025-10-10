@@ -1,0 +1,33 @@
+<!--
+    {
+        group_id,
+        input: { type, id, req },
+        label_id,
+        label
+    }
+-->
+
+<div id="<%= group_id %>" class="input_group flexColumn vp">
+    <div class="in flexRow">
+        <input
+        type="<%= input.type %>"
+        id="<%= input.id %>"
+        placeholder=" "
+        <%= input.req ? 'required' : '' %>
+        />
+        <label for="<%= input.id %>" id="<%= label_id %>" class="vp hp"><%= label %></label>
+        <i class="fas fa-check hidden"></i>
+    </div>
+    <p class="hidden hp vp">Mensaje de error</p>
+</div>
+
+<script type="module">
+    import { radius } from '/js/utils.js';
+
+    ((d) => {
+        d.addEventListener('DOMContentLoaded', () => {
+            radius(d.getElementById('<%= input.id %>'));
+            radius(d.getElementById('<%= label_id %>'));
+        });
+    })(document);
+</script>

@@ -1,11 +1,42 @@
-<div class="option-dropdown flexColumn">
-    <button class="dropdown-btn">Área de la facultad</button>
-    <ul class="hidden">
-        <li>option 1</li>
-        <li>option 2</li>
-        <li>option 3</li>
-        <li>option 4</li>
-        <li>option 5</li>
-        <li>option 6</li>
-    </ul>
+<!--
+    option_dropdown_id,
+    group_id,
+    label_id,
+    label,
+    input: { id, type, req },
+    list_id,
+    data: [ "string", ... ]
+-->
+
+<div id="<%= option_dropdown_id %>" class="dropdown flexColumn">
+    <%- include('components/input_group', {
+        group_id,
+        label_id,
+        label,
+        input
+    }); %>
+
+    <%- include('dropdowns/option-list', { list_id, data }); %>
 </div>
+
+<script type="module">
+    import {
+        closeDropdowns,
+        closeDropdownsExcept
+    } from '/js/utils.js';
+
+    ((d) => {
+        const lab=d.getElementById('<%= group_id %>');
+        const list=d.getElementById('<%= list_id %>');
+        const input=d.getElementById('<%= input.id %>');
+        input.readOnly = true;
+        
+        lab.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            closeDropdownsExcept(list);
+            list.classList.toggle('hidden');
+        });
+        d.addEventListener('click', closeDropdowns);
+    })(document);
+</script>

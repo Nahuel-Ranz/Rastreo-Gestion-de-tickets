@@ -1,0 +1,13 @@
+.dropdownList > li {
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-primary-color);
+    width: var(--full-width-parent);
+    a {
+        width: var(--full-width-parent);
+        justify-content: end;
+        padding: 3% 12%;
+        gap: 10%;
+        color: var(--primary-font-color);
+        i { font-size: 25px;}
+    }
+}

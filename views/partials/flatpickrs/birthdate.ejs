@@ -1,0 +1,27 @@
+<!-- {
+    group_id,
+    input: { id, type, req },
+    label_id,
+    label
+} -->
+
+<%- include('components/input_group', {
+    group_id,
+    input,
+    label_id,
+    label: `${ label } (año-mes-día)`
+}); %>
+
+<script>
+    ((d) => {
+        d.addEventListener('DOMContentLoaded', () => {
+            flatpickr('#<%= input.id %>', {
+                dateFormat: 'Y-m-d',
+                maxDate: new Date().fp_incr((-18*365)-5),
+                altFormat: 'd-m-Y',
+                allowInput: false,
+                clickOpens: true
+            });
+        })
+    })(document);
+</script>

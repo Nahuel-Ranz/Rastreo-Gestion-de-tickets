@@ -1,15 +1,17 @@
 .dropdown {
     position: relative;
+    width: var(--full-width-parent);
     .dropdownSelector {   
     }
     .dropdownList {
+        justify-content: start;
         position: absolute;
         top: 100%;
-        background-color: red;
-        * {
-            background-color: var(--primary-color);
-            width: var(--full-width-parent);
-            justify-content: end;
-        }
+        background-color: transparent;
+        z-index: 3;
+        max-height: 50vh;
+        overflow-y: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar{ display:none;}
     }
 }

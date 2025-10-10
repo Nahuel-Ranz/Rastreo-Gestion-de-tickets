@@ -2,7 +2,7 @@
     group_id,
     button_id,
     list_id,
-    button:{ content, icon_classes},
+    button:{ content, icon_classes, min_width },
     data: [{desc, icon, url}, ...]
 -->
 <div id="<%= group_id %>" class="dropdown flexColumn">
@@ -16,16 +16,8 @@
             'nav_font_color_fontSize'
         ]
     }); %>
-    <ul id="<%= list_id %>" class="dropdownList flexColumn hidden">
-        <% data.forEach(link => { %>
-            <li class="flexColumn">
-                <a href="<%= link.url %>" class="flexRow">
-                    <p><%= link.desc %></p>
-                    <i class="<%= link.icon %>"></i>
-                </a>
-            </li>
-        <% }); %>
-    </ul>
+    
+    <%- include('dropdowns/link-list', { list_id, data }); %>
 </div>
 
 <script type="module">
@@ -40,10 +32,17 @@
 
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
+
+            // cierra todos los dropdowns excepto el perteneciente a este botón.
             closeDropdownsExcept(list);
             list.classList.toggle('hidden');
         });
 
+        // cierra todos los dropdowns. Sin importar donde se clickee.
         d.addEventListener('click', closeDropdowns);
+
+        // el ancho del dropdown como de sus opciones siempre será el mismo.
+        btn.style.minWidth = '<%= button.min_width %>px';
+        list.style.minWidth = btn.style.minWidth;
     })(document);
 </script>

@@ -1,14 +1,13 @@
-// applies a radius equivalent to 1/5 of the shorter length
-// between its height and its width.
-export function radius(e) {
+// aplica un radio equivalente a 1/5 del largo más corto
+// entre la altura y la anchura.
+export function radius(e, measurement=7) {
     const smaller = e.offsetHeight<e.offsetWidth
         ? e.offsetHeight
         : e.offsetWidth;
-    
-    e.style.borderRadius = (smaller/5)+ "px";
+    e.style.borderRadius = (smaller/measurement)+ "px";
 }
 
-// ajusts the three main elements to correctly fill the full screen.
+// ajusta los 3 elementos principales para ocupar correctamente la pantalla completa.
 export function fitToScreen(header, main, footer) {
     const headerHeight=header.offsetHeight;
     const footerHeight=footer.offsetHeight;
@@ -18,7 +17,7 @@ export function fitToScreen(header, main, footer) {
     main.style.minHeight = (vh-(headerHeight+footerHeight))+ "px";
 }
 
-// closes all dropdown menus in the page.
+// cierra todos los menus desplegados en la página.
 export function closeDropdowns() {
     document.querySelectorAll('.dropdownList').forEach(list => list.classList.add('hidden'));
 }
@@ -28,4 +27,9 @@ export function closeDropdownsExcept(list) {
     document.querySelectorAll('.dropdownList').forEach(l => {
         if(list !== l) l.classList.add('hidden');
     });
+}
+
+// aplica un radio a todo los elementos de la lista dada.
+export function radiusToAll(list, measurement=7) {
+    for(const item of list) radius(item, measurement);
 }

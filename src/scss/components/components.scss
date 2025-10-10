@@ -1,3 +1,6 @@
-@import 'button';
-@import 'i';
-@import 'dropdown';
+@use 'button' as *;
+@use 'i' as *;
+@use 'input_group' as *;
+@use 'link_list' as *;
+@use 'dropdown' as *;
+@use 'forms' as *;

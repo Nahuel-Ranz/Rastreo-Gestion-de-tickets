@@ -1,0 +1,29 @@
+<!--
+    list_id
+    data: [{ url, desc, icon }, ...]
+-->
+
+<ul id="<%= list_id %>" class="dropdownList flexColumn">
+    <% data.forEach(link => { %>
+        <li class="flexColumn">
+            <a href="<%= link.url %>" class="flexRow">
+                <p><%= link.desc %></p>
+                <i class="<%= link.icon %>"></i>
+            </a>
+        </li>
+    <% }); %>
+</ul>
+
+<script type="module">
+    import { radiusToAll } from './js/utils.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        (() => {
+            const list=document.getElementById('<%= list_id %>');
+            const items=list.getElementsByTagName('li');
+
+            radiusToAll(items,10);
+            list.classList.add('hidden');
+        })();
+    });
+</script>

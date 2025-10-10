@@ -1,0 +1,32 @@
+<!-- {
+    group_id,
+    input: { id, type, req },
+    label_id,
+    label
+} -->
+
+<%- include('components/input_group', {
+    group_id,
+    input,
+    label_id,
+    label: `${ label } (año-mes-día)`
+}); %>
+
+<script>
+    ((d) => {
+        d.addEventListener('DOMContentLoaded', () => {
+            flatpickr('#<%= input.id %>', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: new Date().fp_incr(7),
+                minuteIncrement: 10,
+                time_24hr: true,
+                disable:[
+                    function(date){
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    }
+                ]
+            });
+        })
+    })(document);
+</script>

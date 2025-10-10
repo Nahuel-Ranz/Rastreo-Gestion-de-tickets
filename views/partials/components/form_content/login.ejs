@@ -1,0 +1,35 @@
+<%- include('components/input_group', {
+    group_id:'credential_group',
+    label_id:'credential_label',
+    label: 'Número de usuario, DNI, correo o celular',
+    input: {
+        id:'credential',
+        type:'text',
+        req:true
+    }
+}); %>
+
+<%- include('components/input_group', {
+    group_id:'pass_group',
+    label_id:'pass_label',
+    label: 'Contraseña',
+    input: {
+        id:'pass',
+        type:'password',
+        req:true
+    }
+}); %>
+
+<div id="button_group" class="flexRow vp">
+    <%- include('components/button', {
+        id:'enter',
+        name:'Ingresar',
+        icon_classes: '',
+        type:'submit',
+        classList:[]}
+    ); %>
+</div>
+<div id="link_group" class="flexRow vp">
+    <a href="/recuperar_clave/email">Olvidé mi contraseña</a>
+    <a href="/registro">Registrarme</a>
+</div>

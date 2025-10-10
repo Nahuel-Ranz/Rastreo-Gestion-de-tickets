@@ -1,0 +1,21 @@
+<!-- use -->
+
+<form id="<%= id %>" class="form flexColumn hp">
+    <h1><%= title %></h1>
+    <% switch(id) {
+        case 'login': %>
+            <%- include('components/form_content/login'); %>
+        <% break;
+        case 'register': %>
+            <%- include('components/form_content/register'); %>
+        <% break; %>
+    <% } %>
+</form>
+
+<script type="module">
+    import { radius } from '/js/utils.js';
+    ((d) => {
+        const form = d.getElementById('<%= id %>');
+        radius(form, 20);
+    })(document);
+</script>

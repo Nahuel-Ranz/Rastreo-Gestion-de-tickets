@@ -1,17 +1,17 @@
 // variables
-@import 'variables';
+@use 'variables' as var;
 
 // themes
-@import 'themes/themes';
+@use 'themes/themes' as *;
 
 // base
-@import 'base/reset';
-@import 'base/global';
+@use 'base/reset' as *;
+@use 'base/global' as *;
 
 // components
-@import 'components/components';
+@use 'components/components' as *;
 
 // layouts
-@import 'layouts/header';
-@import 'layouts/main';
-@import 'layouts/footer';
+@use 'layouts/header' as *;
+@use 'layouts/main' as *;
+@use 'layouts/footer' as *;

@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => res.render('login'));
-router.get('/waiting_list', (req, res) => res.render('index'));
-router.get('/execution_queue', (req, res) => res.render('execution_queue'));
-router.get('/profile', (req, res) => res.render('profile'));
-router.get('/statistics', (req, res) => res.render('dashboard'));
-router.get('/settings', (req, res) => res.render('settings'));
-router.get('/notifications', (req, res) => res.render('notifications'));
-router.get('/account_types', (req, res) => res.render('account_types'));
+// formularios
+router.get('/', (req, res) => res.render('forms/login'));
+router.get('/registro', (req, res) => res.render('forms/register'));
+router.get('/establecer_clave', (req, res) => res.render('forms/set_password'));
+router.get('/recuperar_clave/email', (req, res) => res.render('forms/recovery_password/email'));
+router.get('/recuperar_clave/clave', (req, res) => res.render('forms/recovery_password/key'));
+router.get('/recuperar_clave/nueva_clave', (req, res) => res.render('forms/recovery_password/new_password'));
+
+// páginas
+router.get('/lista_de_espera', (req, res) => res.render('index'));
+router.get('/cola_de_ejecucion', (req, res) => res.render('execution_queue'));
+router.get('/perfil', (req, res) => res.render('profile'));
+router.get('/estadisticas', (req, res) => res.render('dashboard'));
+router.get('/configuraciones', (req, res) => res.render('settings'));
+router.get('/notificaciones', (req, res) => res.render('notifications'));
+router.get('/tipos_de_cuentas', (req, res) => res.render('account_types'));
 
 module.exports = router;
