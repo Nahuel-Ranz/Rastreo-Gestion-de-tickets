@@ -1,6 +1,7 @@
 <!--
     option_dropdown_id,
     group_id,
+    input_group_id,
     label_id,
     label,
     input: { id, type, req },
@@ -11,12 +12,17 @@
 <div id="<%= option_dropdown_id %>" class="dropdown flexColumn">
     <%- include('components/input_group', {
         group_id,
+        input_group_id,
+        input,
         label_id,
-        label,
-        input
+        label
     }); %>
 
-    <%- include('dropdowns/option-list', { list_id, data }); %>
+    <ul id="<%= list_id %>" class="dropdownList flexColumn hidden">
+        <% data.forEach(option => { %>
+            <li><p><%= option %></p></li>
+        <% }); %>
+    </ul>
 </div>
 
 <script type="module">
@@ -26,18 +32,25 @@
     } from '/js/utils.js';
 
     ((d) => {
-        const group=d.getElementById('<%= option_dropdown_id %>')
-        const lab=d.getElementById('<%= group_id %>');
         const list=d.getElementById('<%= list_id %>');
         const input=d.getElementById('<%= input.id %>');
+        const label=d.getElementById('<%= label_id %>');
         input.readOnly = true;
-        
-        group.addEventListener('click', (e) => {
+
+        d.addEventListener('click', (e) => {
             e.stopPropagation();
+            e.preventDefault();
             
-            closeDropdownsExcept(list);
-            list.classList.toggle('hidden');
+            if([label, list, input].includes(e.target)) {
+                closeDropdownsExcept(list);
+                list.classList.toggle('hidden');
+                if(list.classList.contains('hidden')) input.blur();
+                else input.focus();
+            } else { closeDropdowns();}
         });
-        d.addEventListener('click', closeDropdowns);
+        
+        input.addEventListener('focus', () => list.classList.remove('hidden'));
+
+        input.addEventListener('blur', () => list.classList.add('hidden'));
     })(document);
 </script>

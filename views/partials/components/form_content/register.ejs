@@ -1,5 +1,6 @@
 <%- include('components/input_group', {
     group_id:'name_group',
+    input_group_id:'name_input',
     label_id:'name_label',
     label: 'Nombre/s *',
     input: {
@@ -11,6 +12,7 @@
 
 <%- include('components/input_group', {
     group_id:'last_name_group',
+    input_group_id:'last_name_input',
     label_id:'last_name_label',
     label: 'Apellido/s *',
     input: {
@@ -22,6 +24,7 @@
 
 <%- include('components/input_group', {
     group_id:'dni_group',
+    input_group_id:'dni_input',
     label_id:'dni_label',
     label: 'DNI N° *',
     input: {
@@ -33,6 +36,7 @@
 
 <%- include('flatpickrs/birthdate', {
     group_id:'birth_group',
+    input_group_id:'birth_input',
     label_id:'birth_label',
     label: 'Fecha de nacimiento',
     input: {
@@ -44,6 +48,7 @@
 
 <%- include('components/input_group', {
     group_id:'cel_group',
+    input_group_id:'cel_input',
     label_id:'cel_label',
     label: 'Celular',
     input: {
@@ -55,6 +60,7 @@
 
 <%- include('components/input_group', {
     group_id:'mail_group',
+    input_group_id:'mail_input',
     label_id:'mail_label',
     label: 'Correo *',
     input: {
@@ -67,10 +73,11 @@
 <%- include('dropdowns/option-dropdown', {
     option_dropdown_id: 'area_dropdown',
     group_id: 'area_group',
+    input_group_id:'area_input',
     label_id: 'area_label',
     label: 'Área de la Facultad *',
     input: {
-        id: 'area_input',
+        id: 'area',
         type: '',
         req: true
     },
