@@ -26,12 +26,13 @@
     } from '/js/utils.js';
 
     ((d) => {
+        const group=d.getElementById('<%= option_dropdown_id %>')
         const lab=d.getElementById('<%= group_id %>');
         const list=d.getElementById('<%= list_id %>');
         const input=d.getElementById('<%= input.id %>');
         input.readOnly = true;
         
-        lab.addEventListener('click', (e) => {
+        group.addEventListener('click', (e) => {
             e.stopPropagation();
             
             closeDropdownsExcept(list);

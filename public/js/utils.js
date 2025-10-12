@@ -1,4 +1,4 @@
-// aplica un radio equivalente a 1/5 del largo más corto
+// aplica un radio equivalente a 1/7 del largo más corto
 // entre la altura y la anchura.
 export function radius(e, measurement=7) {
     const smaller = e.offsetHeight<e.offsetWidth
@@ -33,3 +33,4 @@ export function closeDropdownsExcept(list) {
 export function radiusToAll(list, measurement=7) {
     for(const item of list) radius(item, measurement);
 }
+

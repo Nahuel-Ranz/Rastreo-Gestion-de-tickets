@@ -14,14 +14,15 @@ const mysql = mysql2.createPool({
 const mongoCli = new MongoClient(process.env.MONGO_URI);
 let mongodb = null;
 
-async function startMongo(){
+async function getMongo(){
     if(!mongodb){
-        await mongoCli.connect();
-        mongodb = mongoCli.db(process.env.MONGO_DB);
+        try {
+            await mongoCli.connect();
+            mongodb = mongoCli.db(process.env.MONGO_DB);
+        } catch(error) {
+            console.log("Error de conexión de MongoDB ... ", error);
+        }
     }
-
     return mongodb;
 }
-
-const mongo = await startMongo();
-module.exports = { mysql, mongo };
+module.exports = { mysql, getMongo };

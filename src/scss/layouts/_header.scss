@@ -6,16 +6,19 @@
     top:0;
     z-index: 10;
 
-    #nav_header{
+    #nav_header {
         width: var(--full-width-parent);
         justify-content: end;
+        > .dropdown { width:auto;}
     }
 
     @media(max-width:800px){
         #logo { display: none;}
         #nav_header {
             flex-direction: column;
-            gap: 15px;
+            gap: 5px;
+            > * { width: var(--full-width-parent);}
+            .dropdown, .dropdownList { width: var(--full-width-parent);}
         }
     }
 }
