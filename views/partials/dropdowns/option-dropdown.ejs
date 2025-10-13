@@ -6,7 +6,7 @@
     label,
     input: { id, type, req },
     list_id,
-    data: [ "string", ... ]
+    data: [ "...", ... ]
 -->
 
 <div id="<%= option_dropdown_id %>" class="dropdown flexColumn">
@@ -18,11 +18,11 @@
         label
     }); %>
 
-    <ul id="<%= list_id %>" class="dropdownList flexColumn hidden">
-        <% data.forEach(option => { %>
-            <li><p><%= option %></p></li>
-        <% }); %>
-    </ul>
+    <%- include('dropdowns/option-list', {
+        input_id: input.id,
+        list_id,
+        data
+    }); %>
 </div>
 
 <script type="module">
@@ -49,7 +49,23 @@
             } else { closeDropdowns();}
         });
         
-        input.addEventListener('focus', () => list.classList.remove('hidden'));
+        input.addEventListener('focus', () => {
+            list.classList.remove('hidden');
+            const element=input.getBoundingClientRect();
+
+            const spaceAbove=element.top;
+            const spaceBelow=window.innerHeight-element.bottom;
+
+            if(spaceBelow < (window.innerHeight/3)) {
+                list.style.maxHeight = `${(window.innerHeight/3)-10}px`;
+                list.style.bottom = `${element.height+12}px`;
+                list.style.top = 'auto';
+            } else {
+                list.style.maxHeight = `${(window.innerHeight/3)-10}px`;
+                list.style.top = `${element.height}px`;
+                list.style.bottom = 'auto';
+            }
+        });
 
         input.addEventListener('blur', () => list.classList.add('hidden'));
     })(document);

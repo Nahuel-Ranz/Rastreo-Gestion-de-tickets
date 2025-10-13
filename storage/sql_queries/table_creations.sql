@@ -16,6 +16,7 @@ drop table if exists AreasFacultad;
 create table AreasFacultad (
 	id int primary key auto_increment,
     nombre varchar(70) not null unique,
+    abreviacion varchar(10) not null unique,
     correo varchar(40) not null unique,
     constraint chk_nombre check(nombre regexp '^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$'),
     constraint chk_correo check(correo regexp "^[\w!#$%&'*+/=?^`{|}~-]+(\.[\w!#$%&'*+/=?^`{|}~-]+)*@([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$")

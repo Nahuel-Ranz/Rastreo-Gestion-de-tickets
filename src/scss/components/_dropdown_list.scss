@@ -2,12 +2,23 @@
     background-color: var(--primary-color);
     border: 1px solid var(--border-primary-color);
     width: var(--full-width-parent);
-    a {
+    a, > p {
         width: var(--full-width-parent);
         justify-content: end;
         padding: 3% 12%;
         gap: 10%;
         color: var(--primary-font-color);
         i { font-size: 25px;}
+        &:hover, i:hover {
+            color: var(--tertiary-font-color);
+            i{color:var(--tertiary-font-color);}
+        }
+    }
+
+    > p {
+        padding: 3% 3%;
+        text-align: start;
+        font-size: 13px;
+        cursor: pointer;
     }
 }

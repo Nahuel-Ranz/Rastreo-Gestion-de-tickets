@@ -1,7 +1,29 @@
-<!-- list_id, data: [ "string1", ... ] -->
+<!-- input_id, list_id, data: [ "...", ... ] -->
 
-<ul id="<%= list_id %>" class="dropdownList flexColumn hidden">
+<ul id="<%= list_id %>" class="dropdownList flexColumn">
     <% data.forEach(option => { %>
         <li><p><%= option %></p></li>
     <% }); %>
 </ul>
+
+<script type="module">
+    import { radiusToAll } from '/js/utils.js';
+
+    ((d) => {
+        const list=d.getElementById('<%= list_id %>');
+        const items=list.getElementsByTagName('li');
+        const input=d.getElementById('<%= input_id %>');
+
+                list.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if(!li) return;
+
+            const text = li.textContent.trim();
+            console.log(text);
+
+            input.value = text;
+            list.classList.add('hidden');
+            input.blur();
+        });
+    })(document);
+</script>

@@ -7,8 +7,11 @@
         justify-content: start;
         position: absolute;
         top: 100%;
+        width: var(--full-width-parent);
         background-color: transparent;
-        z-index: 3;
+        border-top: 2px solid var(--secondary-color);
+        border-bottom: 2px solid var(--secondary-color);
+        z-index: 4;
         max-height: 50vh;
         overflow-y: auto;
         scrollbar-width: none;

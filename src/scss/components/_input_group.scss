@@ -1,20 +1,27 @@
 .input_group {
     width: var(--full-width-parent);
+    position:relative;
     
-    label {
-        position:absolute;
-        top: 20%;
-        z-index: 1;
-    }
     .in {
         position: relative;
         justify-content: start;
         width: var(--full-width-parent);
         * { color: var(--primary-font-color);}
+        
         input {
+            position:relative;
+            z-index:2;
             border: 1px solid var(--border-primary-color);
             padding:10px;
             width: var(--full-width-parent);
+            z-index: 1;
+        }
+
+        label {
+            position:absolute;
+            top: 20%;
+            pointer-events:none;
+            transition: all 0.2s ease;
             z-index: 1;
         }
 
