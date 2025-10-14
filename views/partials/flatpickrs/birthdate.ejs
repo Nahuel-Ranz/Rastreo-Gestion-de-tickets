@@ -4,24 +4,40 @@
     label_id,
     label
 } -->
-
-<%- include('components/input_group', {
-    group_id,
-    input,
-    label_id,
-    label: `${ label } (año-mes-día)`
-}); %>
+<div class="pickr-container">
+    <%- include('components/input_group', {
+        group_id,
+        input,
+        label_id,
+        label: `${ label } (año-mes-día)`
+    }); %>
+</div>
 
 <script>
     ((d) => {
         d.addEventListener('DOMContentLoaded', () => {
+            const groupId = '<%= group_id %>';
+            const inputId = '<%= input.id %>';
+
             flatpickr('#<%= input.id %>', {
                 dateFormat: 'Y-m-d',
                 maxDate: new Date().fp_incr((-18*365)-5),
                 altFormat: 'd-m-Y',
                 allowInput: false,
-                clickOpens: true
+                clickOpens: true,
+                onReady: function(selectedDates, dateStr, instance) {
+                    const pickr = instance.calendarContainer;
+                    if (!pickr) return;
+                    
+                    const groupWidth = window.getComputedStyle(group).width;
+                    pickr.style.width = groupWidth;
+                },
+                onOpen: function(selectedDates, dateStr, instance) {
+                    const group = d.getElementById(groupId);
+                    if (!group) return;
+                    instance.calendarContainer.style.width = window.getComputedStyle(group).width;
+                }
             });
-        })
+        });
     })(document);
 </script>

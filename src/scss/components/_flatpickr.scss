@@ -1,0 +1,67 @@
+.pickr-container { position:relative; width: var(--full-width-parent);}
+.flatpickr-calendar {
+    background-color: var(--primary-color);
+    * { color: var(--primary-font-color);}
+
+    .flatpickr-innerContainer {
+        width: var(--full-width-parent);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .flatpickr-weekdays {
+            width: var(--full-width-parent);
+            display: grid !important;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: var(--secondary-color);
+
+            .flatpickr-weekday {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: var(--primary-font-color);
+                padding: 2px 8.5%;
+                font-weight: bolder;
+                font-size: 16px;
+            }
+        }
+
+        .flatpickr-days {
+            width: var(--full-width-parent);
+            display: grid !important;
+            grid-template-columns: repeat(7, 1fr);
+            grid-auto-rows: 1fr;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+
+            .dayContainer {
+                display: contents;
+                .prevMonthDay, .nextMonthDay {
+                    color: var(--tertiary-font-color) !important;
+                }
+                .flatpickr-day {
+                    width: var(--full-width-parent) !important;
+                    background-color: var(--primary-color);
+                    color: var(--primary-font-color);
+
+                    &:hover {background-color: var(--secondary-color);}
+                    &.selected { font-weight: bold;}
+                    &.today {
+                        border: var(--border-primary-color);
+                        font-weight: bold;
+                    }
+                    &.flatpickr-disabled {
+                        color: var(--disabled-font-color) !important;
+                        &:hover {
+                            background-color: transparent;
+                            border: 1px solid var(--disabled-font-color);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
