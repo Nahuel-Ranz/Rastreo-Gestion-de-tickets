@@ -14,15 +14,16 @@
             border: 1px solid var(--border-primary-color);
             padding:10px;
             width: var(--full-width-parent);
-            z-index: 1;
         }
 
         label {
+            background-color: var(--primary-color);
             position:absolute;
             top: 20%;
             pointer-events:none;
+            margin-left: 1px;
             transition: all 0.2s ease;
-            z-index: 1;
+            z-index: 2;
         }
 
         i {
@@ -36,7 +37,6 @@
         input:focus + label,
         input:not(:placeholder-shown) + label {
             transform: translateY(-82%) translateX(-12%) scale(0.7);
-            background-color: var(--primary-color);
             border-left: 1px solid var(--border-primary-color);
             border-right: 1px solid var(--border-primary-color);
         }

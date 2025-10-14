@@ -1,72 +1,46 @@
 <!--
-    option_dropdown_id,
-    group_id,
-    input_group_id,
+    container_id,
+    select_id,
     label_id,
     label,
-    input: { id, type, req },
-    list_id,
-    data: [ "...", ... ]
+    options:[{ value, content }, ... ]
 -->
 
-<div id="<%= option_dropdown_id %>" class="dropdown flexColumn">
-    <%- include('components/input_group', {
-        group_id,
-        input_group_id,
-        input,
-        label_id,
-        label
-    }); %>
-
-    <%- include('dropdowns/option-list', {
-        input_id: input.id,
-        list_id,
-        data
-    }); %>
+<div id="<%= container_id %>" class="selectContainer">
+    <select id="<%= select_id %>">
+        <% options.forEach(option => { %>
+            <option value="<%= option.value %>"><%= option.content %></option>
+        <% }); %>
+    </select>
+    <label for="<%= select_id %>" id="<%= label_id %>" class="vp hp"><%= label %></label>
+    <i class="fas fa-check hidden"></i>
 </div>
 
 <script type="module">
-    import {
-        closeDropdowns,
-        closeDropdownsExcept
-    } from '/js/utils.js';
+    import { radius } from '/js/utils.js';
 
     ((d) => {
-        const list=d.getElementById('<%= list_id %>');
-        const input=d.getElementById('<%= input.id %>');
-        const label=d.getElementById('<%= label_id %>');
-        input.readOnly = true;
-
-        d.addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            if([label, list, input].includes(e.target)) {
-                closeDropdownsExcept(list);
-                list.classList.toggle('hidden');
-                if(list.classList.contains('hidden')) input.blur();
-                else input.focus();
-            } else { closeDropdowns();}
+        const label = d.getElementById('<%= label_id %>');
+        const choices = new Choices('#<%= select_id %>', {
+            searchEnabled:false,
+            itemSelectText: ''
         });
-        
-        input.addEventListener('focus', () => {
-            list.classList.remove('hidden');
-            const element=input.getBoundingClientRect();
+        const choices2=d.querySelector('.choices');
+        const choices__inner=d.querySelector('.choices__inner');
+        const items=d.querySelectorAll('.choices__item');
 
-            const spaceAbove=element.top;
-            const spaceBelow=window.innerHeight-element.bottom;
-
-            if(spaceBelow < (window.innerHeight/3)) {
-                list.style.maxHeight = `${(window.innerHeight/3)-10}px`;
-                list.style.bottom = `${element.height+12}px`;
-                list.style.top = 'auto';
-            } else {
-                list.style.maxHeight = `${(window.innerHeight/3)-10}px`;
-                list.style.top = `${element.height}px`;
-                list.style.bottom = 'auto';
-            }
+        choices2.addEventListener('showDropdown', () => {
+            label.classList.add('active');
         });
 
-        input.addEventListener('blur', () => list.classList.add('hidden'));
+        choices2.addEventListener('hideDropdown', () => {
+            if(!choices.getValue(true)) label.classList.remove('active');
+        });
+
+        choices2.addEventListener('change', () => {
+            if(!choices.getValue(true)) label.classList.remove('active');
+        });
+        radius(choices__inner);
+        radius(label);
     })(document);
 </script>

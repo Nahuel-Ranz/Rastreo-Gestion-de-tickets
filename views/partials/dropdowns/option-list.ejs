@@ -14,7 +14,7 @@
         const items=list.getElementsByTagName('li');
         const input=d.getElementById('<%= input_id %>');
 
-                list.addEventListener('click', (e) => {
+        list.addEventListener('click', (e) => {
             const li = e.target.closest('li');
             if(!li) return;
 
@@ -25,5 +25,7 @@
             list.classList.add('hidden');
             input.blur();
         });
+        radiusToAll(items, 10);
+        list.classList.add('hidden');
     })(document);
 </script>
