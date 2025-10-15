@@ -1,35 +1,26 @@
+<!-- {
+    group: { id:'', input:''},
+    input: { id:'', type:'', req:},
+    label: { id:'', content:''}
+} -->
+
 <%- include('components/input_group', {
-    group_id:'credential_group',
-    input_group_id:'credential_input',
-    label_id:'credential_label',
-    label: 'Número de usuario, DNI, correo o celular',
-    input: {
-        id:'credential',
-        type:'text',
-        req:true
-    }
+    group: { id:'credential_group', input:'credential_input'},
+    input: { id:'credential', type:'text', req:true},
+    label: { id:'credential_label', content:'Número de usuario, DNI, correo o celular'}
 }); %>
 
 <%- include('components/input_group', {
-    group_id:'pass_group',
-    input_group_id:'pass_input',
-    label_id:'pass_label',
-    label: 'Contraseña',
-    input: {
-        id:'pass',
-        type:'password',
-        req:true
-    }
+    group: { id:'pass_group', input:'pass_input'},
+    input: { id:'pass', type:'password', req:true},
+    label: { id:'pass_label', content:'Contraseña'}
 }); %>
 
 <div id="button_group" class="flexRow vp">
     <%- include('components/button', {
-        id:'enter',
-        name:'Ingresar',
-        icon_classes: '',
-        type:'submit',
-        classList:[]}
-    ); %>
+        btn: { id:'enter', type:'submit', classes:''},
+        content: { name:'Ingresar', icon:''}
+    }); %>
 </div>
 <div id="link_group" class="flexRow vp">
     <a href="/recuperar_clave/email">Olvidé mi contraseña</a>

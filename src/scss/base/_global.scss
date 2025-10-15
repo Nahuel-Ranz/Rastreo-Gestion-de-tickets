@@ -25,3 +25,7 @@
     padding-top: var(--vertical-padding);
     padding-bottom: var(--vertical-padding);
 }
+
+.fa-check { color: var(--correct-icon-color) !important;}
+.fa-times { color: var(--error-icon-color) !important;}
+.fa-triangle-exclamation { color: var(--warning-icon-color) !important;}

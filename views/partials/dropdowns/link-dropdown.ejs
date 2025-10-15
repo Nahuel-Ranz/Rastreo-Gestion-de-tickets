@@ -1,48 +1,44 @@
-<!--
-    group_id,
-    button_id,
-    list_id,
-    button:{ content, icon_classes, min_width },
-    data: [{desc, icon, url}, ...]
--->
-<div id="<%= group_id %>" class="dropdown flexColumn">
-    <%- include('components/button', {
-        id: button_id,
-        name: button.content,
-        type:'',
-        icon_classes: button.icon_classes,
-        classList:[
-            'dropdownSelector',
-            'nav_font_color_fontSize'
-        ]
-    }); %>
-    
-    <%- include('dropdowns/link-list', { list_id, data }); %>
-</div>
+    <!--{
+        id,
+        button: {
+            btn: { id, type, classes },
+            content: { name, icon },
+            min_width
+        },
+        list: { id, data:[{desc, icon, url}, ...] }
+    }-->
+    <div id="<%= id %>" class="dropdown flexColumn">
+        <%- include('components/button', {
+            btn: button.btn,
+            content: button.content
+        }); %>
+        
+        <%- include('dropdowns/link-list', { id: list.id, data: list.data }); %>
+    </div>
 
-<script type="module">
-    import {
-        closeDropdowns,
-        closeDropdownsExcept
-    } from '/js/utils.js';
+    <script type="module">
+        import {
+            closeDropdowns,
+            closeDropdownsExcept
+        } from '/js/utils.js';
 
-    ((d) => {
-        const btn=d.getElementById('<%= button_id %>');
-        const list=d.getElementById('<%= list_id %>');
+        ((d) => {
+            const btn=d.getElementById('<%= button.btn.id %>');
+            const list=d.getElementById('<%= list.id %>');
 
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
 
-            // cierra todos los dropdowns excepto el perteneciente a este botón.
-            closeDropdownsExcept(list);
-            list.classList.toggle('hidden');
-        });
+                // cierra todos los dropdowns excepto el perteneciente a este botón.
+                closeDropdownsExcept(list);
+                list.classList.toggle('hidden');
+            });
 
-        // cierra todos los dropdowns. Sin importar donde se clickee.
-        d.addEventListener('click', closeDropdowns);
+            // cierra todos los dropdowns. Sin importar donde se clickee.
+            d.addEventListener('click', closeDropdowns);
 
-        // el ancho del dropdown como de sus opciones siempre será el mismo.
-        btn.style.minWidth = '<%= button.min_width %>px';
-        list.style.minWidth = btn.style.minWidth;
-    })(document);
-</script>
+            // el ancho del dropdown como de sus opciones siempre será el mismo.
+            btn.style.minWidth = '<%= button.min_width %>px';
+            list.style.minWidth = btn.style.minWidth;
+        })(document);
+    </script>

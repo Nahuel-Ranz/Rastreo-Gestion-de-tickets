@@ -1,36 +1,42 @@
 <header id="header" class="flexRow hp vp">
     <img src="media/rgt-white.png" alt="UTN-LOGO" id="logo" >
     <nav id="nav_header" class="flexRow">
-        <%- include("dropdowns/link-dropdown",{
-            group_id:"nav_notifications",
-            button_id:"button_nav_notifications",
-            list_id:"list_nav_notifications",
+        <%- include("dropdowns/link-dropdown", {
+            id:"nav_notifications",
             button:{
-                content:"",
-                icon_classes:"far fa-bell-slash",
+                btn: {
+                    id:'button_nav_notifications',
+                    type:'',
+                    classes:'dropdownSelector nav_font_color_fontSize'
+                },
+                content:{name:'', icon:'far fa-bell-slash'},
                 min_width: 10
             },
-            data:[{desc:'', icon:'', url:'#'}]
+            list: {
+                id:'list_nav_notifications',
+                data:[{desc:'', icon:'', url:'#'}]
+            }
         }); %>
         <a href="/lista_de_espera" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
         <a href="/cola_de_ejecucion" class="nav_font_color_fontSize">COLA DE EJECUCIÓN</a>
         <%- include("dropdowns/link-dropdown",{
-            group_id:"nav_menu",
-            button_id:"button_nav_menu",
-            list_id:"list_nav_menu",
+            id:"nav_menu",
             button:{
-                content:"Isaías Ranz Aquino",
-                icon_classes:"far fa-user-circle",
+                btn: { id:'button_nav_menu', type:'', classes:'' },
+                content: { name: "Isaías Jonás Ranz Aquino", icon:"far fa-user-circle"},
                 min_width: 250
             },
-            data:[
-                {desc:'Perfil', icon:'fas fa-user', url:'/perfil'},
-                {desc:'Estadísticas', icon:'fas fa-chart-line', url:'/estadisticas'},
-                {desc:'Configuración', icon:'fas fa-gear', url:'/configuraciones'},
-                {desc:'Notificaciones', icon:'fas fa-envelope', url:'/notificaciones'},
-                {desc:'Tipos de cuentas', icon:'fas fa-users', url:'tipos_de_cuentas'},
-                {desc:'Cerrar Sesión', icon:'fas fa-right-from-bracket', url:'/'}
-            ]
+            list: {
+                id:"list_nav_menu",
+                data:[
+                    {desc:'Perfil', icon:'fas fa-user', url:'/perfil'},
+                    {desc:'Estadísticas', icon:'fas fa-chart-line', url:'/estadisticas'},
+                    {desc:'Configuración', icon:'fas fa-gear', url:'/configuraciones'},
+                    {desc:'Notificaciones', icon:'fas fa-envelope', url:'/notificaciones'},
+                    {desc:'Tipos de cuentas', icon:'fas fa-users', url:'tipos_de_cuentas'},
+                    {desc:'Cerrar Sesión', icon:'fas fa-right-from-bracket', url:'/'}
+                ]
+            }
         }); %>
     </nav>
 </header>

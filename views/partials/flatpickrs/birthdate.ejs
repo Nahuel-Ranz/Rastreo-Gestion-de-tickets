@@ -1,23 +1,18 @@
-<!-- {
-    group_id,
+<!--
+    group: { id, input },
     input: { id, type, req },
-    label_id,
-    label
-} -->
+    label: { id, content }
+-->
+<% label.content += ' (año-mes-día)'; %>
 <div class="pickr-container">
-    <%- include('components/input_group', {
-        group_id,
-        input,
-        label_id,
-        label: `${ label } (año-mes-día)`
-    }); %>
+    <%- include('components/input_group', { group, input, label}); %>
 </div>
 
 <script>
     ((d) => {
         d.addEventListener('DOMContentLoaded', () => {
-            const groupId = '<%= group_id %>';
-            const inputId = '<%= input.id %>';
+            const group = d.getElementById('<%= group.id %>');
+            const input = d.getElementById('<%= input.id %>');
 
             flatpickr('#<%= input.id %>', {
                 dateFormat: 'Y-m-d',
@@ -33,7 +28,6 @@
                     pickr.style.width = groupWidth;
                 },
                 onOpen: function(selectedDates, dateStr, instance) {
-                    const group = d.getElementById(groupId);
                     if (!group) return;
                     instance.calendarContainer.style.width = window.getComputedStyle(group).width;
                 }

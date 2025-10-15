@@ -1,22 +1,24 @@
 <!--
-    {
-        group_id,
-        input_group_id,
-        input: { type, id, req },
-        label_id,
-        label
-    }
+    group: { id, input },
+    input: { id, type, req },
+    label: { id, content }
 -->
 
-<div id="<%= group_id %>" class="input_group flexColumn vp">
-    <div id="<%= input_group_id %>" class="in flexRow">
+<div id="<%= group.id %>" class="input_group flexColumn vp">
+    <div id="<%= group.input %>" class="in flexRow">
         <input
-        type="<%= input.type %>"
-        id="<%= input.id %>"
-        placeholder=" "
-        <%= input.req ? 'required' : '' %>
+            type="<%= input.type %>"
+            id="<%= input.id %>"
+            placeholder=" "
+            <%= input.req ? 'required' : '' %>
         />
-        <label for="<%= input.id %>" id="<%= label_id %>" class="vp hp"><%= label %></label>
+        <label
+            for="<%= input.id %>"
+            id="<%= label.id %>"
+            class="vp hp"
+        >
+            <%= label.content %>
+        </label>
         <i class="fas fa-check hidden"></i>
     </div>
     <p class="hidden hp vp">Mensaje de error</p>
@@ -28,7 +30,7 @@
     ((d) => {
         d.addEventListener('DOMContentLoaded', () => {
             radius(d.getElementById('<%= input.id %>'));
-            radius(d.getElementById('<%= label_id %>'));
+            radius(d.getElementById('<%= label.id %>'));
         });
     })(document);
 </script>

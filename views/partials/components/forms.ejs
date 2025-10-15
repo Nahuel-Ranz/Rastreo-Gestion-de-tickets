@@ -1,13 +1,13 @@
-<!-- use -->
+<!-- id, title -->
 
 <form id="<%= id %>" class="form flexColumn hp">
     <h1><%= title %></h1>
     <% switch(id) {
         case 'login': %>
-            <%- include('components/form_content/login'); %>
+            <%- include('components/form_content/login', { id }); %>
         <% break;
         case 'register': %>
-            <%- include('components/form_content/register'); %>
+            <%- include('components/form_content/register', { id }); %>
         <% break; %>
     <% } %>
 </form>

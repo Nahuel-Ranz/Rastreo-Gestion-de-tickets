@@ -1,15 +1,17 @@
-<!-- id, name, icon_classes, type, classList -->
-
+<!--
+	btn: { id, type, classes },
+	content: { name, icon}
+-->
 <button
-	type="<%= type || button %>"
-	id="<%= id %>"
-	class="flexRow vp hp"
+	type="<%= btn.type || 'button' %>"
+	id="<%= btn.id %>"
+	class="flexRow vp hp <%= btn.classes %>"
 >
-	<% if(name) { %>
-		<p><%= name %></p>
+	<% if(content.name) { %>
+		<p><%= content.name %></p>
 	<% } %>
-	<% if(icon_classes) { %>
-		<i class="<%= icon_classes %>"></i>
+	<% if(content.icon) { %>
+		<i class="<%= content.icon %>"></i>
 	<% } %>
 </button>
 
@@ -17,10 +19,7 @@
 	import { radius } from '/js/utils.js';
 	
 	((d) => {
-		const classes = <%- JSON.stringify(classList); %>;
-		const btn = d.getElementById('<%= id %>');
-		
-		btn.classList.add(...classes);
+		const btn = d.getElementById('<%= btn.id %>');
 		radius(btn);
 	})(document);
 </script>

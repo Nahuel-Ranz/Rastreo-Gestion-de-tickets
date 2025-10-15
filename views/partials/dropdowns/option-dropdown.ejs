@@ -1,18 +1,22 @@
 <!--
-    container_id,
-    select_id,
-    label_id,
-    label,
+    group: { id, select },
+    label: { id, content },
     options:[{ value, content }, ... ]
 -->
 
-<div id="<%= container_id %>" class="selectContainer">
-    <select id="<%= select_id %>">
-        <% options.forEach(option => { %>
-            <option value="<%= option.value %>"><%= option.content %></option>
+<div id="<%= group.id %>" class="selectContainer">
+    <select id="<%= group.select %>">
+        <% options.forEach(op => { %>
+            <option value="<%= op.value %>"><%= op.content %></option>
         <% }); %>
     </select>
-    <label for="<%= select_id %>" id="<%= label_id %>" class="vp hp"><%= label %></label>
+    <label
+        for="<%= group.select %>"
+        id="<%= label.id %>"
+        class="vp hp"
+    >
+        <%= label.content %>
+    </label>
     <i class="fas fa-check hidden"></i>
 </div>
 
@@ -20,8 +24,8 @@
     import { radius } from '/js/utils.js';
 
     ((d) => {
-        const label = d.getElementById('<%= label_id %>');
-        const choices = new Choices('#<%= select_id %>', {
+        const label = d.getElementById('<%= label.id %>');
+        const choices = new Choices('#<%= group.select %>', {
             searchEnabled:false,
             itemSelectText: ''
         });
@@ -42,5 +46,8 @@
         });
         radius(choices__inner);
         radius(label);
+
+        window.choicesInstances = window.choicesInstances || {};
+        window.choicesInstances['<%= group.select %>'] = choices;
     })(document);
 </script>

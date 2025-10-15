@@ -1,80 +1,52 @@
+<!-- {
+    group: { id:'', input:''},
+    input: { id:'', type:'', req:},
+    label: { id:'', content:''}
+}, {
+    group: { id:'', select:''},
+    label: { id:'', content:''},
+    options: [{ value:'', content:'' }, ... ]
+}-->
+
 <%- include('components/input_group', {
-    group_id:'name_group',
-    input_group_id:'name_input',
-    label_id:'name_label',
-    label: 'Nombre/s *',
-    input: {
-        id:'name',
-        type:'text',
-        req:true
-    }
+    group: { id:'name_group', input:'name_input'},
+    label: { id:'name_label', content:'Nombre/s *'},
+    input: { id:'name', type:'text', req:true}
 }); %>
 
 <%- include('components/input_group', {
-    group_id:'last_name_group',
-    input_group_id:'last_name_input',
-    label_id:'last_name_label',
-    label: 'Apellido/s *',
-    input: {
-        id:'last_name',
-        type:'text',
-        req:true
-    }
+    group: { id:'last_name_group', input:'last_name_input'},
+    label: { id:'last_name_label', content:'Apellido/s *'},
+    input: { id:'last_name', type:'text', req:true}
 }); %>
 
 <%- include('components/input_group', {
-    group_id:'dni_group',
-    input_group_id:'dni_input',
-    label_id:'dni_label',
-    label: 'DNI N° *',
-    input: {
-        id:'dni',
-        type:'number',
-        req:true
-    }
+    group: { id:'dni_group', input:'dni_input'},
+    label: { id:'dni_label', content:'DNI N° *'},
+    input: { id:'dni', type:'number', req:true}
 }); %>
 
 <%- include('flatpickrs/birthdate', {
-    group_id:'birth_group',
-    input_group_id:'birth_input',
-    label_id:'birth_label',
-    label: 'Fecha de nacimiento',
-    input: {
-        id:'birth',
-        type:'text',
-        req:false
-    }
+    group: { id:'birth_group', input:'birth_input'},
+    label: { id:'birth_label', content:'Fecha de nacimiento'},
+    input: { id:'birth', type:'text', req:false}
 }); %>
 
 <%- include('components/input_group', {
-    group_id:'cel_group',
-    input_group_id:'cel_input',
-    label_id:'cel_label',
-    label: 'Celular',
-    input: {
-        id:'cel',
-        type:'number',
-        req:false
-    }
+    group: { id:'cel_group', input:'cel_input'},
+    label: { id:'cel_label', content:'Celular'},
+    input: { id:'cel', type:'number', req:false}
 }); %>
 
 <%- include('components/input_group', {
-    group_id:'mail_group',
-    input_group_id:'mail_input',
-    label_id:'mail_label',
-    label: 'Correo *',
-    input: {
-        id:'mail',
-        type:'email',
-        req:true
-    }
+    group: { id:'mail_group', input:'mail_input'},
+    label: { id:'mail_label', content:'Correo *'},
+    input: { id:'mail', type:'email', req:true}
 }); %>
 
 <%- include('dropdowns/option-dropdown', {
-    container_id: 'dropdown_of_areas',
-    select_id: 'area_select',
-    label_id: 'label_of_areas',
-    label: 'Área de la Facultad *',
+    group: { id:'dropdown_of_areas', select:'area_select'},
+    label: { id:'label_of_areas', content:'Área de la Facultad *'},
     options: [
         { value: "", content: "" },
         { value: "departamento_ingenieria", content: "Departamento de Ingeniería" },
@@ -97,18 +69,22 @@
 
 <div id="button_group" class="flexRow vp">
     <%- include('components/button', {
-        id:'reset',
-        name:'Limpiar Datos',
-        icon_classes: '',
-        type:'reset',
-        classList:[]}
-    ); %>
+        btn: { id:'reset', type:'reset', classes:''},
+        content: { name:'Limpiar Datos', icon:''}
+    }); %>
 
     <%- include('components/button', {
-        id:'check_email',
-        name:'Verificar Correo',
-        icon_classes: '',
-        type:'button',
-        classList:[]}
-    ); %>
+        btn: { id:'check_email', type:'', classes:''},
+        content: { name:'Verificar Correo', icon:''}
+    }); %>
 </div>
+
+<script>
+    const form=document.getElementById('<%= id %>');
+    const glabel=document.getElementById('label_of_areas');
+
+    form.addEventListener('reset', () => {
+        choicesInstances['area_select'].setChoiceByValue('');
+        glabel.classList.remove('active');
+    });
+</script>
