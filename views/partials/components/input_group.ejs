@@ -1,7 +1,8 @@
 <!--
     group: { id, input },
     input: { id, type, req },
-    label: { id, content }
+    label: { id, content },
+    validation: { regex, error_message }
 -->
 
 <div id="<%= group.id %>" class="input_group flexColumn vp">
@@ -10,6 +11,7 @@
             type="<%= input.type %>"
             id="<%= input.id %>"
             placeholder=" "
+            class=""
             <%= input.req ? 'required' : '' %>
         />
         <label
@@ -19,18 +21,63 @@
         >
             <%= label.content %>
         </label>
-        <i class="fas fa-check hidden"></i>
+        <i class="fas hidden"></i>
     </div>
-    <p class="hidden hp vp">Mensaje de error</p>
+    <p class="hidden hp vp"><%= validation.error_message %></p>
 </div>
 
 <script type="module">
     import { radius } from '/js/utils.js';
 
     ((d) => {
+        const group=d.getElementById('<%= group.id %>');
+        const input=group.querySelector('#<%= input.id %>');
+        const label=group.querySelector('#<%= label.id %>');
+        const icon=group.querySelector('i');
+        const p=group.querySelector('p');
+        if(!window.inputStates) window.inputStates = {};
+        inputStates[input.id] = {
+            state: false,
+            label: label,
+            input: input,
+            icon: icon,
+            p: p
+        }
+
+        input.addEventListener('input', () => {
+            if(input.value==='') {
+                label.classList.remove('correct', 'error');
+                input.classList.remove('correct', 'error');
+                icon.classList.add('hidden');
+                p.classList.add('hidden');
+                inputStates[input.id].state = false;
+                return;
+            }
+
+            if(<%= validation.regex %>.test(input.value)) {
+                label.classList.remove('error');
+                label.classList.add('correct');
+                input.classList.remove('error');
+                input.classList.add('correct');
+                icon.classList.remove('hidden', 'fa-times');
+                icon.classList.add('fa-check');
+                p.classList.add('hidden');
+                inputStates[input.id].state = true;
+            } else {
+                label.classList.remove('correct');
+                label.classList.add('error');
+                input.classList.remove('correct');
+                input.classList.add('error');
+                icon.classList.remove('hidden', 'fa-check');
+                icon.classList.add('fa-times');
+                p.classList.remove('hidden');
+                inputStates[input.id].state = false;
+            }
+        });
+
         d.addEventListener('DOMContentLoaded', () => {
-            radius(d.getElementById('<%= input.id %>'));
-            radius(d.getElementById('<%= label.id %>'));
+            radius(input);
+            radius(label);
         });
     })(document);
 </script>

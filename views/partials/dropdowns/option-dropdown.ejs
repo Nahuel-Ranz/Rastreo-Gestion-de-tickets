@@ -6,6 +6,7 @@
 
 <div id="<%= group.id %>" class="selectContainer">
     <select id="<%= group.select %>">
+        <option value=""></option>
         <% options.forEach(op => { %>
             <option value="<%= op.value %>"><%= op.content %></option>
         <% }); %>

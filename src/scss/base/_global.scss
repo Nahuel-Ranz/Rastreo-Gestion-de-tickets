@@ -26,6 +26,16 @@
     padding-bottom: var(--vertical-padding);
 }
 
-.fa-check { color: var(--correct-icon-color) !important;}
-.fa-times { color: var(--error-icon-color) !important;}
-.fa-triangle-exclamation { color: var(--warning-icon-color) !important;}
+.fa-check { color: var(--correct-font-color) !important;}
+.fa-times { color: var(--error-font-color) !important;}
+.fa-triangle-exclamation { color: var(--warning-font-color) !important;}
+
+.correct {
+    border-color: var(--border-correct-color) !important;
+    color: var(--correct-font-color) !important;
+}
+
+.error {
+    border-color: var(--border-error-color) !important;
+    color: var(--error-font-color) !important;
+}

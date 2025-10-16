@@ -1,2 +1,2 @@
 use bod1eymvxhvhobrcebij;
-describe Sesiones;
+describe AreasFacultad;

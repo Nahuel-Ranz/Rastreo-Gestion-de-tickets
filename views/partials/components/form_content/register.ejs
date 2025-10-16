@@ -1,7 +1,8 @@
 <!-- {
     group: { id:'', input:''},
     input: { id:'', type:'', req:},
-    label: { id:'', content:''}
+    label: { id:'', content:''},
+    validation: { regex, error_message }
 }, {
     group: { id:'', select:''},
     label: { id:'', content:''},
@@ -11,44 +12,58 @@
 <%- include('components/input_group', {
     group: { id:'name_group', input:'name_input'},
     label: { id:'name_label', content:'Nombre/s *'},
-    input: { id:'name', type:'text', req:true}
+    input: { id:'name', type:'text', req:true},
+    validation: {
+        regex:/^ *[a-záéíóúñ]{3,}( [a-záéíóúñ]{2,})* *$/i,
+        error_message: 'Solo nombres con letras y un espacio para separarlos. Estos tendrán un mínimo de 3 letras.'
+    }
 }); %>
 
 <%- include('components/input_group', {
     group: { id:'last_name_group', input:'last_name_input'},
     label: { id:'last_name_label', content:'Apellido/s *'},
-    input: { id:'last_name', type:'text', req:true}
+    input: { id:'last_name', type:'text', req:true},
+    validation: {
+        regex:/^ *[a-záéíóúñ]{3,}( [a-záéíóúñ]{2,})* *$/i,
+        error_message: 'Solo apellidos con letras y un espacio para separarlos. Estos tendrán un mínimo de 3 letras.'
+    }
 }); %>
 
 <%- include('components/input_group', {
     group: { id:'dni_group', input:'dni_input'},
     label: { id:'dni_label', content:'DNI N° *'},
-    input: { id:'dni', type:'number', req:true}
+    input: { id:'dni', type:'number', req:true},
+    validation: { regex:/^\d{8}$/, error_message: 'Solo 8 números serán válidos.'}
 }); %>
 
 <%- include('flatpickrs/birthdate', {
     group: { id:'birth_group', input:'birth_input'},
     label: { id:'birth_label', content:'Fecha de nacimiento'},
-    input: { id:'birth', type:'text', req:false}
+    input: { id:'birth', type:'text', req:false},
+    validation: { regex:/.*/, error_message: ''}
 }); %>
 
 <%- include('components/input_group', {
     group: { id:'cel_group', input:'cel_input'},
     label: { id:'cel_label', content:'Celular'},
-    input: { id:'cel', type:'number', req:false}
+    input: { id:'cel', type:'number', req:false},
+    validation: { regex:/^\d{10}$/, error_message: 'Solo 10 números serán válidos.'}
 }); %>
 
 <%- include('components/input_group', {
     group: { id:'mail_group', input:'mail_input'},
     label: { id:'mail_label', content:'Correo *'},
-    input: { id:'mail', type:'email', req:true}
+    input: { id:'mail', type:'email', req:true},
+    validation: {
+        regex:/^ *(?!.*\.\.)[\w.%+-]+@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63} *$/i,
+        error_message: 'Formato mínimo válido: usuario@correo.com'
+    }
 }); %>
 
 <%- include('dropdowns/option-dropdown', {
     group: { id:'dropdown_of_areas', select:'area_select'},
     label: { id:'label_of_areas', content:'Área de la Facultad *'},
     options: [
-        { value: "", content: "" },
         { value: "departamento_ingenieria", content: "Departamento de Ingeniería" },
         { value: "departamento_ciencias_sociales", content: "Departamento de Ciencias Sociales" },
         { value: "departamento_economicas", content: "Departamento de Ciencias Económicas" },
@@ -81,10 +96,18 @@
 
 <script>
     const form=document.getElementById('<%= id %>');
-    const glabel=document.getElementById('label_of_areas');
+    const areasLabel=document.getElementById('label_of_areas');
 
     form.addEventListener('reset', () => {
         choicesInstances['area_select'].setChoiceByValue('');
-        glabel.classList.remove('active');
+        areasLabel.classList.remove('active');
+
+        Object.keys(inputStates).forEach(key => {
+            inputStates[key].state = false;
+            inputStates[key].input.classList.remove('correct', 'error');
+            inputStates[key].label.classList.remove('correct', 'error');
+            inputStates[key].icon.classList.add('hidden');
+            inputStates[key].p.classList.add('hidden');
+        });
     });
 </script>
