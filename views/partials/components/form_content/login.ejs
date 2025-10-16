@@ -1,19 +1,28 @@
 <!-- {
     group: { id:'', input:''},
     input: { id:'', type:'', req:},
-    label: { id:'', content:''}
+    label: { id:'', content:''},
+    validation: { regex, error_message }
 } -->
 
 <%- include('components/input_group', {
     group: { id:'credential_group', input:'credential_input'},
     input: { id:'credential', type:'text', req:true},
-    label: { id:'credential_label', content:'Número de usuario, DNI, correo o celular'}
+    label: { id:'credential_label', content:'Número de usuario, DNI, correo o celular'},
+    validation: {
+        regex:/^\s*(?:[\w.%+-]+@(?:[a-z0-9-]+\.)+[a-z]{2,63}|\d{5,10})\s*$/i,
+        error_message: 'Dato erróneo o incompleto.'
+    }
 }); %>
 
 <%- include('components/input_group', {
     group: { id:'pass_group', input:'pass_input'},
     input: { id:'pass', type:'password', req:true},
-    label: { id:'pass_label', content:'Contraseña'}
+    label: { id:'pass_label', content:'Contraseña'},
+    validation: {
+        regex:/^(?=.*\d).{8,}$/i,
+        error_message:'Debe tener un mínimo de 8 carácteres y al menos un número.'
+    }
 }); %>
 
 <div id="button_group" class="flexRow vp">
