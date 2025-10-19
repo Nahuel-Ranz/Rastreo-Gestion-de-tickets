@@ -1,0 +1,11 @@
+.ticket_container {
+    border: 1px solid var(--primary-font-color);
+    margin: 1%;
+    gap: 5px;
+    > * {
+        border: 1px dashed lightgreen;
+        width: var(--full-width-parent);
+    }
+
+    * { color: var(--primary-font-color);}
+}

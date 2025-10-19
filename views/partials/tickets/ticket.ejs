@@ -1,24 +1,43 @@
-<div id="ticket_container" class="ticket_container">
-    <div id="task_and_time" class="task_and_time">
-        <p>Tarea N°: <%= task.id %></p>
+<div id="<%= id %>" class="ticket_container flexColumn hp vp">
+    <div id="task_and_time" class="task_and_time flexRow">
+        <p>Tarea N°: 654</p>
         <div id="date_and_hour" class="date_and_hour">
-            <p>Fecha de solicitud: <%= task.fecha %></p>
-            <p>Hora: <%= task.hora %></p>
+            <p>Fecha de solicitud: 15/09/2025</p>
+            <p>Hora: 05:50</p>
         </div>
+        <i class="far fa-edit"></i>
+        <i class="far fa-message"></i>
+        <i class="fas fa-chevron-down"></i>
+        <i class="fas fa-chevron-up"></i>
+        <!--
+            (far fa-edit)
+            (far fa-message)
+            (fas fa-chevron-down)
+            (fas fa-chevron-up)
+        -->
     </div>
-    <div id="requester" class="requester">
-        <p>Solicitante: <%= task.solicitante %></p>
-        <button type="button">>> Más detalles ...</button>
+    <div id="requester" class="requester flexRow">
+        <p>Solicitante: Sandra Perez</p>
     </div>
-    <div id="requester_origin" class="requester_origin">
-        <p>Procedencia: <%= task.procedencia %></p>
-        <button type="button">>> Más detalles ...</button>
+    <div id="requester_origin" class="requester_origin flexRow">
+        <p>Procedencia: Secretaría de algún lugar</p>
     </div>
-    <div id="task_details" class="task_details">
-        <p><%= task.detalles_solicitud %></p>
+    <div id="requester_origin" class="requester_origin flexRow">
+        <p>Fecha de la actividad: Jueves, 16 de octubre del 2025</p>
     </div>
-    <div id="task_state_and_button">
-        <p>Estado: <%= task.estado %></p>
+    <div id="task_details" class="task_details flexRow">
+        <p>Detalles ... </p>
+    </div>
+    <div id="task_state_and_button" class="flexRow">
         <button type="button">Iniciar</button>
+        <p>Estado: no visto</p>
     </div>
 </div>
+
+<script type="module">
+    import { radius } from '/js/utils.js';
+    ((d) => {
+        const list = d.getElementById('<%= id %>');
+        radius(list, 15);
+    })(document);
+</script>

@@ -1,3 +1,13 @@
+<!-- id, title, content_type -->
 <main id="main" class="flexRow vp">
-    <%- include('components/forms', {title, id}); %>
+    <% switch(content_type) {
+        case 'form': %>
+            <%- include('components/forms', { id, title }); %>
+        <% break;
+        case 'ticket_collectors': %>
+            <%- include('components/ticket_collectors', { id, title }); %>
+        <% break;
+        case 'configurations': %>
+            <%- include('components/configurations', { id, title }); %>
+    <% } %>
 </main>

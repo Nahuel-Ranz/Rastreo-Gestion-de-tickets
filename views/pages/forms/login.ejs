@@ -1,4 +1,10 @@
 <%- include("head", { title: 'Iniciar Sesión'}); %>
 <%- include("header"); %>
-<%- include("main", {title: 'INICIAR SESIÓN', id: 'login'}); %>
+
+<%- include("main", {
+    id:'login',
+    title:'INICIAR SESIÓN',
+    content_type:'form'
+}); %>
+
 <%- include("footer"); %>

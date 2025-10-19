@@ -7,7 +7,7 @@
 	> label {
 		background-color: var(--primary-color);
 		position: absolute;
-		top: 16%;
+		top: 25%;
 		pointer-events: none;
 		margin-left: 1px;
 		transition: all 0.2s ease;
@@ -21,6 +21,7 @@
 
 	.choices {
 		overflow: visible;
+		margin:0 !important;
 		.choices__inner {
 			background-color: var(--primary-color);
 			.choices__item--selectable { padding-top: 1%;}

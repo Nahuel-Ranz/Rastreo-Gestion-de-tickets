@@ -8,6 +8,15 @@
         <% break;
         case 'register': %>
             <%- include('components/form_content/register', { id }); %>
+        <% break;
+        case 'recovery_email': %>
+            <%- include('components/form_content/recovery_email', { id }); %>
+        <% break;
+        case 'recovery_key': %>
+            <%- include('components/form_content/recovery_key', { id }); %>
+        <% break;
+        case 'recovery_new_password': %>
+            <%- include('components/form_content/recovery_new_password', { id }); %>
         <% break; %>
     <% } %>
 </form>

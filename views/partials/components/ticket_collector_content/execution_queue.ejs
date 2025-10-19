@@ -1,0 +1,17 @@
+<!--
+    header:{ title:'', options:[{value:'',content:''},...]}
+-->
+
+<%- include('tickets/ticket_collector_header', {
+    title:'Cola de Ejecución',
+    options:[
+        { value:'all', content:'Todos'},
+        { value:'pending', content:'Pendientes'},
+        { value:'executing', content:'En ejecución'},
+        { value:'finished', content:'Finalizado'},
+        { value:'canceled', content:'Cancelado'},
+        { value:'undone', content:'No realizado'}
+    ]
+}); %>
+
+<%- include('tickets/ticket_collector_list'); %>

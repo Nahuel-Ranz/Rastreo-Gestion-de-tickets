@@ -1,28 +1,28 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
+    service: process.env.EMAIL_SERV,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     }
 });
 
-async function sendEmail(recipient, subj, message) {
+async function sendMail(destination, subj, content) {
     try {
-        const info = await transporter.sendMail({
-            from: `Rastreo - Gestión de Tickets <${process.env.EMAIL_FROM}>`,
-            to: recipient,
+        const mail = {
+            from: process.env.EMAIL_USER,
+            to: destination,
             subject: subj,
-            html: message
-        });
+            text: content
+        }
 
-        console.log('Mail sent');
+        const info = await transporter.sendMail(mail);
+        console.log(`📨 Correo enviado a ${ destino }: ${ info.response }`);
     } catch(error) {
-        console.log('Error al enviar el correo: ', error);
+        console.error(`❌ Error al enviar correo a ${ destination }: ${ error }`);
     }
 }
 
-module.exports = sendEmail;
+module.exports = sendMail;

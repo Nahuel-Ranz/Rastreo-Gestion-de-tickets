@@ -1,4 +1,10 @@
 <%- include("head", { title: 'Tareas pendientes'}); %>
 <%- include("header"); %>
-<%- include("main"); %>
+
+<%- include("main", {
+    id:'waiting_list', 
+    title:'Lista de Espera',
+    content_type:'ticket_collectors'
+}); %>
+
 <%- include("footer"); %>

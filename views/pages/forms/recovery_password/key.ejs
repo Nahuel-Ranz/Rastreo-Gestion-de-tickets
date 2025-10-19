@@ -1,4 +1,10 @@
-<%- include("head", { title: 'Iniciar Sesión'}); %>
+<%- include("head", { title: 'Recuperar contraseña'}); %>
 <%- include("header"); %>
-<%- include("main"); %>
+
+<%- include("main", {
+    id:'recovery_key',
+    title:'RECUPERAR CONTRASEÑA',
+    content_type:'form'
+}); %>
+
 <%- include("footer"); %>

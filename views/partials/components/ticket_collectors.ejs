@@ -1,0 +1,17 @@
+<!-- id, title -->
+
+<div id="<%= id %>" class="ticket_collector flexColumn">
+    <% if( id === 'waiting_list') { %>
+        <%- include('components/ticket_collector_content/waiting_list'); %>
+    <% } else { %>
+        <%- include('components/ticket_collector_content/execution_queue'); %>
+    <% } %>
+</div>
+
+<script type="module">
+    import { radius } from '/js/utils.js';
+    ((d) => {
+        const list = d.getElementById('ticket_list');
+        radius(list, 30);
+    })(document);
+</script>

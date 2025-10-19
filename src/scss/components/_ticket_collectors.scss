@@ -1,0 +1,39 @@
+.ticket_collector {
+    width: clamp(350px, 60%, 800px);
+
+    #collector_header{
+        width: var(--full-width-parent);
+        height: auto;
+        background-color: var(--secondary-color);
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bolder;
+            width: 250%;
+        }
+        .selectContainer {
+            > label {
+                top: 30%;
+                margin-left: 5px;
+                background-color:  var(--secondary-color);
+            }
+            .choices .choices__inner {
+                margin-top: 2px;
+                background-color: var(--secondary-color);
+            }
+        }
+    }
+
+    #ticket_list {
+        margin-top: 5px;
+        height: 1400px;
+        max-height: 1400px;
+        
+        overflow-y:auto;
+        scrollbar-width:none;
+
+        width: var(--full-width-parent);
+        background-color: var(--primary-color);
+    }
+}

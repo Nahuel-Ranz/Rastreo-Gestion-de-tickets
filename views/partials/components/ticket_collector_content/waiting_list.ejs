@@ -1,0 +1,15 @@
+<!--
+    header:{ title:'', options:[{value:'',content:''},...]}
+-->
+
+<%- include('tickets/ticket_collector_header', {
+    title:'Lista de Espera',
+    options:[
+        { value:'all', content:'Todos'},
+        { value:'unseen', content:'No visto'},
+        { value:'seen', content:'Visto'},
+        { value:'missing_info', content:'Falta Información'}
+    ]
+}); %>
+
+<%- include('tickets/ticket_collector_list'); %>
