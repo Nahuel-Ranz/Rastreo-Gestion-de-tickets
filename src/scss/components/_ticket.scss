@@ -1,11 +1,33 @@
 .ticket_container {
+    background-color: var(--secondary-color);
     border: 1px solid var(--primary-font-color);
-    margin: 1%;
-    gap: 5px;
+    margin: 3% 1%;
+    gap: 10px;
+    align-items: end;
+    
+    * {
+        color: var(--primary-font-color);
+        font-size: 16px;
+    }
+    
     > * {
-        border: 1px dashed lightgreen;
         width: var(--full-width-parent);
+        justify-content: start;
+        border: 1px solid var(--tertiary-color);
+        > * {
+            text-wrap: nowrap;
+            border: 2px solid green;
+        }
+        strong { text-decoration:underline;}
+    }
+    
+    .task_and_time {
+        font-size:24px;
+        .icons {
+            padding: 0 1%;
+            gap: 10px;
+        }
     }
 
-    * { color: var(--primary-font-color);}
+    .state { justify-content: end;}
 }

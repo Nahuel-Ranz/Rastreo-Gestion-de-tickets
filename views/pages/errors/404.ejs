@@ -1,4 +1,10 @@
 <%- include("head", { title: '404'}); %>
 <%- include("header"); %>
-<%- include("main", {title: 'PÁGINA NO ENCONTRADA', id: '404'}); %>
+
+<%- include("main", {
+    id:'404',
+    title:'PÁGINA NO ENCONTRADA',
+    content_type:''
+}); %>
+
 <%- include("footer"); %>

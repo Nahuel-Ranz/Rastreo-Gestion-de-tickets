@@ -16,6 +16,6 @@ router.get('/perfil', (req, res) => res.render('profile'));
 router.get('/estadisticas', (req, res) => res.render('dashboard'));
 router.get('/configuraciones', (req, res) => res.render('settings'));
 router.get('/notificaciones', (req, res) => res.render('notifications'));
-router.get('/tipos_de_cuentas', (req, res) => res.render('account_types'));
+router.get('/tipos_de_cuentas', (req, res) => res.render('access_control_dashboard'));
 
 module.exports = router;

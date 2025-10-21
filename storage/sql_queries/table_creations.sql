@@ -17,7 +17,7 @@ create table AreasFacultad (
 	id int primary key auto_increment,
     nombre varchar(70) not null unique,
     abreviacion varchar(30) not null unique,
-    correo varchar(40) null unique,
+    correo varchar(250) null unique,
 
     constraint chk_nombre
         check(
@@ -72,9 +72,8 @@ create table Personas (
     dni char(8) not null unique,
     fechaNacimiento date null,
     fechaCreacion datetime not null,
-    constrasenia varchar(255) not null,
+    contrasenia varchar(255) not null,
     rol_id int null,
-    aceptado boolean not null,
 
     constraint fk_personas_roles
         foreign key(rol_id)
@@ -112,7 +111,7 @@ create table Celulares (
 
 create table Correos (
 	id int primary key auto_increment,
-    correo varchar(40) not null unique,
+    correo varchar(250) not null unique,
     propietario_id int not null,
 
     constraint fk_correos_personas

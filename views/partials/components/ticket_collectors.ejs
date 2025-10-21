@@ -1,17 +1,17 @@
 <!-- id, title -->
 
-<div id="<%= id %>" class="ticket_collector flexColumn">
+<div id="ticket_collector" class="flexColumn">
     <% if( id === 'waiting_list') { %>
-        <%- include('components/ticket_collector_content/waiting_list'); %>
+        <%- include('components/ticket_collector_content/waiting_list', { id, title }); %>
     <% } else { %>
-        <%- include('components/ticket_collector_content/execution_queue'); %>
+        <%- include('components/ticket_collector_content/execution_queue', { id, title }); %>
     <% } %>
 </div>
 
 <script type="module">
     import { radius } from '/js/utils.js';
     ((d) => {
-        const list = d.getElementById('ticket_list');
+        const list = d.getElementById('collector_list');
         radius(list, 30);
     })(document);
 </script>

@@ -1,10 +1,6 @@
-<!--
-    header:{ title:'', options:[{value:'',content:''},...]}
--->
+<!-- id, title -->
 
-<%- include('tickets/ticket_collector_header', {
-    title:'Lista de Espera',
-    options:[
+<%- include('tickets/ticket_collector_header', { title, options:[
         { value:'all', content:'Todos'},
         { value:'unseen', content:'No visto'},
         { value:'seen', content:'Visto'},
@@ -12,4 +8,4 @@
     ]
 }); %>
 
-<%- include('tickets/ticket_collector_list'); %>
+<%- include('tickets/ticket_collector_list', { id }); %>

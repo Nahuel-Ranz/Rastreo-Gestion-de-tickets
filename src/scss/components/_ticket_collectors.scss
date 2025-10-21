@@ -1,4 +1,4 @@
-.ticket_collector {
+#ticket_collector {
     width: clamp(350px, 60%, 800px);
 
     #collector_header{
@@ -25,7 +25,7 @@
         }
     }
 
-    #ticket_list {
+    #collector_list {
         margin-top: 5px;
         height: 1400px;
         max-height: 1400px;
