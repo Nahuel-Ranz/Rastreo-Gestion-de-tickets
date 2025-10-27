@@ -39,10 +39,15 @@ create table AreasFacultad (
 create table Estados (
 	id int primary key auto_increment,
     estado varchar(20) not null unique,
+    abreviacion varchar(10) not null unique,
 
     constraint chk_estado
         check(
             estado regexp '^[a-záéíóúñ]+( [a-záéíóúñ]+)*$'
+        ),
+	constraint chk_estados_abreviacion
+		check(
+			abreviacion regexp '^[a-z]{1,10}$'
         )
 );
 
@@ -169,6 +174,7 @@ create table Tickets (
     fecha datetime not null,
     solicitante_id int not null,
     area_facultad_id int not null,
+    fecha_actividad datetime not null,
     estado_id int not null,
 
     constraint fk_tickets_personas
@@ -229,8 +235,9 @@ create table TicketsAprobados (
     fecha datetime not null,
     solicitante_id int not null,
     area_facultad_id int not null,
+    fecha_actividad datetime not null,
     ejecutador_id int null,
-    fechaFinalizacion datetime null,
+    fecha_finalizacion datetime null,
     estado_id int not null,
 
     constraint fk_solicitante_ticketsaprobados_personas

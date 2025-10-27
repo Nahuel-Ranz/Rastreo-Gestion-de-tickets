@@ -1,0 +1,12 @@
+{
+    "admin":{
+        "me":[],
+        "others":["date","time","requester","executer","activity_date","finished_date","details"],
+        "general":["id","origin","status"]
+    },
+    "req":{
+        "me":["date","time","requester","executer","activity_date","finished_date","details"],
+        "others":[],
+        "general":["id","origin","status"]
+    }
+}
