@@ -63,23 +63,7 @@
 <%- include('dropdowns/option-dropdown', {
     group: { id:'dropdown_of_areas', select:'area_select'},
     label: { id:'label_of_areas', content:'Área de la Facultad *'},
-    options: [
-        { value: "departamento_ingenieria", content: "Departamento de Ingeniería" },
-        { value: "departamento_ciencias_sociales", content: "Departamento de Ciencias Sociales" },
-        { value: "departamento_economicas", content: "Departamento de Ciencias Económicas" },
-        { value: "departamento_ambiental", content: "Departamento de Ingeniería Ambiental" },
-        { value: "centro_estudiantes", content: "Centro de Estudiantes" },
-        { value: "area_cultura", content: "Área de Cultura y Arte Universitario" },
-        { value: "area_comunicacion", content: "Área de Comunicación Institucional" },
-        { value: "area_investigacion", content: "Área de Investigación y Desarrollo" },
-        { value: "area_vinculacion", content: "Área de Vinculación Tecnológica" },
-        { value: "programa_voluntariado", content: "Programa de Voluntariado Universitario" },
-        { value: "extension_territorial", content: "Área de Extensión Territorial" },
-        { value: "oficina_graduados", content: "Oficina de Graduados" },
-        { value: "secretaria_academica", content: "Secretaría Académica" },
-        { value: "secretaria_bienestar", content: "Secretaría de Bienestar Universitario" },
-        { value: "area_emprendedores", content: "Área de Innovación y Emprendedores" }
-    ]
+    options: areas.length ? areas : [{ value:'', content:areas.length}]
 }); %>
 
 <div id="button_group" class="flexRow vp">
@@ -94,7 +78,7 @@
     }); %>
 </div>
 
-<script>
+<script> 
     const form=document.getElementById('<%= id %>');
     const areasLabel=document.getElementById('label_of_areas');
 

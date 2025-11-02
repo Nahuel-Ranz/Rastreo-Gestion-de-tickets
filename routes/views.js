@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { renderAreas } = require('../public/js/getDBData.js');
 
 // formularios
 router.get('/', (req, res) => res.render('forms/login'));
-router.get('/registro', (req, res) => res.render('forms/register'));
+router.get('/registro', renderAreas);
 router.get('/establecer_clave', (req, res) => res.render('forms/set_password'));
 router.get('/recuperar_clave/email', (req, res) => res.render('forms/recovery_password/email'));
 router.get('/recuperar_clave/clave', (req, res) => res.render('forms/recovery_password/key'));

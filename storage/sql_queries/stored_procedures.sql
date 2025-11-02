@@ -900,3 +900,24 @@ begin
 		set ok = false; set message = json_object('status','no encontrado','tipo',tipoCredencial_,'valor',credencial_);
 	end if;
 end; // delimiter ;
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+drop procedure if exists obtenerAreas;
+delimiter //
+create procedure obtenerAreas(
+	out ok boolean,
+	out message json
+)
+begin
+	select abreviacion, nombre
+	from AreasFacultad
+	order by nombre;
+	
+	if row_count()>0 then
+		set ok = true; set message = json_object('status','Áreas de la Facultad');
+	else
+		set ok = false; set message = json_object('error','Error al obtener las Áreas');
+	end if;
+end; // delimiter ;

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const mysql2=require('mysql2/promise');
 const { MongoClient } = require('mongodb');
 
@@ -26,4 +28,6 @@ async function getMongo(){
     }
     return mongodb;
 }
+console.log("MySQL: ", mysql);
+console.log(getMongo());
 module.exports = { mysql, getMongo };

@@ -25,7 +25,7 @@ app.use(session({
     }
 }));
 
-//app.use('/leer', require('./routes/back_data'));
+app.use('/leer', require('./routes/back_data'));
 //app.use('/escribir', require('./routes/actions'));
 app.use('/', require('./routes/views'));
 
