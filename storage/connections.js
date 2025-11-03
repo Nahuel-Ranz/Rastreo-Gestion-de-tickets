@@ -28,6 +28,5 @@ async function getMongo(){
     }
     return mongodb;
 }
-console.log("MySQL: ", mysql);
-console.log(getMongo());
+
 module.exports = { mysql, getMongo };

@@ -1,4 +1,4 @@
-const { obtenerAreas } = require('../../controllers/backDataControllers.js');
+const { obtenerAreas } = require('../../controllers/viewController.js');
 
 exports.renderAreas = async (req, res) => {
     try {

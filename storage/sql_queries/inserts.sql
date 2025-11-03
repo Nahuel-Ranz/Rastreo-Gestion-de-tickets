@@ -13,6 +13,7 @@ values(null,'no visto','unseen'),
     (null,'finalizado','finished'),
     (null,'cancelado','canceled'),
     (null,'no realizado','undone'),
+    (null,'enviado','sent'),
     (null,'recibido','received'),
     (null,'leído','read');
 select * from Estados;
