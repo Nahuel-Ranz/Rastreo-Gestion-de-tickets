@@ -643,31 +643,14 @@ end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 drop procedure if exists obtenerMensajes;
 delimiter //
-create procedure obtenerMensajes(
-	in _me_id int,
-	in _other_id int,
-	in _ticket_id int,
-	in _page int,
-	out ok boolean,
-	out message json
-)
+create procedure obtenerMensajes(in _me_id int, in _other_id int, in _ticket_id int, in _page int)
 begin
-	declare offset_ int;
+	declare offset_ int default 0;
     
 	set _page = greatest(ifnull(_page, 1), 1);
     set offset_ = (_page-1) * 40;
-    
-	set ok = true;
-	set message = json_object('status','Mensajes obtenidos');
 	
-	select
-		m.id,
-		m.emisor_id as emisor,
-		m.receptor_id as receptor,
-		m.mensaje,
-		m.fecha,
-		m.ticket_id as ticket,
-		e.estado as estado
+	select m.id, m.emisor_id, m.receptor_id, m.mensaje, m.fecha, m.ticket_id, e.estado, e.id
 	from Mensajes as m
 	inner join Estados as e on m.estado_id = e.id
 	where _me_id in(m.emisor_id, m.receptor_id)
@@ -680,12 +663,9 @@ end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
-drop procedure if exists leerMensaje;
+drop procedure if exists leerMensajes;
 delimiter //
-create procedure leerMensaje(
-	in _message_ids json,
-	out ok boolean
-)
+create procedure leerMensajes(in _message_ids json)
 main:begin
 	declare i_ int default 0;
 	declare total_ int;
@@ -693,7 +673,6 @@ main:begin
 	
 	set total_ = json_length(_message_ids);
 	if total_ = 0 then
-		set ok = false;
 		leave main;
 	end if;
 	
@@ -706,8 +685,6 @@ main:begin
 		
 		set i_ = i_ + 1;
 	end while;
-	
-	set ok = true;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -719,9 +696,7 @@ create procedure actualizarTicket(
 	in _id int,
 	in _fecha_solicitud datetime,
 	in _fecha_actividad datetime,
-	in _origin int,
-	out ok boolean,
-	out message json
+	in _origin int
 )
 begin
 	declare query_ text default '';
@@ -738,19 +713,10 @@ begin
 	set fecha = "', _fecha_solicitud, '"', query_,
 	' where id = ', _id);
 	
-	
 	prepare stmt from @query;
 	execute stmt;
 	deallocate prepare stmt;
 	set @query = null;
-	
-	if row_count()>0 then
-		set ok = true;
-		set message = json_object('status',if(query_='', 'Solo me modifcó el detalle en MongoDB', 'Modificaciones en MySQL hechas'));
-	else
-		set ok = false;
-		set message = json_object('error','No hubo modificaciones');
-	end if;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -758,12 +724,7 @@ end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 drop procedure if exists existeUsuario;
 delimiter //
-
-create procedure existeUsuario(
-	in _credencial json,
-	out ok boolean,
-	out message json
-)
+create procedure existeUsuario(in _credencial json)
 begin
 	declare credencial_ varchar(250) default '';
 	declare tipoCredencial_ varchar(20) default '';
@@ -789,9 +750,9 @@ begin
 	end if;
 
 	if filas_>0 then
-		set ok = true; set message = json_object('status','encontrado','tipo',tipoCredencial_,'valor',credencial_);
+		select true as ok, concat('Usuario encontrado por su ', tipoCredencial_) as 'status';
 	else
-		set ok = false; set message = json_object('status','no encontrado','tipo',tipoCredencial_,'valor',credencial_);
+		select false as ok, 'Usuario NO encontrado' as 'status';
 	end if;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */

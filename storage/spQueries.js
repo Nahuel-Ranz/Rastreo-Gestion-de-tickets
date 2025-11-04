@@ -232,9 +232,57 @@ async function receiveMessages(id) {
     }
 }
 // ===========================================================================================================================
+async function getMessages(me_id, other_id, ticket_id, page=1) {
+	try {
+		const [result] = await mysql.query('call obtenerMensajes(?,?,?,?)', [
+			me_id, other_id, ticket_id, page
+		]);
+		const messages = result[0] || [];
+		
+		return { ok: true, data: messages };
+	} catch (error) {
+		console.error('Error al intentar obtener los mensajes (desde spQueries): ', error);
+		return { ok: false, error: 'No se pudieron obtener los mensajes.' };
+	}
+}
 // ===========================================================================================================================
+async function readMessages(messages_id = []) {
+    try {
+        await mysql.execute('call leerMensajes(?);', [ JSON.stringify(messages_id) ]);
+
+        return { ok: true };
+    } catch ( error ) {
+        console.error('Error al obtener los mensajes (desde spQueries): ', error);
+        return { ok: false, error:'No se pudo obtener los mensajes.' };
+    }
+}
 // ===========================================================================================================================
+async function updateTicket(id, fecha_actividad = null, origin_id = null) {
+    try {
+        await mysql.execute('call actualizarTicket(?,?,?,?);', [
+            id, new Date(), fecha_actividad, origin_id
+        ]);
+
+        return { ok: true };
+    } catch ( error ) {
+        console.error('Error al actualizar el ticket (desde spQueries): ', error);
+        return { ok: false, error:'No se pudo actualizar el ticket.' };
+    }
+}
 // ===========================================================================================================================
+async function userExists(credencial = []) {
+	try {
+		const [result] = await mysql.query('call existeUsuario(?)', [
+			JSON.stringify(credencial)
+		]);
+		const confirmation = result[0][0];
+		
+		return { ok: true, data: confirmation };
+	} catch (error) {
+		console.error('Error al intentar verificar la existencia del usuario (desde spQueries): ', error);
+		return { ok: false, error: 'No se pudieron verificar si el usuario existe.' };
+	}
+}
 // ===========================================================================================================================
 // ===========================================================================================================================
 // ===========================================================================================================================
@@ -248,12 +296,16 @@ module.exports = {
     createTicket,
     getAreas,
     getArgon2Hash,
+    getMessages,
     getTickets,
     getUserData,
     initSession,
+    readMessages,
     receiveMessages,
     registerUser,
     rejectNewUser,
     sendMessage,
-    updateLastActivity
+    updateLastActivity,
+    updateTicket,
+    userExists
 }
