@@ -7,7 +7,16 @@ async function showRegister(req, res) {
 }
 
 async function showWaitingList(req, res) {
-    
+    const tickets = await spQueries.getTickets(
+        req.session.user.id, 1, ''
+    );
+
+    if(!tickets.ok) return res.render('index', { error: tickets.error});
+    if('status' in tickets) return res.render('index', { status: tickets.status });
+    return res.render('index', { tickets: tickets.tickets });
 }
 
-module.exports = { showRegister }
+module.exports = {
+    showRegister,
+    showWaitingList
+}

@@ -477,7 +477,11 @@ main:begin
 		set @query = null;
 	end if;
 	-- ---------------------------------------------------------
-	
+	if @mis_tickets is null and @tickets_de_otros is null then
+		select true as ok, 'No hay tickets por mostrar' as 'status';
+        leave main;
+	end if;
+    
 	select
 		true as ok,
 		json_object(

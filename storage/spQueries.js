@@ -1,6 +1,7 @@
 const { mysql, getMongo } = require('./connections.js');
 const argon2 = require('argon2');
 const UAParser = require('ua-parser-js');
+const utils = require('../utils/utils.js');
 // ===========================================================================================================================
 async function getAreas() {
     try {
@@ -186,22 +187,18 @@ async function changeTicketStatus(id, abreviation_status) {
 // type: 'Aprobados' || ''
 async function getTickets(usuario_id, page=1, type='Aprobados') {
 
-    if (!['Aprobados',''].includes(type)) {
-        return { ok:false, error:'Tipo de tickets inválido.' };
-    }
+    if (!['Aprobados',''].includes(type)) return { ok:false, error:'Tipo de ticket inválido.' };
+    if(!utils.isNatural(page)) return { ok:false, error:'Número de página inválido.' };
 
     try {
         const [result] = await mysql.query(`call obtenerTickets(?,?,?)`, [ usuario_id, page, type ]);
+        const tickets = result[0][0];
 
-        const tickets_propios = result[0]?.[0]?.tickets_propios
-            ? JSON.parse(result[0][0].tickets_propios)
-            : [];
-
-        const tickets_ajenos = result[1]?.[0]?.tickets_ajenos
-            ? JSON.parse(result[1][0].tickets_ajenos)
-            : [];
+        if(!tickets.ok) return { ok: false, error: tickets.error };
+        if('status' in tickets) return { ok:true, status: tickets.status };
         
-        return { ok: true, tickets_propios, tickets_ajenos };
+        const merged = utils.mergeTickets(tickets.tickets);
+        return { ok: true, tickets: merged };
     } catch( error ) {
         console.error(`Error al intentar obtener los tickets ${type}: ${ error }`);
         return { ok: false, error:`No se pudo obtener los tickets ${type}.`}
