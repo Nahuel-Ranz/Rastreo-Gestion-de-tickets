@@ -16,7 +16,6 @@
             . styles.min.css
         > js/
             . front_controllers.js
-            . getDBData.js
             . utils.js
         > media/
             . frre-black.png

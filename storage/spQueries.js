@@ -58,16 +58,16 @@ async function aproveNewUser(id, rol) {
     }
 }
 // ===========================================================================================================================
-async function getArgon2Hash(credencial) {
+async function getArgon2Hash(credential) {
     try {
-        const [result] = await mysql.query('call obtenerArgon2Hash(?);', [ JSON.stringify([credencial]) ]);
+        const [result] = await mysql.query('call obtenerArgon2Hash(?);', [ JSON.stringify([credential]) ]);
         const response = Array.isArray(result[0]) ? result[0][0] : result[0];
 
-        if(response.ok) return { ok: true, id:response.id_user, hash:response.contrasenia };
+        if(response.ok) return { ok: true, id:response.id_user, hash:response.hash };
         return { ok: false, error:response.error };
     } catch (error) {
         console.error('Error al obtener el Hash de Argon2 (desde spQueries): ', error);
-        return { ok: false, error: 'Argon2 no obtenido.' };
+        return { ok: false, error: 'Error al obtener Argon2 (desde spQueries).' };
     }
 }
 // ===========================================================================================================================
@@ -77,17 +77,19 @@ async function initSession(req, id_user) {
         const ua = parser.getResult();
 
         const device = ua.device.type || 'PC';
-        const so = ua.os.name || 'Desconocido';
+        const os = ua.os.name || 'Desconocido';
         const browser = ua.browser.name || 'Desconocido';
         const ip = req.ip.replace('::ffff:', '') || '0.0.0.0';
         const date = new Date();
 
         const [result] = await mysql.query('call iniciarSesion(?,?,?,?,?,?,?);', [
-            id_user, device, ip, so, browser, date, date
+            id_user, device, ip, os, browser, date, date
         ]);
 
         const response = Array.isArray(result[0]) ? result[0][0] : result[0];
-        return { ok: true, data: JSON.parse(response.datos_sesion) };
+        return response.ok
+            ? { ok: true, data: JSON.parse(response.datos_sesion) }
+            : { ok: false, error: response.error };
     } catch (error) {
         console.error('Error al iniciar sesión (desde spQueries): ', error);
         return { ok: false, error: 'No se ha podido iniciar sesión ni recibir las credenciales.' };
@@ -181,15 +183,15 @@ async function changeTicketStatus(id, abreviation_status) {
     }
 }
 // ===========================================================================================================================
-// type: Aceptados || Pendientes
-async function getTickets(usuario_id, page=1, type) {
+// type: 'Aprobados' || ''
+async function getTickets(usuario_id, page=1, type='Aprobados') {
 
-    if (!['Aceptados','Pendientes'].includes(type)) {
+    if (!['Aprobados',''].includes(type)) {
         return { ok:false, error:'Tipo de tickets inválido.' };
     }
 
     try {
-        const [result] = await mysql.query(`call obtenerTickets${type}(?,?)`, [ usuario_id, page ]);
+        const [result] = await mysql.query(`call obtenerTickets(?,?,?)`, [ usuario_id, page, type ]);
 
         const tickets_propios = result[0]?.[0]?.tickets_propios
             ? JSON.parse(result[0][0].tickets_propios)

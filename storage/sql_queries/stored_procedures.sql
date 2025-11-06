@@ -1,17 +1,14 @@
-use bod1eymvxhvhobrcebij;
+-- use bod1eymvxhvhobrcebij;
+use Rastreo;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
 drop procedure if exists verificarNuevoUsuario;
 delimiter //
-create procedure verificarNuevoUsuario(
-	in _dni char(8),
-    in _celular int,
-    in _correo varchar(40)
-)
+create procedure verificarNuevoUsuario(in _dni char(8), in _celular int, in _correo varchar(40))
 begin
-	select 'dni' as credencial, 'El DNI ingresado ya se encuentra almacenado en nuestro sistema.' as message
+	select 'dni' as credential, 'El DNI ingresado ya se encuentra almacenado en nuestro sistema.' as message
 		where exists(select 1 from Personas where dni = _dni)
 	union all
 	select 'celular', 'El número ingresado ya se encuentra almacenado en nuestro sistema.'
@@ -76,9 +73,7 @@ end; // delimiter ;
 drop procedure if exists obtenerArgon2Hash;
 /* [6544] || [40608621] || [3624311688] || ["usuario@correo.com"] */
 delimiter //
-create procedure obtenerArgon2Hash(
-	in _credencial json
-)
+create procedure obtenerArgon2Hash(in _credencial json)
 main_block: begin
     declare credencial_ varchar(250) default '';
 	declare tipo_ varchar(20) default '';
@@ -89,30 +84,26 @@ main_block: begin
 	set credencial_ = json_unquote(json_extract(_credencial, '$[0]'));
 	
 	if credencial_ regexp '^[0-9]{10}$' then
-		select p.id, p.contrasenia, p.rol_id
-		into id_, contrasenia_, rol_
+		select p.id, p.contrasenia, p.rol_id into id_, contrasenia_, rol_
 		from Personas as p
 		inner join Celulares as c on p.id = c.propietario_id
 		where c.numero = cast(credencial_ as unsigned);
 		
 		set tipo_ = 'Celular';
 	elseif credencial_ regexp '^[0-9]{8}$' then
-		select id, contrasenia, rol_id
-		into id_, contrasenia_, rol_
+		select id, contrasenia, rol_id into id_, contrasenia_, rol_
 		from Personas
 		where dni = credencial_;
 	
 		set tipo_ = 'DNI';
 	elseif credencial_ regexp '^[0-9]+$' then
-		select id, contrasenia, rol_id
-		into id_, contrasenia_, rol_
+		select id, contrasenia, rol_id into id_, contrasenia_, rol_
 		from Personas
 		where id = cast(credencial_ as unsigned);
 		
 		set tipo_ = 'Número de usuario';
 	elseif credencial_ like '%@%' then
-		select p.id, p.contrasenia, p.rol_id
-		into id_, contrasenia_, rol_
+		select p.id, p.contrasenia, p.rol_id into id_, contrasenia_, rol_
 		from Personas as p
 		inner join Correos as c on p.id = c.propietario_id
 		where c.correo = credencial_;
@@ -128,7 +119,7 @@ main_block: begin
     elseif rol_ is null then
 		select false as ok, 'Usuario aún no aceptado por el administrador' as 'error';
     else
-        select true as ok, id_ as id_user, contrasenia_ as contrasenia;
+        select true as ok, id_ as id_user, contrasenia_ as 'hash';
     end if;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
@@ -168,8 +159,6 @@ begin
 			'dni', p.dni,
 			'fecha_nacimiento', p.fechaNacimiento,
 			'fecha_creacion', p.fechaCreacion,
-			'rol', r.rol,
-			'permisos', r.permisos,
 			'areas_facultad', (
 				select json_objectagg(af.id,json_object(af.abreviacion, af.nombre))
 				from PersonasProcedenDe as ppd
@@ -177,14 +166,14 @@ begin
 				where ppd.persona_id = p.id
 			),
 			'celulares',(
-				select json_arrayagg(cel.numero)
-				from Celulares as cel
-				where cel.propietario_id = p.id
+				select json_arrayagg(numero)
+				from Celulares
+				where propietario_id = p.id
 			),
 			'correos', (
-				select json_arrayagg(c.correo)
-				from Correos as c
-				where c.propietario_id = p.id
+				select json_arrayagg(correo)
+				from Correos
+				where propietario_id = p.id
 			)
 		) into usuario_json_
 		from Personas as p
@@ -192,7 +181,12 @@ begin
 		where p.id = _usuario_id;
     commit;
     
-    select json_object('id',sesion_id_, 'usuario',usuario_json_) as datos_sesion;
+    select true as ok, json_object(
+		'id',sesion_id_,
+        'usuario',usuario_json_,
+        'rol',r.rol,
+        'permisos',r.permisos
+	) as datos_sesion;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -228,7 +222,7 @@ drop procedure if exists rechazarRegistro;
 delimiter //
 create procedure rechazarRegistro(in _id int)
 begin
-	delete from Personas as p where p.id = _id;
+	delete from Personas where id = _id;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -336,9 +330,10 @@ end;// delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
-drop procedure if exists obtenerTicketsPendientes;
+drop procedure if exists obtenerTickets;
 delimiter //
-create procedure obtenerTicketsPendientes(in _usuario_id int, in _page int)
+-- tipo: 'Aprobados' || ''
+create procedure obtenerTickets(in _usuario_id int, in _page int, in _tipo varchar(10))
 main:begin
 	declare permisos_ json;
     declare me_ json;
@@ -348,8 +343,12 @@ main:begin
     declare mine_ text default '';
 	declare someone_else_ text default '';
     
+	if _tipo not in ('', 'Aprobados') then
+		select false as ok, 'Tipo erróneo de ticket (desde MySQL)' as 'error';
+		leave main;
+	end if;
+	
     set _page = greatest(ifnull(_page, 1), 1);
-	set message = json_object();
 	-- Permisos del usuario -----------------------------------------
     select r.permisos
     into permisos_
@@ -362,7 +361,12 @@ main:begin
     set others_ = coalesce(json_extract(permisos_, '$.r.ticket.others'), json_array());
     set general_ = coalesce(json_extract(permisos_, '$.r.ticket.general'), json_array());
     
-    if json_length(me_)=0 and json_length(others_)=0 and json_length(general_)=0 then
+    if
+		ifnull(json_length(me_),0)=0
+		and ifnull(json_length(others_),0)=0
+		and ifnull(json_length(general_),0)=0
+	then
+
 		select false as ok, 'No tienes permisos para ver ningún ticket' as 'error';
         leave main;
 	end if;
@@ -393,143 +397,13 @@ main:begin
 		if json_contains(me_, '"requester"') then
 			set mine_ = concat(mine_, "'solicitante', concat(p.nombre, ' ', p.apellido), ");
 		end if;
-		if json_contains(me_, '"activity_date"') then
-			set mine_ = concat(mine_, "'fecha_actividad', t.fecha_actividad, ");
-		end if;
-		set mine_ = trim(trailing ', ' from mine_);
-	end if;
-	-- ----------------------------------------------------------
-    
-	-- permisos sobre tickets ajenos ---------------------------
-	if json_length(others_)>0 then
-		if json_contains(others_, '"date"') then
-			set someone_else_ = concat(someone_else_, "'fecha', date(t.fecha), ");
-		end if;
-		if json_contains(others_, '"time"') then
-			set someone_else_ = concat(someone_else_, "'hora', time(t.fecha), ");
-		end if;
-		if json_contains(others_, '"requester"') then
-			set someone_else_ = concat(someone_else_, "'solicitante', concat(p.nombre, ' ', p.apellido), ");
-		end if;
-		if json_contains(others_, '"activity_date"') then
-			set someone_else_ = concat(someone_else_, "'fecha_actividad', t.fecha_actividad, ");
-		end if;
-		set someone_else_ = trim(trailing ', ' from someone_else_);
-	end if;
-	-- ----------------------------------------------------------
-	
-	-- consulta dináminca sobre los tickets propios ------------
-	if mine_ <> '' then
-		set @query = concat(
-			'select json_arrayagg(json_object(', mine_, ')) into @json_result
-			from Tickets as t
-			inner join Personas as p on t.solicitante_id = p.id
-			inner join Estados as e on t.estado_id = e.id
-			inner join AreasFacultad as af on t.area_facultad_id = af.id
-			where t.solicitante_id = ', _usuario_id,
-			' order by t.id desc
-            limit 30 offset ', (_page-1)*30
-		);
-		
-        set @json_result = null;
-		prepare stmt from @query;
-		execute stmt;
-		deallocate prepare stmt;
-		set @query = null;
-        select @json_result as tickets_propios;
-	end if;
-	-- ---------------------------------------------------------
-	
-	-- consulta dináminca sobre los tickets ajenos ------------
-	if someone_else_ <> '' then
-		set @query = concat(
-			'select json_arrayagg(json_object(', someone_else_, ')) into @json_result
-			from Tickets as t
-			inner join Personas as p on t.solicitante_id = p.id
-			inner join Estados as e on t.estado_id = e.id
-			inner join AreasFacultad as af on t.area_facultad_id = af.id
-			where t.solicitante_id <> ', _usuario_id,
-			' order by t.id desc
-            limit 30 offset ', (_page-1)*30
-		);
-		
-        set @json_result = null;
-		prepare stmt from @query;
-		execute stmt;
-		deallocate prepare stmt;
-		set @query = null;
-        select @json_result as tickets_ajenos;
-	end if;
-	-- ---------------------------------------------------------
-end; // delimiter ;
-/* --------------------------------------------------------------------------------------- */
-/* --------------------------------------------------------------------------------------- */
-/* --------------------------------------------------------------------------------------- */
-/* --------------------------------------------------------------------------------------- */
-drop procedure if exists obtenerTicketsAceptados;
-delimiter //
-create procedure obtenerTicketsAceptados(in _usuario_id int, in _page int)
-main:begin
-	declare permisos_ json;
-    declare me_ json;
-    declare others_ json;
-    declare general_ json;
-	
-    declare mine_ text default '';
-	declare someone_else_ text default '';
-    
-    set _page = greatest(ifnull(_page, 1), 1);
-	set message = json_object();
-	-- Permisos del usuario -----------------------------------------
-    select r.permisos
-    into permisos_
-    from Personas as p
-    inner join Roles as r on p.rol_id = r.id
-    where p.id = _usuario_id;
-	-- ---------------------------------------------------------------
-    
-    set me_ = coalesce(json_extract(permisos_, '$.r.ticket.me'), json_array());
-    set others_ = coalesce(json_extract(permisos_, '$.r.ticket.others'), json_array());
-    set general_ = coalesce(json_extract(permisos_, '$.r.ticket.general'), json_array());
-    
-    if json_length(me_)=0 and json_length(others_)=0 and json_length(general_)=0 then
-		select false as ok, 'No tienes permisos para ver ningún ticket' as 'error';
-        leave main;
-	end if;
-	
-	-- permisos generales -------------------------------------
-    if json_contains(general_, '"id"') then
-		set mine_ = concat(mine_, "'id', t.id, ");
-		set someone_else_ = mine_;
-	end if;
-    if json_contains(general_, '"origin"') then
-		set mine_ = concat(mine_, "'procedencia', af.nombre, ");
-		set someone_else_ = mine_;
-	end if;
-    if json_contains(general_, '"status"') then
-		set mine_ = concat(mine_, "'estado', e.estado, ");
-		set someone_else_ = mine_;
-	end if;
-	-- ----------------------------------------------------------
-	
-	-- permisos sobre mis tickets ------------------------------
-	if json_length(me_)>0 then
-		if json_contains(me_, '"date"') then
-			set mine_ = concat(mine_, "'fecha', date(t.fecha), ");
-		end if;
-		if json_contains(me_, '"time"') then
-			set mine_ = concat(mine_, "'hora', time(t.fecha), ");
-		end if;
-		if json_contains(me_, '"requester"') then
-			set mine_ = concat(mine_, "'solicitante', concat(p.nombre, ' ', p.apellido), ");
-		end if;
-		if json_contains(me_, '"executer"') then
+		if json_contains(me_, '"executer"') and _tipo = 'Aprobados' then
 			set mine_ = concat(mine_, "'ejecutor', concat(ex.nombre, ' ', ex.apellido), ");
 		end if;
 		if json_contains(me_, '"activity_date"') then
 			set mine_ = concat(mine_, "'fecha_actividad', t.fecha_actividad, ");
 		end if;
-		if json_contains(me_, '"finished_date"') then
+		if json_contains(me_, '"finished_date"') and _tipo = 'Aprobados' then
 			set mine_ = concat(mine_, "'fecha_finalizacion', t.fecha_finalizacion, ");
 		end if;
 		set mine_ = trim(trailing ', ' from mine_);
@@ -547,13 +421,13 @@ main:begin
 		if json_contains(others_, '"requester"') then
 			set someone_else_ = concat(someone_else_, "'solicitante', concat(p.nombre, ' ', p.apellido), ");
 		end if;
-		if json_contains(others_, '"executer"') then
+		if json_contains(others_, '"executer"') and _tipo = 'Aprobados' then
 			set someone_else_ = concat(someone_else_, "'ejecutor', concat(ex.nombre, ' ', ex.apellido), ");
 		end if;
 		if json_contains(others_, '"activity_date"') then
 			set someone_else_ = concat(someone_else_, "'fecha_actividad', t.fecha_actividad, ");
 		end if;
-		if json_contains(others_, '"finished_date"') then
+		if json_contains(others_, '"finished_date"') and _tipo = 'Aprobados' then
 			set someone_else_ = concat(someone_else_, "'fecha_finalizacion', t.fecha_finalizacion, ");
 		end if;
 		set someone_else_ = trim(trailing ', ' from someone_else_);
@@ -561,50 +435,57 @@ main:begin
 	-- ----------------------------------------------------------
 	
 	-- consulta dináminca sobre los tickets propios ------------
+	set @mis_tickets = null;
 	if mine_ <> '' then
 		set @query = concat(
-			'select json_arrayagg(json_object(', mine_, ')) into @json_result
-			from TicketsAprobados as t
-			inner join Personas as p on t.solicitante_id = p.id
-            inner join Personas as ex on t.ejecutador_id = ex.id
-			inner join Estados as e on t.estado_id = e.id
+			'select json_arrayagg(json_object(', mine_, ')) into @mis_tickets
+			from Tickets', _tipo, ' as t
+			inner join Personas as p on t.solicitante_id = p.id ',
+			if(_tipo = '', '', ' inner join Personas as ex on t.ejecutador_id = ex.id '),
+			' inner join Estados as e on t.estado_id = e.id
 			inner join AreasFacultad as af on t.area_facultad_id = af.id
 			where t.solicitante_id = ', _usuario_id,
 			' order by t.id desc
-            limit 50 offset ', (_page-1)*50
+            limit 50 offset ', ((_page-1)*50)
 		);
 		
-        set @json_result = null;
 		prepare stmt from @query;
 		execute stmt;
 		deallocate prepare stmt;
 		set @query = null;
-        select @json_result as tickets_propios;
 	end if;
 	-- ---------------------------------------------------------
 	
 	-- consulta dináminca sobre los tickets ajenos ------------
+	set @tickets_de_otros = null;
 	if someone_else_ <> '' then
 		set @query = concat(
-			'select json_arrayagg(json_object(', someone_else_, ')) into @json_result
-			from TicketsAprobados as t
-			inner join Personas as p on t.solicitante_id = p.id
-            inner join Personas as ex on t.ejecutador_id = ex.id
-			inner join Estados as e on t.estado_id = e.id
+			'select json_arrayagg(json_object(', someone_else_, ')) into @tickets_de_otros
+			from Tickets', _tipo, ' as t
+			inner join Personas as p on t.solicitante_id = p.id ',
+			if(_tipo = '', '', ' inner join Personas as ex on t.ejecutador_id = ex.id '),
+			' inner join Estados as e on t.estado_id = e.id
 			inner join AreasFacultad as af on t.area_facultad_id = af.id
 			where t.solicitante_id <> ', _usuario_id,
 			' order by t.id desc
-            limit 50 offset ', (_page-1)*50
+            limit 50 offset ', ((_page-1)*50)
 		);
 		
-        set @json_result = null;
 		prepare stmt from @query;
 		execute stmt;
 		deallocate prepare stmt;
 		set @query = null;
-        select @json_result as tickets_ajenos;
 	end if;
 	-- ---------------------------------------------------------
+	
+	select
+		true as ok,
+		json_object(
+			'propios', @mis_tickets,
+			'ajenos', @tickets_de_otros
+		) as tickets;
+	set @mis_tickets = null;
+	set @tickets_de_otros = null;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */

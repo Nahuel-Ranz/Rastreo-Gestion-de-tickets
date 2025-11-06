@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended:true}));
 app.use(session({
     secret:"secret key",
     resave:false,
+    saveUninitialized:false,
     cookie:{
         maxAge:1000*60*60,
         secure: false,
@@ -26,8 +27,8 @@ app.use(session({
 }));
 
 //app.use('/leer', require('./routes/back_data'));
-//app.use('/escribir', require('./routes/actions'));
 app.use('/', require('./routes/views'));
+app.use('/', require('./routes/actions'));
 
 app.use(require('./routes/error_handling'));
 
