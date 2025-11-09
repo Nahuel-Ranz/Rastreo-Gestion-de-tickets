@@ -88,9 +88,16 @@ async function initSession(req, id_user) {
         ]);
 
         const response = Array.isArray(result[0]) ? result[0][0] : result[0];
-        return response.ok
-            ? { ok: true, data: JSON.parse(response.datos_sesion) }
-            : { ok: false, error: response.error };
+        if(!response.ok) return { ok:false, error: response.error };
+
+        return {
+            ok: true,
+            session: {
+                id: response.session_id,
+                last_activity: response.last_activity,
+                userId: response.user_id
+            },
+        };
     } catch (error) {
         console.error('Error al iniciar sesión (desde spQueries): ', error);
         return { ok: false, error: 'No se ha podido iniciar sesión ni recibir las credenciales.' };
@@ -113,7 +120,7 @@ async function closeSession(session_id) {
         return { ok: true };
     } catch (error) {
         console.error('Error al cerrar la última actividad (desde spQueries): ', error);
-        return { ok: false, error: 'No se pudo cerrar la última actividad.' };
+        return { ok: false, error: 'No se pudo cerrar la última sesión activa (desde spQueries).' };
     }
 }
 // ===========================================================================================================================
@@ -283,6 +290,18 @@ async function userExists(credencial = []) {
 	}
 }
 // ===========================================================================================================================
+async function getUserPermissions(id) {
+    try {
+        const [result] = await mysql.query('call obtenerPermisosUsuario(?)', [id]);
+        const user = result[0][0];
+
+        user.permissions = await utils.jsonToObject(user.permissions);
+        return { ok: true, data: user };
+    } catch (error) {
+        console.error('Error al intentar obtener los permisos de usuario (desde spQueries): ', error);
+        return { ok: false, error:'No se puedo obtener los permisos del usuario' };
+    }
+}
 // ===========================================================================================================================
 // ===========================================================================================================================
 // ===========================================================================================================================
@@ -298,6 +317,7 @@ module.exports = {
     getMessages,
     getTickets,
     getUserData,
+    getUserPermissions,
     initSession,
     readMessages,
     receiveMessages,

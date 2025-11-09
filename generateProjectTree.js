@@ -11,14 +11,22 @@ function generateTree(dir, depth = 0) {
     const indent = "    ".repeat(depth);
     const entries = fs.readdirSync(dir, { withFileTypes: true });
 
+    // Filtramos los ignorados
+    const filtered = entries.filter(entry => !ignoreList.includes(entry.name));
+
+    // Ordenamos: carpetas primero, luego archivos; ambos en orden descendente
+    filtered.sort((a, b) => {
+        if (a.isDirectory() && !b.isDirectory()) return -1;
+        if (!a.isDirectory() && b.isDirectory()) return 1;
+        // Ambos son del mismo tipo → orden descendente alfabético
+        return a.name.localeCompare(b.name);
+    });
+
     let result = "";
 
-    for (const entry of entries) {
+    for (const entry of filtered) {
         const fullPath = path.join(dir, entry.name);
         const isDir = entry.isDirectory();
-
-        // Ignorar carpetas/archivos innecesarios
-        if (ignoreList.includes(entry.name)) continue;
 
         if (isDir) {
             result += `${indent}> ${entry.name}/\n`;

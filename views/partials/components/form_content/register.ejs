@@ -63,7 +63,7 @@
 <%- include('dropdowns/option-dropdown', {
     group: { id:'dropdown_of_areas', select:'area_select'},
     label: { id:'label_of_areas', content:'Área de la Facultad *'},
-    options: areas.length ? areas : [{ value:'', content:areas.length}]
+    options: areas
 }); %>
 
 <div id="button_group" class="flexRow vp">

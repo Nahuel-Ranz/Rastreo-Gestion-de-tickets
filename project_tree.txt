@@ -1,21 +1,17 @@
 > root/
-    . .env
-    . .env.example
-    . .gitignore
     > .vscode/
         . settings.json
-    . app.js
     > controllers/
+        . userController.js
         . viewController.js
-    . generateProjectTree.js
     > middlewares/
-    . package-lock.json
-    . package.json
+        . authMiddleware.js
     > public/
         > css/
             . styles.min.css
         > js/
-            . front_controllers.js
+            . dataController.js
+            . designController.js
             . utils.js
         > media/
             . frre-black.png
@@ -31,7 +27,6 @@
             . utn-black.png
             . utn-white.png
         > vendor/
-            . axios.min.js
             > chartjs/
                 . chart.umd.js
             > choices/
@@ -48,6 +43,7 @@
                     . fa-regular-400.woff2
                     . fa-solid-900.woff2
                     . fa-v4compatibility.woff2
+            . axios.min.js
     > routes/
         . actions.js
         . back_data.js
@@ -59,74 +55,76 @@
                 . _global.scss
                 . _reset.scss
             > components/
-                . components.scss
                 . _button.scss
-                . _dropdown.scss
                 . _dropdown_list.scss
                 . _dropdown_options.scss
+                . _dropdown.scss
                 . _flatpickr.scss
                 . _forms.scss
                 . _i.scss
                 . _input_group.scss
-                . _ticket.scss
                 . _ticket_collectors.scss
+                . _ticket.scss
+                . components.scss
             > layouts/
                 . _footer.scss
                 . _header.scss
                 . _main.scss
-            . styles.scss
             > themes/
                 . _themes.scss
             . _variables.scss
+            . styles.scss
     > storage/
-        . connections.js
-        . spQueries.js
         > sql_queries/
+            . events.sql
             . global_configurations.sql
             . inserts.sql
             . stored_procedures.sql
             . table_creations.sql
             . tests.sql
             . triggers.sql
+        . connections.js
+        . spQueries.js
     > utils/
         . auxiliary.json
         . MailerHandler.js
         . permissions.json
+        . utils.js
     > views/
         > pages/
-            . access_control_dashboard.ejs
-            . dashboard.ejs
             > errors/
                 . 404.ejs
-            . execution_queue.ejs
             > forms/
-                . login.ejs
-                . new_ticket.ejs
                 > recovery_password/
                     . email.ejs
                     . key.ejs
                     . new_password.ejs
+                . login.ejs
+                . new_ticket.ejs
                 . register.ejs
                 . set_password.ejs
+            . access_control_dashboard.ejs
+            . dashboard.ejs
+            . execution_queue.ejs
             . index.ejs
             . notifications.ejs
             . profile.ejs
             . settings.ejs
         > partials/
             > components/
-                . button.ejs
-                . forms.ejs
                 > form_content/
                     . login.ejs
                     . recovery_email.ejs
                     . recovery_key.ejs
                     . recovery_new_password.ejs
                     . register.ejs
-                . input_group.ejs
-                . ticket_collectors.ejs
                 > ticket_collector_content/
                     . execution_queue.ejs
                     . waiting_list.ejs
+                . button.ejs
+                . forms.ejs
+                . input_group.ejs
+                . ticket_collectors.ejs
             > dropdowns/
                 . link-dropdown.ejs
                 . link-list.ejs
@@ -134,11 +132,18 @@
             > flatpickrs/
                 . birthdate.ejs
                 . event_date.ejs
+            > tickets/
+                . ticket_collector_header.ejs
+                . ticket_collector_list.ejs
+                . ticket.ejs
             . footer.ejs
             . head.ejs
             . header.ejs
             . main.ejs
-            > tickets/
-                . ticket.ejs
-                . ticket_collector_header.ejs
-                . ticket_collector_list.ejs
+    . .env
+    . .env.example
+    . .gitignore
+    . app.js
+    . generateProjectTree.js
+    . package-lock.json
+    . package.json

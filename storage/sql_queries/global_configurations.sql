@@ -32,3 +32,12 @@ set default_storage_engine = InnoDB;
 
 /* consultar motor por defecto */
 select @@default_storage_engine;
+
+/* consultar si los eventos programados están activos */
+show variables like 'event_scheduler';
+
+/* setear los eventos programados a on */
+set global event_scheduler = on;
+
+/* ver los eventos */
+show events from rastreo;

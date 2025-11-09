@@ -20,9 +20,10 @@ app.use(session({
     resave:false,
     saveUninitialized:false,
     cookie:{
-        maxAge:1000*60*60,
-        secure: false,
-        sameSite:'lax'
+        maxAge:1000*60*30,
+        secure: true,
+        httpOnly: true,
+        sameSite:'lax',
     }
 }));
 
@@ -34,5 +35,5 @@ app.use(require('./routes/error_handling'));
 
 const PORT = process.env.EXPRESS_PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor: http://localhost:${PORT}`);
+    console.log(`Servidor: https://localhost:${PORT}`);
 });

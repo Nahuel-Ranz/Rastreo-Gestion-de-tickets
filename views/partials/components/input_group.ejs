@@ -27,8 +27,6 @@
 </div>
 
 <script type="module">
-    import { radius } from '/js/utils.js';
-
     ((d) => {
         const group=d.getElementById('<%= group.id %>');
         const input=group.querySelector('#<%= input.id %>');
@@ -73,11 +71,6 @@
                 p.classList.remove('hidden');
                 inputStates[input.id].state = false;
             }
-        });
-
-        d.addEventListener('DOMContentLoaded', () => {
-            radius(input);
-            radius(label);
         });
     })(document);
 </script>

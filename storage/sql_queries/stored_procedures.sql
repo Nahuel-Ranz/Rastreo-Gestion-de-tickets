@@ -138,8 +138,7 @@ create procedure iniciarSesion(
     in _ultimaActividad datetime
 )
 begin
-	declare usuario_json_ json;
-    declare sesion_id_ int;
+    declare sesion_id_ int default 0;
     
     declare exit handler for sqlexception
     begin
@@ -151,42 +150,10 @@ begin
 		insert into Sesiones(id, usuario_id, dispositivo, ip, so, navegador, inicio, ultimaActividad, activa)
 		values(null, _usuario_id, _dispositivo, _ip, _so, _navegador, _inicio, _ultimaActividad, true);
 		set sesion_id_ = last_insert_id();
-		
-		select json_object(
-			'id', p.id,
-			'nombre', p.nombre,
-			'apellido', p.apellido,
-			'dni', p.dni,
-			'fecha_nacimiento', p.fechaNacimiento,
-			'fecha_creacion', p.fechaCreacion,
-			'areas_facultad', (
-				select json_objectagg(af.id,json_object(af.abreviacion, af.nombre))
-				from PersonasProcedenDe as ppd
-				inner join AreasFacultad as af on ppd.area_facultad_id = af.id
-				where ppd.persona_id = p.id
-			),
-			'celulares',(
-				select json_arrayagg(numero)
-				from Celulares
-				where propietario_id = p.id
-			),
-			'correos', (
-				select json_arrayagg(correo)
-				from Correos
-				where propietario_id = p.id
-			)
-		) into usuario_json_
-		from Personas as p
-		inner join Roles as r on p.rol_id = r.id
-		where p.id = _usuario_id;
     commit;
     
-    select true as ok, json_object(
-		'id',sesion_id_,
-        'usuario',usuario_json_,
-        'rol',r.rol,
-        'permisos',r.permisos
-	) as datos_sesion;
+    select
+		true as ok, sesion_id_ as session_id, _ultimaActividad as last_activity, _usuario_id as user_id;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -651,4 +618,17 @@ begin
 	select abreviacion as 'value', nombre as content
 	from AreasFacultad
 	order by nombre;
+end; // delimiter ;
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------- */
+drop procedure if exists obtenerPermisosUsuario;
+delimiter //
+create procedure obtenerPermisosUsuario(in _id int)
+begin
+	select concat(p.nombre, ' ', p.apellido) as 'full_name', r.permisos as 'permissions'
+    from Personas as p
+    inner join Roles as r on p.rol_id = r.id
+    where p.id = _id;
 end; // delimiter ;
