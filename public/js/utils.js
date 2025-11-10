@@ -1,3 +1,4 @@
+// ============= DISEÑO ======================================================================
 // aplica un radio equivalente a 1/7 del largo más corto
 // entre la altura y la anchura.
 export function radius(e, measurement=7) {
@@ -17,6 +18,16 @@ export function fitToScreen(header, main, footer) {
     main.style.minHeight = (vh-(headerHeight+footerHeight))+ "px";
 }
 
+// aplica un radio a todo los elementos de la lista dada.
+export function radiusToAll(list, measurement=7) {
+    for(const item of list) radius(item, measurement);
+}
+// ===========================================================================================
+
+
+
+
+// ================= COMPORTAMIENTO ==========================================================
 // cierra todos los menus desplegados en la página.
 export function closeDropdowns() {
     document.querySelectorAll('.dropdownList').forEach(list => list.classList.add('hidden'));
@@ -27,11 +38,6 @@ export function closeDropdownsExcept(list) {
     document.querySelectorAll('.dropdownList').forEach(l => {
         if(list !== l) l.classList.add('hidden');
     });
-}
-
-// aplica un radio a todo los elementos de la lista dada.
-export function radiusToAll(list, measurement=7) {
-    for(const item of list) radius(item, measurement);
 }
 
 // abre modal.
@@ -45,3 +51,24 @@ export function hideElement(id) {
     const modal = document.getElementById(id);
     if(modal) modal.classList.add('hidden');
 }
+// ===========================================================================================
+
+
+
+
+// ================= CONTROL DE DATOS ========================================================
+export function checkObjectState(object) {
+    const isInputType = 'input' in Object.values(object)[0];
+
+    for (const key in object) {
+        const item = object[key];
+        const required = isInputType
+        ? item.input.required
+        : item.choices.passedElement.element.required;
+
+        if (required && !item.state) return false;
+    }
+
+    return true;
+}
+// ===========================================================================================

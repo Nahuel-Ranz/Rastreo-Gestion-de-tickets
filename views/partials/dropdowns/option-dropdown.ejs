@@ -5,7 +5,11 @@
 -->
 
 <div id="<%= group.id %>" class="selectContainer">
-    <select id="<%= group.select %>">
+    <select
+        id="<%= group.select %>"
+         name="<%= group.select %>" 
+        <%= group.req ? 'required' : '' %>
+    >
         <option value=""></option>
         <% options.forEach(op => { %>
             <option value="<%= op.value %>"><%= op.content %></option>
@@ -33,7 +37,7 @@
         const choices__inner=d.querySelector('.choices__inner');
         const items=d.querySelectorAll('.choices__item');
 
-        if(!window.selectStates) window.selectStates = {}; console.log(choices.id);
+        if(!window.selectStates) window.selectStates = {};
         selectStates['<%= group.select %>'] = {
             state: false,
             label: label,

@@ -61,7 +61,7 @@
 }); %>
 
 <%- include('dropdowns/option-dropdown', {
-    group: { id:'dropdown_of_areas', select:'area_select'},
+    group: { id:'dropdown_of_areas', select:'area_select', req:false },
     label: { id:'label_of_areas', content:'Área de la Facultad *'},
     options: areas
 }); %>
@@ -77,25 +77,3 @@
         content: { name:'Enviar', icon:''}
     }); %>
 </div>
-
-<script> 
-    const form=document.getElementById('page_form');
-
-    form.addEventListener('reset', () => {
-
-        Object.keys(inputStates).forEach(key => {
-            inputStates[key].state = false;
-            inputStates[key].input.classList.remove('correct', 'error');
-            inputStates[key].label.classList.remove('correct', 'error');
-            inputStates[key].icon.classList.add('hidden');
-            inputStates[key].p.classList.add('hidden');
-        });
-
-        Object.keys(selectStates).forEach( key => {
-            selectStates[key].state = false;
-            selectStates[key].label.classList.remove('correct', 'active');
-            selectStates[key].choices__inner.classList.remove('correct');
-            selectStates[key].choices.setChoiceByValue('');
-        });
-    });
-</script>
