@@ -34,3 +34,14 @@ export function radiusToAll(list, measurement=7) {
     for(const item of list) radius(item, measurement);
 }
 
+// abre modal.
+export function showElement(id) {
+    const modal = document.getElementById(id);
+    if(modal) modal.classList.remove('hidden');
+}
+
+// cierra modal
+export function hideElement(id) {
+    const modal = document.getElementById(id);
+    if(modal) modal.classList.add('hidden');
+}

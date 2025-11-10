@@ -24,7 +24,10 @@
 		margin:0 !important;
 		.choices__inner {
 			background-color: var(--primary-color);
-			.choices__item--selectable { padding-top: 1%;}
+			.choices__item--selectable {
+				padding-top: 1%;
+				color: var(--correct-font-color) !important;
+			}
 		}
 		.choices__list--dropdown {
 			background-color: transparent;

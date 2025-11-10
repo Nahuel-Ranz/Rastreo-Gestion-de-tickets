@@ -68,6 +68,7 @@
                 input.classList.add('error');
                 icon.classList.remove('hidden', 'fa-check');
                 icon.classList.add('fa-times');
+                p.textContent = '<%= validation.error_message %>';
                 p.classList.remove('hidden');
                 inputStates[input.id].state = false;
             }

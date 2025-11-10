@@ -73,18 +73,15 @@
     }); %>
 
     <%- include('components/button', {
-        btn: { id:'check_email', type:'', classes:''},
+        btn: { id:'check_email', type:'submit', classes:''},
         content: { name:'Enviar', icon:''}
     }); %>
 </div>
 
 <script> 
-    const form=document.getElementById('<%= id %>');
-    const areasLabel=document.getElementById('label_of_areas');
+    const form=document.getElementById('page_form');
 
     form.addEventListener('reset', () => {
-        choicesInstances['area_select'].setChoiceByValue('');
-        areasLabel.classList.remove('active');
 
         Object.keys(inputStates).forEach(key => {
             inputStates[key].state = false;
@@ -92,6 +89,13 @@
             inputStates[key].label.classList.remove('correct', 'error');
             inputStates[key].icon.classList.add('hidden');
             inputStates[key].p.classList.add('hidden');
+        });
+
+        Object.keys(selectStates).forEach( key => {
+            selectStates[key].state = false;
+            selectStates[key].label.classList.remove('correct', 'active');
+            selectStates[key].choices__inner.classList.remove('correct');
+            selectStates[key].choices.setChoiceByValue('');
         });
     });
 </script>

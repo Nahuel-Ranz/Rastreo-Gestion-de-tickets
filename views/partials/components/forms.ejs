@@ -1,6 +1,6 @@
 <!-- id, title -->
 
-<form id="<%= id %>" class="form flexColumn hp">
+<form id="page_form" class="form flexColumn hp">
     <h1><%= title %></h1>
     <% switch(id) {
         case 'login': %>
@@ -20,11 +20,3 @@
         <% break; %>
     <% } %>
 </form>
-
-<script type="module">
-    import { radius } from '/js/utils.js';
-    ((d) => {
-        const form = d.getElementById('<%= id %>');
-        radius(form, 20);
-    })(document);
-</script>

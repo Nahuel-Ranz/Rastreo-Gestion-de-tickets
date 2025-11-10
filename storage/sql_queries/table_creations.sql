@@ -101,11 +101,11 @@ create table Personas (
 
 	constraint chk_dni
         check(dni regexp '^[0-9]{8}$')
-);
+) auto_increment = 23120;
 
 create table Celulares (
 	id int primary key auto_increment,
-    numero int not null unique,
+    numero bigint not null unique,
     propietario_id int not null,
 
     constraint fk_celulares_personas
@@ -128,7 +128,7 @@ create table Correos (
 
     constraint chk_correos_correo
         check(
-            correo regexp '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$'
+            correo regexp '^[A-Za-z0-9._%+áéíóúÁÉÍÓÚñÑ-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
             and correo not like '%..%'
         )
 );

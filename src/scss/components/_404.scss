@@ -1,0 +1,16 @@
+.container_404 {
+    gap: 60px;
+    
+    h1 { font-size: 100px; text-align: center; }
+    h2 { font-size: 50px; text-align: center; }
+    a {
+        color: var(--tertiary-font-color);
+        font-size: 30px;
+        text-align: center;
+        &:hover {
+            color: var(--secondary-font-color);
+            font-weight: bolder;
+            text-shadow: 1px 1px 2px var(--primary-font-color);
+        }
+    }
+}

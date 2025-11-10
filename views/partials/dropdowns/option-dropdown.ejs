@@ -18,7 +18,6 @@
     >
         <%= label.content %>
     </label>
-    <i class="fas fa-check hidden"></i>
 </div>
 
 <script type="module">
@@ -34,6 +33,14 @@
         const choices__inner=d.querySelector('.choices__inner');
         const items=d.querySelectorAll('.choices__item');
 
+        if(!window.selectStates) window.selectStates = {}; console.log(choices.id);
+        selectStates['<%= group.select %>'] = {
+            state: false,
+            label: label,
+            choices: choices,
+            choices__inner: choices__inner
+        }
+
         choices2.addEventListener('showDropdown', () => {
             label.classList.add('active');
         });
@@ -43,11 +50,16 @@
         });
 
         choices2.addEventListener('change', () => {
-            if(!choices.getValue(true)) label.classList.remove('active');
+            if(!choices.getValue(true)) {
+                label.classList.remove('active', 'correct');
+                choices__inner.classList.remove('correct');
+                selectStates['<%= group.select %>'].state = false;
+            } else {
+                label.classList.add('correct');
+                choices__inner.classList.add('correct');
+                selectStates['<%= group.select %>'].state = true;
+            }
         });
         radius(choices__inner);
-
-        window.choicesInstances = window.choicesInstances || {};
-        window.choicesInstances['<%= group.select %>'] = choices;
     })(document);
 </script>

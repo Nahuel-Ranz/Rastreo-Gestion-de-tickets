@@ -6,7 +6,7 @@ use Rastreo;
 /* --------------------------------------------------------------------------------------- */
 drop procedure if exists verificarNuevoUsuario;
 delimiter //
-create procedure verificarNuevoUsuario(in _dni char(8), in _celular int, in _correo varchar(40))
+create procedure verificarNuevoUsuario(in _dni char(8), in _celular bigint, in _correo varchar(250))
 begin
 	select 'dni' as credential, 'El DNI ingresado ya se encuentra almacenado en nuestro sistema.' as message
 		where exists(select 1 from Personas where dni = _dni)
@@ -29,17 +29,13 @@ create procedure registrarUsuario(
     in _dni char(8),
     in _fechaNacimiento date,
     in _fechaCreacion datetime,
-    in _celular int,
+    in _celular bigint,
     in _correo varchar(250),
     in _areaFacultad int,
     in _contrasenia varchar(255)
 )
 begin
 	declare usuario_id int;
-    
-	if _fechaNacimiento = '' or _fechaNacimiento = '0000-00-00' then
-		set _fechaNacimiento = null;
-	end if;
     
     if _celular = '' or _celular = 0  then
 		set _celular = null;
