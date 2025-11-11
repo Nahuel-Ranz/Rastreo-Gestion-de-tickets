@@ -1,69 +1,73 @@
 <!--
-    group: { id, select },
+    group: { id, select, req },
     label: { id, content },
     options:[{ value, content }, ... ]
 -->
 
 <div id="<%= group.id %>" class="selectContainer">
-    <select
-        id="<%= group.select %>"
-         name="<%= group.select %>" 
-        <%= group.req ? 'required' : '' %>
-    >
-        <option value=""></option>
-        <% options.forEach(op => { %>
-            <option value="<%= op.value %>"><%= op.content %></option>
-        <% }); %>
-    </select>
-    <label
-        for="<%= group.select %>"
-        id="<%= label.id %>"
-        class="vp hp"
-    >
-        <%= label.content %>
-    </label>
+  <select
+    id="<%= group.select %>"
+    name="<%= group.select %>"
+    <%= group.req ? 'required' : '' %>
+  >
+    <option value=""></option>
+    <% options.forEach(op => { %>
+      <option value="<%= op.value %>"><%= op.content %></option>
+    <% }); %>
+  </select>
+  <label
+    for="<%= group.select %>"
+    id="<%= label.id %>"
+    class="vp hp"
+  >
+    <%= label.content %>
+  </label>
 </div>
 
 <script type="module">
-    import { radius } from '/js/utils.js';
+  import { radius } from '/js/utils.js';
 
-    ((d) => {
-        const label = d.getElementById('<%= label.id %>');
-        const choices = new Choices('#<%= group.select %>', {
-            searchEnabled:false,
-            itemSelectText: ''
-        });
-        const choices2=d.querySelector('.choices');
-        const choices__inner=d.querySelector('.choices__inner');
-        const items=d.querySelectorAll('.choices__item');
+  ((d) => {
+    const select = d.getElementById('<%= group.select %>');
+    const label = d.getElementById('<%= label.id %>');
 
-        if(!window.selectStates) window.selectStates = {};
-        selectStates['<%= group.select %>'] = {
-            state: false,
-            label: label,
-            choices: choices,
-            choices__inner: choices__inner
+    // --- Inicializa el estado global si no existe
+    if (!window.selectStates) window.selectStates = {};
+    selectStates['<%= group.select %>'] = {
+      state: false,
+      label,
+      select
+    };
+
+    // --- Función auxiliar
+    function updateLabelState() {
+      if (select.value) {
+        label.classList.add('active', 'correct');
+        select.classList.add('correct');
+        selectStates['<%= group.select %>'].state = true;
+      } else {
+        label.classList.remove('correct');
+        select.classList.remove('correct');
+        selectStates['<%= group.select %>'].state = false;
+        // Quita "active" solo si no tiene foco
+        if (document.activeElement !== select) {
+          label.classList.remove('active');
         }
+      }
+    }
 
-        choices2.addEventListener('showDropdown', () => {
-            label.classList.add('active');
-        });
+    // --- Listeners
+    select.addEventListener('focus', () => {
+      label.classList.add('active');
+    });
 
-        choices2.addEventListener('hideDropdown', () => {
-            if(!choices.getValue(true)) label.classList.remove('active');
-        });
+    select.addEventListener('blur', updateLabelState);
+    select.addEventListener('change', updateLabelState);
 
-        choices2.addEventListener('change', () => {
-            if(!choices.getValue(true)) {
-                label.classList.remove('active', 'correct');
-                choices__inner.classList.remove('correct');
-                selectStates['<%= group.select %>'].state = false;
-            } else {
-                label.classList.add('correct');
-                choices__inner.classList.add('correct');
-                selectStates['<%= group.select %>'].state = true;
-            }
-        });
-        radius(choices__inner);
-    })(document);
+    // --- Inicializar
+    updateLabelState();
+
+    // --- Aplica radio al select
+    radius(select);
+  })(document);
 </script>

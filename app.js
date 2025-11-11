@@ -35,5 +35,5 @@ app.use(require('./routes/error_handling'));
 
 const PORT = process.env.EXPRESS_PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor: https://localhost:${PORT}`);
+    console.log(`Servidor: http://localhost:${PORT}`);
 });
