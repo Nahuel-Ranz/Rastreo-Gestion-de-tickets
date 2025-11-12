@@ -25,7 +25,7 @@ async function checkNewUser(dni, celular, correo) {
         return { data: alreadyExists[0] };
     } catch (error) {
         console.error('No se pudo chequear el usuario (desde spQueries): ', error);
-        return { data: [{credencial:'', message:'Error en la verificación desde spQueries'}] };
+        return { data: [{credential:'error', message:'Error en la verificación (desde spQueries)'}] };
     }
 }
 // ===========================================================================================================================

@@ -28,51 +28,25 @@
 </div>
 
 <script type="module">
+    import { updateInputState } from '/js/utils.js';
+
     ((d) => {
         const group=d.getElementById('<%= group.id %>');
         const input=group.querySelector('#<%= input.id %>');
         const label=group.querySelector('#<%= label.id %>');
         const icon=group.querySelector('i');
         const p=group.querySelector('p');
+
+        // Inicializa el estado global si no existe        
         if(!window.inputStates) window.inputStates = {};
-        inputStates[input.id] = {
-            state: false,
-            label: label,
-            input: input,
-            icon: icon,
-            p: p
-        }
+        inputStates[input.id] = { state: false, label, input, icon, p };
 
+        const regEx = {
+            regex: <%= validation.regex %>,
+            error_message: '<%= validation.error_message %>'
+        };
         input.addEventListener('input', () => {
-            if(input.value==='') {
-                label.classList.remove('correct', 'error');
-                input.classList.remove('correct', 'error');
-                icon.classList.add('hidden');
-                p.classList.add('hidden');
-                inputStates[input.id].state = false;
-                return;
-            }
-
-            if(<%= validation.regex %>.test(input.value)) {
-                label.classList.remove('error');
-                label.classList.add('correct');
-                input.classList.remove('error');
-                input.classList.add('correct');
-                icon.classList.remove('hidden', 'fa-times');
-                icon.classList.add('fa-check');
-                p.classList.add('hidden');
-                inputStates[input.id].state = true;
-            } else {
-                label.classList.remove('correct');
-                label.classList.add('error');
-                input.classList.remove('correct');
-                input.classList.add('error');
-                icon.classList.remove('hidden', 'fa-check');
-                icon.classList.add('fa-times');
-                p.textContent = '<%= validation.error_message %>';
-                p.classList.remove('hidden');
-                inputStates[input.id].state = false;
-            }
+            updateInputState(inputStates[input.id], regEx);
         });
     })(document);
 </script>

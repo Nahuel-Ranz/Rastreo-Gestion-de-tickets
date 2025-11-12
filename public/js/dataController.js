@@ -15,8 +15,8 @@ form.addEventListener('reset', () => {
     Object.keys(selectStates).forEach( key => {
         selectStates[key].state = false;
         selectStates[key].label.classList.remove('correct', 'active');
-        selectStates[key].choices__inner.classList.remove('correct');
-        selectStates[key].choices.setChoiceByValue('');
+        selectStates[key].select.classList.remove('correct');
+        selectStates[key].icon.classList.add('hidden');
     });
 });
 
@@ -28,8 +28,10 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
-        const formData = new FormData(form);
-        const entries = Object.fromEntries(formData.entries());
+    const formData = new FormData(form);
+    const entries = Object.fromEntries(formData.entries());
 
-        console.log('Datos del formulario:', entries);
+    axios.post('/verificar_usuario', entries)
+        .then( res => console.log("desde axios (res.data): ", res.data))
+        .catch( error => console.log("Ocurrió un error (res.data: ", error));
 });

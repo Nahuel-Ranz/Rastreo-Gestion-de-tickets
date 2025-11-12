@@ -9,6 +9,7 @@ const footer=document.getElementById('footer');
 const form = document.getElementById('page_form');
 const labels = document.getElementsByTagName('label');
 const inputs = document.getElementsByTagName('input');
+const selects = document.getElementsByTagName('select');
 const modal_body = document.getElementById('modal-body');
 
 window.addEventListener('load', () => fitToScreen(header, main, footer));
@@ -16,5 +17,6 @@ window.addEventListener('resize', () => fitToScreen(header, main, footer));
 
 radiusToAll(labels);
 radiusToAll(inputs);
+radiusToAll(selects);
 radius(modal_body, 15);
 radius(form, 20);

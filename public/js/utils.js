@@ -1,6 +1,5 @@
 // ============= DISEÑO ======================================================================
-// aplica un radio equivalente a 1/7 del largo más corto
-// entre la altura y la anchura.
+// aplica un radio equivalente a 1/7 del largo más corto.
 export function radius(e, measurement=7) {
     const smaller = e.offsetHeight<e.offsetWidth
         ? e.offsetHeight
@@ -40,16 +39,61 @@ export function closeDropdownsExcept(list) {
     });
 }
 
-// abre modal.
-export function showElement(id) {
-    const modal = document.getElementById(id);
-    if(modal) modal.classList.remove('hidden');
+// mostrar|ocultar el elemento.
+export function showElement(e) { if(e) e.classList.remove('hidden'); }
+export function hideElement(e) { if(e) e.classList.add('hidden'); }
+
+// actualiza el estado en el grupo completo.
+export function updateSelectState(o) {
+    if (o.select.value) {
+        o.label.classList.add('active', 'correct');
+        o.select.classList.add('correct');
+        o.icon.classList.remove('hidden');
+        o.state = true;
+    } else {
+        o.label.classList.remove('correct', 'active');
+        o.select.classList.remove('correct');
+        o.icon.classList.add('hidden');
+        o.state = false;
+
+        // Quita "active" solo si no tiene foco
+        if (document.activeElement !== o.select) {
+            o.label.classList.remove('active');
+        }
+    }
 }
 
-// cierra modal
-export function hideElement(id) {
-    const modal = document.getElementById(id);
-    if(modal) modal.classList.add('hidden');
+// actualiza el estado en el grupo completo.
+export function updateInputState(o, condition) {
+    if(o.input.value==='') {
+        o.label.classList.remove('correct', 'error');
+        o.input.classList.remove('correct', 'error');
+        o.icon.classList.add('hidden');
+        o.p.classList.add('hidden');
+        o.state = false;
+        return;
+    }
+
+    if(condition.regex.test(o.input.value)) {
+        o.label.classList.remove('error');
+        o.label.classList.add('correct');
+        o.input.classList.remove('error');
+        o.input.classList.add('correct');
+        o.icon.classList.remove('hidden', 'fa-times');
+        o.icon.classList.add('fa-check');
+        o.p.classList.add('hidden');
+        o.state = true;
+    } else {
+        o.label.classList.remove('correct');
+        o.label.classList.add('error');
+        o.input.classList.remove('correct');
+        o.input.classList.add('error');
+        o.icon.classList.remove('hidden', 'fa-check');
+        o.icon.classList.add('fa-times');
+        o.p.textContent = condition.error_message;
+        o.p.classList.remove('hidden');
+        o.state = false;
+    }
 }
 // ===========================================================================================
 
@@ -64,7 +108,7 @@ export function checkObjectState(object) {
         const item = object[key];
         const required = isInputType
         ? item.input.required
-        : item.choices.passedElement.element.required;
+        : item.select.required;
 
         if (required && !item.state) return false;
     }

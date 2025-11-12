@@ -20,10 +20,11 @@
     
     ((d) => {
         const closer = d.getElementById('close-modal');
+        const container = d.getElementById('modal_container');
 
-        closer.addEventListener('click', () => hideElement('modal_container'));
+        closer.addEventListener('click', () => hideElement(container));
         d.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') hideElement('modal_container');
+            if(e.key === 'Escape') hideElement(container);
         })
     })(document);
 </script>
