@@ -1,0 +1,14 @@
+<!-- { title:'' } -->
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <%- include("partials/head", { title }); %>
+    </head>
+    <body>
+        <%- include("partials/header"); %>
+        <main id="main" class="flexRow vp">
+            <%- content %>
+        </main>
+        <%- include("partials/footer"); %>
+    </body>
+</html>
