@@ -3,32 +3,6 @@ const argon2 = require('argon2');
 const UAParser = require('ua-parser-js');
 const utils = require('../utils/utils.js');
 // ===========================================================================================================================
-async function getAreas() {
-    try {
-        const [areas] = await mysql.query(`call obtenerAreas();`);
-
-        return { data: areas[0] };
-    } catch (error) {
-        console.error('Error al intentar obtener las áreas (desde spQueries): ', error);
-        return { data: [{value:'', content:'Error desde spQueries'}] };
-    }
-}
-// ===========================================================================================================================
-async function checkNewUser(dni, celular, correo) {
-    try {
-
-        // [{ credencial, message }, ... ]
-        const [alreadyExists] = await mysql.query('call verificarNuevoUsuario(?,?,?)',
-            [dni, celular, correo]
-        );
-
-        return { data: alreadyExists[0] };
-    } catch (error) {
-        console.error('No se pudo chequear el usuario (desde spQueries): ', error);
-        return { data: [{credential:'error', message:'Error en la verificación (desde spQueries)'}] };
-    }
-}
-// ===========================================================================================================================
 async function registerUser(nombre, apellido, dni, fechaNacimiento, celular, correo, areaFacultad, contrasenia) {
     try {
         const hash = await argon2.hash(contrasenia, {
@@ -45,7 +19,7 @@ async function registerUser(nombre, apellido, dni, fechaNacimiento, celular, cor
         return { ok:true };
     } catch (error) {
         console.error('No se pudo registrar el usuario (desde spQueries): ', error);
-        return { error: 'Error desde spQueries.' };
+        return { ok:false, error: 'Error al registrar el usuario (desde spQueries).' };
     }
 }
 // ===========================================================================================================================
@@ -55,7 +29,138 @@ async function aproveNewUser(id, rol) {
         return { ok:true };
     } catch (error) {
         console.error('Error al aprobar el usuario (desde spQueries): ', error);
-        return { error: 'El usuario no ha sido aprobado.' };
+        return { ok: false, error: 'El usuario no ha sido aprobado (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function updateLastActivity(session_id) {
+    try {
+        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ session_id, new Date() ]);
+        return { ok: true };
+    } catch (error) {
+        console.error('Error al actualizar la última actividad (desde spQueries): ', error);
+        return { ok: false, error: 'No se pudo actualizar la última actividad (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function closeSession(session_id) {
+    try {
+        await mysql.execute('call cerrarSesion(?, ?)', [ session_id, new Date() ]);
+        return { ok: true };
+    } catch (error) {
+        console.error('Error al cerrar la última actividad (desde spQueries): ', error);
+        return { ok: false, error: 'No se pudo cerrar la última sesión activa (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function rejectNewUser(id) {
+    try {
+        await mysql.execute('call rechazarRegistro(?)', [ id ]);
+        return { ok: true };
+    } catch (error) {
+        console.error('Error al rechazar el nuevo usuario (desde spQueries): ', error);
+        return { ok: false, error: 'No se pudo rechazar el nuevo usuario (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function sendMessage(emisor_id, receptor_id, message, ticket_id ) {
+    try {
+        const [result] = await mysql.execute('call enviarMensaje(?,?,?,?,?)', [
+            emisor_id, receptor_id, message, new Date(), ticket_id
+        ]);
+
+        const data = result[0][0]['last_insert_id()'];
+
+        return { ok: true, data };
+    } catch (error) {
+        console.error(`Error al enviar mensaje (desde spQueries): `, error);
+        return { ok: false, error: `No se pudo enviar el mensaje del ticket ${ticket_id} (desde spQueries).` };
+    }
+}
+// ===========================================================================================================================
+async function receiveMessages(id) {
+    try {
+        await mysql.execute('call recibirMensajes(?)', [ id ]);
+
+        return { ok: true };
+    } catch (error) {
+        console.error(`Error al recibir los mensajes (desde spQueries): `, error);
+        return { ok: false, error: `No se pudo recibir los mensajes (desde spQueries).` };
+    }
+}
+// ===========================================================================================================================
+async function readMessages(messages_id = []) {
+    try {
+        await mysql.execute('call leerMensajes(?);', [ JSON.stringify(messages_id) ]);
+
+        return { ok: true };
+    } catch ( error ) {
+        console.error('Error al obtener los mensajes (desde spQueries): ', error);
+        return { ok: false, error:'No se pudo obtener los mensajes (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function updateTicket(id, fecha_actividad = null, origin_id = null) {
+    try {
+        await mysql.execute('call actualizarTicket(?,?,?,?);', [
+            id, new Date(), fecha_actividad, origin_id
+        ]);
+
+        return { ok: true };
+    } catch ( error ) {
+        console.error('Error al actualizar el ticket (desde spQueries): ', error);
+        return { ok: false, error:'No se pudo actualizar el ticket (desde spQueries).' };
+    }
+}
+// ===========================================================================================================================
+async function acceptTicket(id, fecha, solicitante_id, area_id, fecha_actividad) {
+    try {
+        await mysql.execute('call aceptarTicket(?,?,?,?,?)', [
+            id, fecha, solicitante_id, area_id, fecha_actividad
+        ]);
+
+        return { ok: true };
+    } catch (error) {
+        console.error(`Error al aceptar el ticket ${ id } (desde spQueries): `, error);
+        return { ok: false, error: `No se pudo aceptar el ticket ${ id } (desde spQueries).` };
+    }
+}
+// ===========================================================================================================================
+async function changeTicketStatus(id, abreviation_status) {
+    try {
+        await mysql.execute('call cambiarEstadoTicket(?,?)', [ id, abreviation_status ]);
+
+        return { ok: true };
+    } catch (error) {
+        console.error(`Error al cambiar el estado del ticket ${ id } (desde spQueries): `, error);
+        return { ok: false, error: `No se pudo cambier el estado del ticket ${ id } (desde spQueries).` };
+    }
+}
+// ===========================================================================================================================
+async function getAreas() {
+    try {
+        const [areas] = await mysql.query(`call obtenerAreas();`);
+
+        return { ok: true, data: areas[0] };
+    } catch (error) {
+        console.error('Error al intentar obtener las áreas (desde spQueries): ', error);
+        return { ok: false, data: [{value:'', content:'Error desde spQueries'}] };
+    }
+}
+// ===========================================================================================================================
+async function checkNewUser(dni, celular, correo) {
+    try {
+
+        // [{ credencial, message }, ... ]
+        const [alreadyExists] = await mysql.query('call verificarNuevoUsuario(?,?,?)',
+            [dni, celular, correo]
+        );
+
+        if(alreadyExists[0].length === 0) return { ok:true };
+        return { ok:false, data: alreadyExists[0] };
+    } catch (error) {
+        console.error('No se pudo chequear el usuario (desde spQueries): ', error);
+        return { ok:false, data: [{credential:'error', message:'Error en la verificación (desde spQueries)'}] };
     }
 }
 // ===========================================================================================================================
@@ -104,36 +209,6 @@ async function initSession(req, id_user) {
     }
 }
 // ===========================================================================================================================
-async function updateLastActivity(session_id) {
-    try {
-        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ session_id, new Date() ]);
-        return { ok: true };
-    } catch (error) {
-        console.error('Error al actualizar la última actividad (desde spQueries): ', error);
-        return { ok: false, error: 'No se pudo actualizar la última actividad.' };
-    }
-}
-// ===========================================================================================================================
-async function closeSession(session_id) {
-    try {
-        await mysql.execute('call cerrarSesion(?, ?)', [ session_id, new Date() ]);
-        return { ok: true };
-    } catch (error) {
-        console.error('Error al cerrar la última actividad (desde spQueries): ', error);
-        return { ok: false, error: 'No se pudo cerrar la última sesión activa (desde spQueries).' };
-    }
-}
-// ===========================================================================================================================
-async function rejectNewUser(id) {
-    try {
-        await mysql.execute('call rechazarRegistro(?)', [ id ]);
-        return { ok: true };
-    } catch (error) {
-        console.error('Error al rechazar el nuevo usuario (desde spQueries): ', error);
-        return { ok: false, error: 'No se pudo rechazar el nuevo usuario.' };
-    }
-}
-// ===========================================================================================================================
 async function getUserData(id) {
     try {
         const [result] = await mysql.query('call obtenerDatosUsuario(?)', [ id ]);
@@ -167,30 +242,6 @@ async function createTicket(solicitante_id, area_facultad_id, fecha_actividad) {
     }
 }
 // ===========================================================================================================================
-async function acceptTicket(id, fecha, solicitante_id, area_id, fecha_actividad) {
-    try {
-        await mysql.execute('call aceptarTicket(?,?,?,?,?)', [
-            id, fecha, solicitante_id, area_id, fecha_actividad
-        ]);
-
-        return { ok: true };
-    } catch (error) {
-        console.error(`Error al aceptar el ticket ${ id } (desde spQueries): `, error);
-        return { ok: false, error: `No se pudo aceptar el ticket ${ id }.` };
-    }
-}
-// ===========================================================================================================================
-async function changeTicketStatus(id, abreviation_status) {
-    try {
-        await mysql.execute('call cambiarEstadoTicket(?,?)', [ id, abreviation_status ]);
-
-        return { ok: true };
-    } catch (error) {
-        console.error(`Error al cambiar el estado del ticket ${ id } (desde spQueries): `, error);
-        return { ok: false, error: `No se pudo cambier el estado del ticket ${ id }.` };
-    }
-}
-// ===========================================================================================================================
 // type: 'Aprobados' || ''
 async function getTickets(usuario_id, page=1, type='Aprobados') {
 
@@ -212,68 +263,18 @@ async function getTickets(usuario_id, page=1, type='Aprobados') {
     }
 }
 // ===========================================================================================================================
-async function sendMessage(emisor_id, receptor_id, message, ticket_id ) {
-    try {
-        const [result] = await mysql.execute('call enviarMensaje(?,?,?,?,?)', [
-            emisor_id, receptor_id, message, new Date(), ticket_id
-        ]);
-
-        const message_id = result[0][0]['last_insert_id()'];
-
-        return { ok: true, message_id };
-    } catch (error) {
-        console.error(`Error al enviar mensaje (desde spQueries): `, error);
-        return { ok: false, error: `No se pudo enviar el mensaje del ticket ${ticket_id}.` };
-    }
-}
-// ===========================================================================================================================
-async function receiveMessages(id) {
-    try {
-        await mysql.execute('call recibirMensajes(?)', [ id ]);
-
-        return { ok: true };
-    } catch (error) {
-        console.error(`Error al recibir los mensajes (desde spQueries): `, error);
-        return { ok: false, error: `No se pudo recibir los mensajes.` };
-    }
-}
-// ===========================================================================================================================
 async function getMessages(me_id, other_id, ticket_id, page=1) {
 	try {
 		const [result] = await mysql.query('call obtenerMensajes(?,?,?,?)', [
 			me_id, other_id, ticket_id, page
 		]);
-		const messages = result[0] || [];
+		const data = result[0] || [];
 		
-		return { ok: true, data: messages };
+		return { ok: true, data };
 	} catch (error) {
 		console.error('Error al intentar obtener los mensajes (desde spQueries): ', error);
 		return { ok: false, error: 'No se pudieron obtener los mensajes.' };
 	}
-}
-// ===========================================================================================================================
-async function readMessages(messages_id = []) {
-    try {
-        await mysql.execute('call leerMensajes(?);', [ JSON.stringify(messages_id) ]);
-
-        return { ok: true };
-    } catch ( error ) {
-        console.error('Error al obtener los mensajes (desde spQueries): ', error);
-        return { ok: false, error:'No se pudo obtener los mensajes.' };
-    }
-}
-// ===========================================================================================================================
-async function updateTicket(id, fecha_actividad = null, origin_id = null) {
-    try {
-        await mysql.execute('call actualizarTicket(?,?,?,?);', [
-            id, new Date(), fecha_actividad, origin_id
-        ]);
-
-        return { ok: true };
-    } catch ( error ) {
-        console.error('Error al actualizar el ticket (desde spQueries): ', error);
-        return { ok: false, error:'No se pudo actualizar el ticket.' };
-    }
 }
 // ===========================================================================================================================
 async function userExists(credencial = []) {

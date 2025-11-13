@@ -12,7 +12,8 @@
         position: relative;
         background-color: transparent;
         width: clamp(450px, 60%, 800px);
-        height: clamp(450px, 70%, 700px);
+        max-height: 90%;
+        box-shadow: 8px 3px 10px var(--shadow);
 
         #close-modal {
             position: absolute;
@@ -32,7 +33,7 @@
             }
         }
 
-        header, .modal-body, footer {
+        header, #modal_body, footer {
             width: var(--full-width-parent);
         }
 
@@ -49,10 +50,11 @@
                 margin-right: 60px;
             }
         }
-        #modal-body {
+        #modal_body {
+            overflow-y:auto;
+            scrollbar-width: thin;
             background-color: var(--secondary-color);
-            height: 100%;
-            width: 100%;
+            justify-content: start;
         }
 
         footer {

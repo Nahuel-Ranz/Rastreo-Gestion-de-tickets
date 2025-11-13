@@ -32,7 +32,7 @@
 <%- include('components/input_group', {
     group: { id:'dni_group', input:'dni_input'},
     label: { id:'dni_label', content:'DNI N° *'},
-    input: { id:'dni', type:'number', req:true},
+    input: { id:'dni', type:'text', req:true},
     validation: { regex:/^\d{8}$/, error_message: 'Solo 8 números serán válidos.'}
 }); %>
 

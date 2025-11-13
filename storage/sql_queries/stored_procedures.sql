@@ -11,10 +11,10 @@ begin
 	select 'dni' as credential, 'El DNI ingresado ya se encuentra almacenado en nuestro sistema.' as message
 		where exists(select 1 from Personas where dni = _dni)
 	union all
-	select 'celular', 'El número ingresado ya se encuentra almacenado en nuestro sistema.'
+	select 'cel', 'El número ingresado ya se encuentra almacenado en nuestro sistema.'
 		where exists(select 1 from Celulares where numero = _celular)
 	union all
-	select 'correo', 'El correo ingresado ya se encuentra almacenado en nuestro sistema.'
+	select 'mail', 'El correo ingresado ya se encuentra almacenado en nuestro sistema.'
 		where exists(select 1 from Correos where correo = _correo);
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */

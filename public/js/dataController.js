@@ -1,6 +1,7 @@
-import { checkObjectState } from '/js/utils.js';
+import { checkObjectState, normalizeFormData } from '/js/utils.js';
 
 const form=document.getElementById('page_form');
+const modal=document.getElementById('modal_container');
 
 form.addEventListener('reset', () => {
 
@@ -28,10 +29,28 @@ form.addEventListener('submit', (e) => {
         return;
     }
 
-    const formData = new FormData(form);
-    const entries = Object.fromEntries(formData.entries());
+    const formData = normalizeFormData(form);
+    axios.post('/verificar_usuario', formData)
+        .then(res => {
+            if(!res.data.ok) {
+                if(res.data.data[0].credential === 'error') {
+                    alert(res.data.data[0].message);
+                    return;
+                }
 
-    axios.post('/verificar_usuario', entries)
-        .then( res => console.log("desde axios (res.data): ", res.data))
-        .catch( error => console.log("Ocurrió un error (res.data: ", error));
+                for(const message of res.data.data) {
+                    inputStates[message.credential].p.textContent = message.message;
+                    inputStates[message.credential].p.classList.remove('hidden');
+                    inputStates[message.credential].label.classList.remove('correct');
+                    inputStates[message.credential].label.classList.add('error');
+                    inputStates[message.credential].input.classList.remove('correct');
+                    inputStates[message.credential].input.classList.add('error');
+                    inputStates[message.credential].icon.classList.remove('fa-check');
+                    inputStates[message.credential].icon.classList.add('fa-times');
+                }
+            } else {
+                modal.classList.remove('hidden');
+            }
+        })
+        .catch(error => console.error(error));
 });
