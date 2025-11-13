@@ -17,16 +17,16 @@ const selects = document.getElementsByTagName('select');
 
 window.addEventListener('load', () => {
     fitToScreen(header, main, footer);
-    adjustModal(modal, modalHeader, modalBody, modalFooter);
+    if(modal) adjustModal(modal, modalHeader, modalBody, modalFooter);
 });
 
 window.addEventListener('resize', () => {
     fitToScreen(header, main, footer);
-    adjustModal(modal, modalHeader, modalBody, modalFooter);
+    if(modal) adjustModal(modal, modalHeader, modalBody, modalFooter);
 });
 
-radiusToAll(labels);
-radiusToAll(inputs);
-radiusToAll(selects);
-radius(form, 20);
-radius(modal,15);
+if(labels) radiusToAll(labels);
+if(inputs) radiusToAll(inputs);
+if(selects) radiusToAll(selects);
+if(form) radius(form, 20);
+if(modal) radius(modal,8);

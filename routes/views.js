@@ -4,8 +4,8 @@ const viewController = require('../controllers/viewController.js');
 const { isAuthenticated, isGuest } = require('../middlewares/authMiddleware.js');
 
 // formularios
-router.get('/', isGuest, (req, res) => res.render('forms/login', { login:false }));
-router.get('/registro', isGuest, viewController.showRegister );
+router.get('/', isGuest, viewController.renderLogin);
+router.get('/registro', isGuest, viewController.renderRegister );
 router.get('/establecer_clave', isGuest, (req, res) => res.render('forms/set_password', { login:false }));
 router.get('/recuperar_clave/email', isGuest, (req, res) => res.render('forms/recovery_password/email', { login:false }));
 router.get('/recuperar_clave/clave', isGuest, (req, res) => res.render('forms/recovery_password/key', { login:false }));

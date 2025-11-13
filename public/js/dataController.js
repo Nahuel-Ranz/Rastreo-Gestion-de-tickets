@@ -3,7 +3,7 @@ import { checkObjectState, normalizeFormData } from '/js/utils.js';
 const form=document.getElementById('page_form');
 const modal=document.getElementById('modal_container');
 
-form.addEventListener('reset', () => {
+if(form) form.addEventListener('reset', () => {
 
     Object.keys(inputStates).forEach(key => {
         inputStates[key].state = false;
@@ -21,7 +21,7 @@ form.addEventListener('reset', () => {
     });
 });
 
-form.addEventListener('submit', (e) => {
+if(form) form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     if(!checkObjectState(inputStates) || !checkObjectState(selectStates)) {

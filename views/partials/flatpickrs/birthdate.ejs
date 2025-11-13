@@ -1,11 +1,11 @@
 <!--
     group: { id, input },
-    input: { id, type, req },
+    input: { id, type, ejsPath, req },
     label: { id, content }
 -->
 <% label.content += ' (año-mes-día)'; %>
 <div class="pickr-container">
-    <%- include('components/input_group', { group, input, label}); %>
+    <%- include(`${ejsPath}components/input_group`, { group, input, label}); %>
 </div>
 
 <script>

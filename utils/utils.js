@@ -1,3 +1,7 @@
+const path = require('path');
+
+const ejsPath = path.join(__dirname, '../views/partials/');
+
 function isNatural(value) {
     return Number.isFinite(value)
         && Number.isInteger(value)
@@ -41,6 +45,7 @@ function destroySession(req) {
 
 module.exports = {
     destroySession,
+    ejsPath,
     isNatural,
     jsonToObject,
     mergeTickets,

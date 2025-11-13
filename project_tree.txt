@@ -2,6 +2,7 @@
     > .vscode/
         . settings.json
     > controllers/
+        . registerController.js
         . userController.js
         . viewController.js
     > middlewares/
@@ -55,6 +56,7 @@
                 . _global.scss
                 . _reset.scss
             > components/
+                . _404.scss
                 . _button.scss
                 . _dropdown_list.scss
                 . _dropdown_options.scss
@@ -63,6 +65,7 @@
                 . _forms.scss
                 . _i.scss
                 . _input_group.scss
+                . _modal.scss
                 . _ticket_collectors.scss
                 . _ticket.scss
                 . components.scss
@@ -76,6 +79,11 @@
             . styles.scss
     > storage/
         > sql_queries/
+            > mocks/
+                . generateHashes.mjs
+                . hashes.txt
+                . password.txt
+                . registrarUsuario.sql
             . events.sql
             . global_configurations.sql
             . inserts.sql
@@ -91,28 +99,12 @@
         . permissions.json
         . utils.js
     > views/
-        > pages/
-            > errors/
-                . 404.ejs
-            > forms/
-                > recovery_password/
-                    . email.ejs
-                    . key.ejs
-                    . new_password.ejs
-                . login.ejs
-                . new_ticket.ejs
-                . register.ejs
-                . set_password.ejs
-            . access_control_dashboard.ejs
-            . dashboard.ejs
-            . execution_queue.ejs
-            . index.ejs
-            . notifications.ejs
-            . profile.ejs
-            . settings.ejs
+        > errors/
+            . 404.ejs
         > partials/
             > components/
                 > form_content/
+                    . email_validation_key.ejs
                     . login.ejs
                     . recovery_email.ejs
                     . recovery_key.ejs
@@ -123,7 +115,9 @@
                     . waiting_list.ejs
                 . button.ejs
                 . forms.ejs
+                . header_nav.ejs
                 . input_group.ejs
+                . modal.ejs
                 . ticket_collectors.ejs
             > dropdowns/
                 . link-dropdown.ejs
@@ -132,6 +126,7 @@
             > flatpickrs/
                 . birthdate.ejs
                 . event_date.ejs
+            > layouts/
             > tickets/
                 . ticket_collector_header.ejs
                 . ticket_collector_list.ejs
@@ -139,7 +134,7 @@
             . footer.ejs
             . head.ejs
             . header.ejs
-            . main.ejs
+        . base.ejs
     . .env
     . .env.example
     . .gitignore
