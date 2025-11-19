@@ -1,6 +1,6 @@
 {
     "c":{
-        "me":["ticket","phone","email"],
+        "me":["ticket","phone","email","notification"],
         "others":["ticket","phone","email"],
         "general":["user","rol","area"]
     },
@@ -20,7 +20,8 @@
         },
         "permisos":true,
         "area":true,
-        "statistic":true
+        "statistic":true,
+        "notification":true
     },
     "u":{
         "ticket":{

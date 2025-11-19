@@ -24,25 +24,3 @@
     </label>
     <i class="fas fa-check hidden"></i>
 </div>
-
-<script type="module">
-  import { updateSelectState } from '/js/utils.js';
-
-  ((d) => {
-    const group=d.getElementById('<%= group.id %>');
-    const select = group.querySelector('#<%= group.select %>');
-    const label = group.querySelector('#<%= label.id %>');
-    const icon = group.querySelector('i');
-
-    // Inicializa el estado global si no existe
-    if (!window.selectStates) window.selectStates = {};
-    selectStates[select.id] = { state: false, label, select, icon };
-
-    select.addEventListener('focus', () => label.classList.add('active'));
-    select.addEventListener('blur', () => updateSelectState(selectStates[select.id]));
-    select.addEventListener('change', () => updateSelectState(selectStates[select.id]));
-
-    // Inicializar
-    updateSelectState(selectStates[select.id]);
-  })(document);
-</script>

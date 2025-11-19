@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const mysql2=require('mysql2/promise');
 const { MongoClient } = require('mongodb');
+const { createClient } = require('redis');
 
 // mysql connection.
 const mysql = mysql2.createPool({
@@ -29,4 +30,20 @@ async function getMongo(){
     return mongodb;
 }
 
-module.exports = { mysql, getMongo };
+// redis connection (singleton)
+let redis = null;
+
+async function getRedis() {
+    if(!redis) {
+        redis = createClient({ url: process.env.REDIS_URL });
+        redis.on("error", (error) => console.error(`Error en Redis: ${error}`));
+        
+        try {
+            await redis.connect();
+            console.log("Redis Conectado.");
+        } catch(error) { console.error(`Error al conectar Redis: ${error}`)}
+    }
+    return redis;
+}
+
+module.exports = { mysql, getMongo, getRedis };

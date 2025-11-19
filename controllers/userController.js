@@ -1,35 +1,34 @@
 const argon2 = require('argon2');
-const spQueries = require('../storage/spQueries.js');
+const dbQueries = require('../storage/dbQueries.js');
 const utils = require('../utils/utils.js');
 
 const userController = {};
 
 userController.login = async (req, res) => {
-    const {credential, password } = req.body;
+    const {credential, pass } = req.body;
 
-    const data = await spQueries.getArgon2Hash(credential);
-    if(!data.ok) return res.render('forms/login', { error: data.error});
+    const data = await dbQueries.getArgon2Hash(credential);
+    if(!data.ok) return res.json(data);
 
-    const verified = await argon2.verify(data.hash, password);
-    if(!verified) return res.render('forms/login', { error: 'Contraseña incorrecta' });
+    const verified = await argon2.verify(data.hash, pass);
+    if(!verified) return res.json({ ok:false, type:'pass', error: 'Contraseña incorrecta' });
 
-    const sessionData = await spQueries.initSession(req, data.id);
-    if(!sessionData.ok) return res.render('forms/login', { error: sessionData.error });
+    const sessionData = await dbQueries.initSession(req, data.id);
+    if(!sessionData.ok) return res.json(sessionData);
 
-    // req.session.id
-    // req.session.last_activity
-    // req.session.userId
-    req.session = sessionData.session;
+    req.session.dbSessionId = sessionData.session.id;
+    req.session.userId = sessionData.session.userId;
+    req.session.lastActivity = sessionData.session.last_activity;
     return res.redirect('/lista_de_espera');
 };
 
 userController.logout = async (req, res) => {
-    const id = req.session?.session?.id;
+    const id = req.session?.dbSessionId;
 
     try {
         await utils.destroySession(req);
         if(id) {
-            const ans = await spQueries.closeSession(id);
+            const ans = await dbQueries.closeSession(id);
             if(!ans.ok) return res.render('index', { error_logout: ans.error });
         }
 

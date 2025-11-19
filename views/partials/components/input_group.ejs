@@ -24,29 +24,6 @@
         </label>
         <i class="fas hidden"></i>
     </div>
-    <p class="hidden hp vp"><%= validation.error_message %></p>
+    <p class="message hidden hp vp"><%= validation.error_message %></p>
+    <p class="regex hidden"><%= validation.regex %></p>
 </div>
-
-<script type="module">
-    import { updateInputState } from '/js/utils.js';
-
-    ((d) => {
-        const group=d.getElementById('<%= group.id %>');
-        const input=group.querySelector('#<%= input.id %>');
-        const label=group.querySelector('#<%= label.id %>');
-        const icon=group.querySelector('i');
-        const p=group.querySelector('p');
-
-        // Inicializa el estado global si no existe        
-        if(!window.inputStates) window.inputStates = {};
-        inputStates[input.id] = { state: false, label, input, icon, p };
-
-        const regEx = {
-            regex: <%= validation.regex %>,
-            error_message: '<%= validation.error_message %>'
-        };
-        input.addEventListener('input', () => {
-            updateInputState(inputStates[input.id], regEx);
-        });
-    })(document);
-</script>

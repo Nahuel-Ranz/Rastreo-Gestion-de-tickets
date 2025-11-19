@@ -32,6 +32,20 @@ export function adjustModal(modal, header, main, footer) {
     main.style.marginBottom = footerHeight+ "px";
     main.style.minHeight = (modalHeight-(headerHeight+footerHeight))+ "px";
 }
+
+// aplica radius a todos los elementos visibles de los formularios
+export function radiusToEntireForm(form) {
+    const labels = form.querySelectorAll('label');
+    const inputs = form.querySelectorAll('input');
+    const selects = form.querySelectorAll('select');
+    const buttons = form.querySelectorAll('button');
+
+    if(form) radius(form, 20);
+    if(labels) radiusToAll(labels);
+    if(inputs) radiusToAll(inputs);
+    if(selects) radiusToAll(selects);
+    if(buttons) radiusToAll(buttons);
+}
 // ===========================================================================================
 
 
@@ -40,13 +54,13 @@ export function adjustModal(modal, header, main, footer) {
 // ================= COMPORTAMIENTO ==========================================================
 // cierra todos los menus desplegados en la página.
 export function closeDropdowns() {
-    document.querySelectorAll('.dropdownList').forEach(list => list.classList.add('hidden'));
+    document.querySelectorAll('.dropdownList').forEach(list => hideElement(list));
 }
 
 // closes all dropdown menus except the one indicated.
 export function closeDropdownsExcept(list) {
     document.querySelectorAll('.dropdownList').forEach(l => {
-        if(list !== l) l.classList.add('hidden');
+        if(list !== l) hideElement(l);
     });
 }
 
@@ -54,17 +68,73 @@ export function closeDropdownsExcept(list) {
 export function showElement(e) { if(e) e.classList.remove('hidden'); }
 export function hideElement(e) { if(e) e.classList.add('hidden'); }
 
+// crear|destruir elemento.
+export function createElementAfter(e, newE) { if(e && newE) e.insertAdjacentHTML('afterend', newE); }
+export function deleteElement(closer, container) {
+    closer.addEventListener('click', () => container.remove());
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') container.remove();
+    });
+}
+
+export function fillObjectStates(form) {
+    const inputs = form.querySelectorAll('input');
+    const selects = form.querySelectorAll('select');
+    if(inputs) fillInputStates(inputs);
+    if(selects) fillSelectStates(selects);
+}
+
+function fillInputStates(inputs) {
+    const groups = [];
+    inputs.forEach( i => groups.push( i.parentElement.parentElement ));
+
+    groups.forEach( g => {
+        const input = g.querySelector('input');
+        const label = g.querySelector('label');
+        const icon = g.querySelector('i');
+        const errorMessage = g.querySelector('p.message');
+        const originalErrorMessage = errorMessage.textContent;
+        const regex =  parseRegex(g.querySelector('p.regex').textContent.trim());
+        inputStates[input.id] = {
+            state: false, input, label, icon, errorMessage, originalErrorMessage, regex
+        };
+
+        input.addEventListener('input', () => updateInputState(inputStates[input.id]));
+    });
+}
+
+function fillSelectStates(selects) {
+    const groups = [];
+    selects.forEach( s => groups.push( s.parentElement ));
+
+    groups.forEach( g => {
+        const select = g.querySelector('select');
+        const label = g.querySelector('label');
+        const icon = g.querySelector('i');
+        selectStates[select.id] = {
+            state:false, select, label, icon
+        }
+
+        select.addEventListener('focus', () => label.classList.add('active'));
+        select.addEventListener('blur', () => updateSelectState(selectStates[select.id]));
+        select.addEventListener('change', () => updateSelectState(selectStates[select.id]));
+
+        
+        updateSelectState(selectStates[select.id]);
+    });
+}
+
 // actualiza el estado en el grupo completo.
 export function updateSelectState(o) {
     if (o.select.value) {
         o.label.classList.add('active', 'correct');
         o.select.classList.add('correct');
-        o.icon.classList.remove('hidden');
+        showElement(o.icon);
         o.state = true;
     } else {
         o.label.classList.remove('correct', 'active');
         o.select.classList.remove('correct');
-        o.icon.classList.add('hidden');
+        hideElement(o.icon);
         o.state = false;
 
         // Quita "active" solo si no tiene foco
@@ -75,24 +145,24 @@ export function updateSelectState(o) {
 }
 
 // actualiza el estado en el grupo completo.
-export function updateInputState(o, condition) {
+export function updateInputState(o) {
     if(o.input.value==='') {
         o.label.classList.remove('correct', 'error');
         o.input.classList.remove('correct', 'error');
-        o.icon.classList.add('hidden');
-        o.p.classList.add('hidden');
+        hideElement(o.icon);
+        hideElement(o.errorMessage);
         o.state = false;
         return;
     }
 
-    if(condition.regex.test(o.input.value)) {
+    if(o.regex.test(o.input.value)) {
         o.label.classList.remove('error');
         o.label.classList.add('correct');
         o.input.classList.remove('error');
         o.input.classList.add('correct');
         o.icon.classList.remove('hidden', 'fa-times');
         o.icon.classList.add('fa-check');
-        o.p.classList.add('hidden');
+        hideElement(o.errorMessage);
         o.state = true;
     } else {
         o.label.classList.remove('correct');
@@ -101,8 +171,8 @@ export function updateInputState(o, condition) {
         o.input.classList.add('error');
         o.icon.classList.remove('hidden', 'fa-check');
         o.icon.classList.add('fa-times');
-        o.p.textContent = condition.error_message;
-        o.p.classList.remove('hidden');
+        o.errorMessage.textContent = o.originalErrorMessage;
+        showElement(o.errorMessage);
         o.state = false;
     }
 }
@@ -112,16 +182,29 @@ export function updateInputState(o, condition) {
 
 
 // ================= CONTROL DE DATOS ========================================================
-export function checkObjectState(object) {
+export function parseRegex(reg) {
+    const m = reg.match(/^\/(.+)\/([a-z]*)$/i);
+    if(!m) throw new Error(`Formato de RegExp inválido: ${reg}`);
+    return new RegExp(m[1], m[2]);
+}
+
+export function checkObjectState(object, form) {
+
+    const names = Array.from(form.elements)
+        .map(e => e.name)
+        .filter(name => name);
+
     const isInputType = 'input' in Object.values(object)[0];
 
     for (const key in object) {
-        const item = object[key];
-        const required = isInputType
-        ? item.input.required
-        : item.select.required;
+        if(names.includes(key)) {
+            const item = object[key];
+            const required = isInputType
+            ? item.input.required
+            : item.select.required;
 
-        if (required && !item.state) return false;
+            if (required && !item.state) return false;
+        }
     }
 
     return true;

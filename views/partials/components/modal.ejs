@@ -1,18 +1,14 @@
 <!-- { title, content }-->
 
-<div id="modal_container" class="modal_container flexColumn hiedden">
+<div id="modal_container" class="modal_container flexColumn">
     <div id="modal" class="modal flexColumn">
         <i id="close-modal" class="fas fa-times-circle"></i>
         <header id="modal_header" class="flexRow hp">
             <img src="/media/rgt-white.png" alt="UTN-LOGO" id="logo" >
-            <h2>Título del modal</h2>
+            <h2><%= title %></h2>
         </header>
         <div id="modal_body" class="flexColumn hp vp">
-            <p>body</p>
-            <p>body</p>
-            <p>body</p>
-            <p>body</p>
-            <p>body</p>
+            <%- content %>
         </div>
         <footer id="modal_footer" class="flexRow hp">
             <img src="/media/merge-white.png" alt="UTN" />
@@ -20,17 +16,3 @@
         </footer>
     </div>
 </div>
-
-<script type="module">
-    import { showElement, hideElement } from '/js/utils.js';
-    
-    ((d) => {
-        const closer = d.getElementById('close-modal');
-        const container = d.getElementById('modal_container');
-
-        closer.addEventListener('click', () => hideElement(container));
-        d.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') hideElement(container);
-        })
-    })(document);
-</script>

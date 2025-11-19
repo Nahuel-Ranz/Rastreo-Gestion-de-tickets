@@ -33,9 +33,11 @@
 .correct {
     border-color: var(--border-correct-color) !important;
     color: var(--correct-font-color) !important;
+    --input-color: var(--correct-font-color) !important;
 }
 
 .error {
     border-color: var(--border-error-color) !important;
     color: var(--error-font-color) !important;
+    --input-color: var(--error-font-color) !important;
 }

@@ -2,10 +2,12 @@
     > .vscode/
         . settings.json
     > controllers/
+        . partialController.js
         . registerController.js
         . userController.js
         . viewController.js
     > middlewares/
+        . activityMiddleware.js
         . authMiddleware.js
     > public/
         > css/
@@ -78,21 +80,18 @@
             . _variables.scss
             . styles.scss
     > storage/
-        > sql_queries/
-            > mocks/
-                . generateHashes.mjs
-                . hashes.txt
-                . password.txt
-                . registrarUsuario.sql
-            . events.sql
-            . global_configurations.sql
-            . inserts.sql
-            . stored_procedures.sql
-            . table_creations.sql
-            . tests.sql
-            . triggers.sql
+        > db_definitions/
+            > sql_queries/
+                . events.sql
+                . global_configurations.sql
+                . inserts.sql
+                . stored_procedures.sql
+                . table_creations.sql
+                . tests.sql
+                . triggers.sql
+            . mongoDB_script.js
         . connections.js
-        . spQueries.js
+        . dbQueries.js
     > utils/
         . auxiliary.json
         . MailerHandler.js

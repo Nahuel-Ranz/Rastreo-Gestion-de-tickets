@@ -1,4 +1,4 @@
-const { mysql, getMongo } = require('./connections.js');
+const { mysql, getMongo, getRedis } = require('./connections.js');
 const argon2 = require('argon2');
 const UAParser = require('ua-parser-js');
 const utils = require('../utils/utils.js');
@@ -33,9 +33,9 @@ async function aproveNewUser(id, rol) {
     }
 }
 // ===========================================================================================================================
-async function updateLastActivity(session_id) {
+async function updateLastActivity(session_id, lastActivity) {
     try {
-        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ session_id, new Date() ]);
+        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ session_id, lastActivity ]);
         return { ok: true };
     } catch (error) {
         console.error('Error al actualizar la última actividad (desde spQueries): ', error);
@@ -43,9 +43,9 @@ async function updateLastActivity(session_id) {
     }
 }
 // ===========================================================================================================================
-async function closeSession(session_id) {
+async function closeSession(session_id, lastActivity) {
     try {
-        await mysql.execute('call cerrarSesion(?, ?)', [ session_id, new Date() ]);
+        await mysql.execute('call cerrarSesion(?, ?)', [ session_id, lastActivity ]);
         return { ok: true };
     } catch (error) {
         console.error('Error al cerrar la última actividad (desde spQueries): ', error);
@@ -167,13 +167,13 @@ async function checkNewUser(dni, celular, correo) {
 async function getArgon2Hash(credential) {
     try {
         const [result] = await mysql.query('call obtenerArgon2Hash(?);', [ JSON.stringify([credential]) ]);
-        const response = Array.isArray(result[0]) ? result[0][0] : result[0];
+        const response = result[0][0];
 
         if(response.ok) return { ok: true, id:response.id_user, hash:response.hash };
-        return { ok: false, error:response.error };
+        return { ok: false, type: 'credential', error:response.error };
     } catch (error) {
         console.error('Error al obtener el Hash de Argon2 (desde spQueries): ', error);
-        return { ok: false, error: 'Error al obtener Argon2 (desde spQueries).' };
+        return { ok: false, type: 'error', error: 'Error al obtener Argon2 (desde spQueries).' };
     }
 }
 // ===========================================================================================================================
@@ -192,8 +192,8 @@ async function initSession(req, id_user) {
             id_user, device, ip, os, browser, date, date
         ]);
 
-        const response = Array.isArray(result[0]) ? result[0][0] : result[0];
-        if(!response.ok) return { ok:false, error: response.error };
+        const response = result[0][0];
+        if(!response.ok) return { ok:false, type:'error', error: response.error };
 
         return {
             ok: true,
