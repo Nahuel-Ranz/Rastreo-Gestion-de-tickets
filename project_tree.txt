@@ -13,8 +13,17 @@
         > css/
             . styles.min.css
         > js/
-            . dataController.js
-            . designController.js
+            > socket/
+                > namespaces/
+                    . chat.namespace.js
+                    . general.namespace.js
+                    . notifications.namespace.js
+                . socket.js
+                . socketHandler.js
+            . formEvents.js
+            . mainController.js
+            . modal.js
+            . submitForms.js
             . utils.js
         > media/
             . frre-black.png
@@ -94,7 +103,7 @@
         . dbQueries.js
     > utils/
         . auxiliary.json
-        . MailerHandler.js
+        . Mailer.js
         . permissions.json
         . utils.js
     > views/
@@ -103,7 +112,7 @@
         > partials/
             > components/
                 > form_content/
-                    . email_validation_key.ejs
+                    . email_validation_code.ejs
                     . login.ejs
                     . recovery_email.ejs
                     . recovery_key.ejs

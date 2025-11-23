@@ -1,10 +1,9 @@
 import {
     adjustModal,
     deleteElement,
-    radius,
-    radiusToEntireForm,
+    formHandler,
+    radius
 } from '/js/utils.js';
-import { submitForm } from '/js/formEvents.js';
 
 export function initModal(formData) {
     const container = document.getElementById('modal_container');
@@ -15,10 +14,7 @@ export function initModal(formData) {
     layoutModal(modal);
 
     const modalForm = modal.querySelector('#modal_form');
-    if(modalForm) {
-        radiusToEntireForm(modalForm);
-        modalForm.addEventListener('submit', (e) => submitForm(e, modalForm));
-    };
+    if(modalForm) formHandler(modalForm);
 };
 
 function closeModal(container, modal) {

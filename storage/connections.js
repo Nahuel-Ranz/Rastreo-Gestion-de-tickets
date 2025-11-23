@@ -32,6 +32,7 @@ async function getMongo(){
 
 // redis connection (singleton)
 let redis = null;
+let redisSubscriber = null;
 
 async function getRedis() {
     if(!redis) {
@@ -46,4 +47,17 @@ async function getRedis() {
     return redis;
 }
 
-module.exports = { mysql, getMongo, getRedis };
+async function getRedisSubscriber() {
+    if(!redisSubscriber) {
+        redisSubscriber = createClient({ url: process.env.REDIS_URL });
+        redisSubscriber.on("error", (error) => console.error(`Error en Redis Subscriber: ${error}`));
+        
+        try {
+            await redisSubscriber.connect();
+            console.log("Redis Subscriber Conectado.");
+        } catch(error) { console.error(`Error al conectar Redis Subscriber: ${error}`)}
+    }
+    return redisSubscriber;
+}
+
+module.exports = { mysql, getMongo, getRedis, getRedisSubscriber };

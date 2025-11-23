@@ -11,7 +11,7 @@ userController.login = async (req, res) => {
     if(!data.ok) return res.json(data);
 
     const verified = await argon2.verify(data.hash, pass);
-    if(!verified) return res.json({ ok:false, type:'pass', error: 'Contraseña incorrecta' });
+    if(!verified) return res.json({ ok:false, credential:'pass', message: 'Contraseña incorrecta' });
 
     const sessionData = await dbQueries.initSession(req, data.id);
     if(!sessionData.ok) return res.json(sessionData);

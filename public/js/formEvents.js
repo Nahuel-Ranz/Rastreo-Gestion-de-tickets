@@ -1,5 +1,6 @@
 import {
 	submitConfirmCode,
+	submitLogin,
 	submitRegister,
 	submitReSendCode
 } from '/js/submitForms.js';
@@ -10,6 +11,7 @@ export function submitForm(e, form) {
 	
 	const btn = e.submitter;
 	switch(form.children[0].textContent.toLowerCase()) {
+		case "iniciar sesión": submitLogin(form); break;
 		case "registrarse": submitRegister(form); break;
 		case "confirmar la existencia del correo":
 			const mail = form.querySelector('strong').textContent;

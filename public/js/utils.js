@@ -1,3 +1,5 @@
+import { resetForm, submitForm } from '/js/formEvents.js';
+
 // ============= DISEÑO ======================================================================
 // aplica un radio equivalente a 1/7 del largo más corto.
 export function radius(e, measurement=7) {
@@ -278,3 +280,12 @@ export function normalizeFormData(form) {
 	return data;
 }
 // ===========================================================================================
+export function formHandler(form) {
+    if(!window.inputStates) window.inputStates = {};
+    if(!window.selectStates) window.selectStates = {};
+    
+    radiusToEntireForm(form);
+    fillObjectStates(form);
+    form.addEventListener('submit', (e) => submitForm(e, form));
+    form.addEventListener('reset', () => resetForm());
+}

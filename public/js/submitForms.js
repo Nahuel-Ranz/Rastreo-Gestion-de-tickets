@@ -1,9 +1,25 @@
 import {
     checkObjectState,
     createElementAfter,
+    hideElement,
     normalizeFormData,
     showElement
 } from '/js/utils.js';
+
+export function submitLogin(form) {
+    if(!checkObjectState(inputStates, form)) {
+        alert('Debe corregir o rellenar los datos obligatorios.');
+        return;
+    }
+
+    const formData = normalizeFormData(form);
+    axios.post('/login', formData)
+        .then(res => {
+            if(res.data.credential === 'error') { alert(res.data.message); return; }
+            updateInputStates(res.data);
+        })
+        .catch( error => console.log( error ));
+}
 
 export function submitConfirmCode() {
 
@@ -43,7 +59,12 @@ export function submitReSendCode(mail) {
         .then(res => {
             if(!res.data.ok) { alert(res.data.error); return;}
             else {
+                inputStates['code'].input.value = '';
+                inputStates['code'].input.classList.remove('correct', 'error');
+                inputStates['code'].label.classList.remove('correct', 'error');
+                hideElement(inputStates['code'].icon);
                 inputStates['code'].errorMessage.textContent = res.data.message;
+                inputStates['code'].errorMessage.style.color = 'var(--primary-font-color)';
                 showElement(inputStates['code'].errorMessage);
             }
         })
