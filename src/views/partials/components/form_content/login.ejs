@@ -8,7 +8,7 @@
 <%- include(`${ejsPath}components/input_group`, {
     group: { id:'credential_group', input:'credential_input'},
     input: { id:'credential', type:'text', req:true},
-    label: { id:'credential_label', content:'Número de usuario, DNI, correo o celular'},
+    label: { id:'credential_label', content:'N° de usuario, DNI, correo o celular'},
     validation: {
         regex:/^\s*(?:[\w.%+-]+@(?:[a-z0-9-]+\.)+[a-z]{2,63}|\d{5,10})\s*$/i,
         error_message: 'Dato erróneo o incompleto.'

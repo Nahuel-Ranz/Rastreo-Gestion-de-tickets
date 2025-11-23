@@ -1,6 +1,4 @@
-> root/
-    > .vscode/
-        . settings.json
+> src/
     > controllers/
         . partialController.js
         . registerController.js
@@ -61,33 +59,32 @@
         . back_data.js
         . error_handling.js
         . views.js
-    > src/
-        > scss/
-            > base/
-                . _global.scss
-                . _reset.scss
-            > components/
-                . _404.scss
-                . _button.scss
-                . _dropdown_list.scss
-                . _dropdown_options.scss
-                . _dropdown.scss
-                . _flatpickr.scss
-                . _forms.scss
-                . _i.scss
-                . _input_group.scss
-                . _modal.scss
-                . _ticket_collectors.scss
-                . _ticket.scss
-                . components.scss
-            > layouts/
-                . _footer.scss
-                . _header.scss
-                . _main.scss
-            > themes/
-                . _themes.scss
-            . _variables.scss
-            . styles.scss
+    > scss/
+        > base/
+            . _global.scss
+            . _reset.scss
+        > components/
+            . _404.scss
+            . _button.scss
+            . _dropdown_list.scss
+            . _dropdown_options.scss
+            . _dropdown.scss
+            . _flatpickr.scss
+            . _forms.scss
+            . _i.scss
+            . _input_group.scss
+            . _modal.scss
+            . _ticket_collectors.scss
+            . _ticket.scss
+            . components.scss
+        > layouts/
+            . _footer.scss
+            . _header.scss
+            . _main.scss
+        > themes/
+            . _themes.scss
+        . _variables.scss
+        . styles.scss
     > storage/
         > db_definitions/
             > sql_queries/
@@ -134,7 +131,6 @@
             > flatpickrs/
                 . birthdate.ejs
                 . event_date.ejs
-            > layouts/
             > tickets/
                 . ticket_collector_header.ejs
                 . ticket_collector_list.ejs
@@ -143,10 +139,4 @@
             . head.ejs
             . header.ejs
         . base.ejs
-    . .env
-    . .env.example
-    . .gitignore
     . app.js
-    . generateProjectTree.js
-    . package-lock.json
-    . package.json

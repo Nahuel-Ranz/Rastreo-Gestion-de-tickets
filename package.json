@@ -2,11 +2,11 @@
   "name": "rastreo",
   "version": "1.0.0",
   "description": "Gestor de tickets",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "concurrently \"sass --watch src/scss/styles.scss public/css/styles.min.css --no-source-map --style=compressed\" \"nodemon app.js\"",
-    "build": "sass src/scss/styles.scss public/css/styles.min.css --no-source-map --style=compressed && node app.js"
+    "start": "node src/app.js",
+    "dev": "concurrently \"sass --watch src/scss/styles.scss src/public/css/styles.min.css --no-source-map --style=compressed\" \"nodemon src/app.js\"",
+    "build": "sass src/scss/styles.scss src/public/css/styles.min.css --no-source-map --style=compressed && node src/app.js"
   },
   "keywords": [],
   "author": "",
