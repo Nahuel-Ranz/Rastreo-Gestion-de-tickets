@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const mysql2=require('mysql2/promise');
 const { MongoClient } = require('mongodb');
-const { createClient } = require('redis');
+const Redis = require('ioredis');
 
 // mysql connection.
 const mysql = mysql2.createPool({
@@ -31,33 +31,22 @@ async function getMongo(){
 }
 
 // redis connection (singleton)
-let redis = null;
-let redisSubscriber = null;
+let cli = null;
+let sub = null;
 
 async function getRedis() {
-    if(!redis) {
-        redis = createClient({ url: process.env.REDIS_URL });
-        redis.on("error", (error) => console.error(`Error en Redis: ${error}`));
-        
-        try {
-            await redis.connect();
-            console.log("Redis Conectado.");
-        } catch(error) { console.error(`Error al conectar Redis: ${error}`)}
+    if(!cli) {
+        cli = new Redis(process.env.REDIS_URL);
+        cli.on("connect", () => console.log("Redis conectado (ioredis)."));
+        cli.on("error", (e) => console.error(`Error en ioRedis: ${e}`));
     }
-    return redis;
+    
+    if(!sub) {
+        sub = new Redis(process.env.REDIS_URL);
+        sub.on("connect", () => console.log("Redis Subscriber conectado (ioredis)."));
+        sub.on("error", (e) => console.error(`Error en ioRedis Subscriber: ${e}`));
+    }
+    return { cli, sub };
 }
 
-async function getRedisSubscriber() {
-    if(!redisSubscriber) {
-        redisSubscriber = createClient({ url: process.env.REDIS_URL });
-        redisSubscriber.on("error", (error) => console.error(`Error en Redis Subscriber: ${error}`));
-        
-        try {
-            await redisSubscriber.connect();
-            console.log("Redis Subscriber Conectado.");
-        } catch(error) { console.error(`Error al conectar Redis Subscriber: ${error}`)}
-    }
-    return redisSubscriber;
-}
-
-module.exports = { mysql, getMongo, getRedis, getRedisSubscriber };
+module.exports = { mysql, getMongo, getRedis };

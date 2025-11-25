@@ -29,7 +29,7 @@ registerController.sendCode = async (req, res) => {
         );
         
         await sendCodeByMail(correo, 'register');
-
+        
         return res.json({ ok:true, modal });
     } catch ( error ) {
         console.log(`Ha ocurrido un error al intenar envíar el correo: ${error}`);

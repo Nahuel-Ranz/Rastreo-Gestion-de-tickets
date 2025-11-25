@@ -17,7 +17,7 @@ export function submitForm(e, form) {
 			const mail = form.querySelector('strong').textContent;
 			switch(btn.id){
 				case "re-send_code": submitReSendCode(mail); break;
-				case "confirm":
+				case "confirm": submitConfirmCode(form); break;
 			}
 	}
 }

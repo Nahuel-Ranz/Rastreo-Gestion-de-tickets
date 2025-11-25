@@ -7,12 +7,8 @@ import {
 } from '/js/utils.js';
 
 export function submitLogin(form) {
-    if(!checkObjectState(inputStates, form)) {
-        alert('Debe corregir o rellenar los datos obligatorios.');
-        return;
-    }
+    const formData = clearFormData(form);
 
-    const formData = normalizeFormData(form);
     axios.post('/login', formData)
         .then(res => {
             if(res.data.credential === 'error') { alert(res.data.message); return; }
@@ -21,17 +17,14 @@ export function submitLogin(form) {
         .catch( error => console.log( error ));
 }
 
-export function submitConfirmCode() {
-
+export function submitConfirmCode(form) {
+    const formData = clearFormData(form);
+    console.log(formData);
 }
 
 export function submitRegister(form) {
-    if(!checkObjectState(inputStates, form) || !checkObjectState(selectStates, form)) {
-        alert("Debe corregir los campos obligatorios (son los que tienen asterísco)");
-        return;
-    }
+    const formData = clearFormData(form);
 
-    const formData = normalizeFormData(form);
     axios.post('/verificar_usuario', formData)
         .then(res => {
             if(!res.data.ok) {
@@ -80,4 +73,13 @@ function updateInputStates(key) {
     inputStates[key.credential].input.classList.add('error');
     inputStates[key.credential].icon.classList.remove('fa-check');
     inputStates[key.credential].icon.classList.add('fa-times');
+}
+
+function clearFormData(form) {
+    if(!checkObjectState(inputStates, form) || !checkObjectState(selectStates, form)) {
+        alert("Debe corregir los campos obligatorios (son los que tienen asterísco)");
+        return;
+    }
+
+    return normalizeFormData(form);
 }

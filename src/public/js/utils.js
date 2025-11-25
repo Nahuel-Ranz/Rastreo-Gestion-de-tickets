@@ -14,6 +14,20 @@ export function radiusToAll(list, measurement=7) {
     for(const item of list) radius(item, measurement);
 }
 
+// aplica radius a todos los elementos visibles de los formularios
+export function radiusToEntireForm(form) {
+    const labels = form.querySelectorAll('label');
+    const inputs = form.querySelectorAll('input');
+    const selects = form.querySelectorAll('select');
+    const buttons = form.querySelectorAll('button');
+
+    if(form) radius(form, 20);
+    if(labels) radiusToAll(labels);
+    if(inputs) radiusToAll(inputs);
+    if(selects) radiusToAll(selects);
+    if(buttons) radiusToAll(buttons);
+}
+
 // ajusta los 3 elementos principales para ocupar correctamente la pantalla completa.
 export function fitToScreen(header, main, footer) {
     const headerHeight=header.offsetHeight;
@@ -33,20 +47,6 @@ export function adjustModal(modal, header, main, footer) {
     main.style.marginTop = headerHeight+ "px";
     main.style.marginBottom = footerHeight+ "px";
     main.style.minHeight = (modalHeight-(headerHeight+footerHeight))+ "px";
-}
-
-// aplica radius a todos los elementos visibles de los formularios
-export function radiusToEntireForm(form) {
-    const labels = form.querySelectorAll('label');
-    const inputs = form.querySelectorAll('input');
-    const selects = form.querySelectorAll('select');
-    const buttons = form.querySelectorAll('button');
-
-    if(form) radius(form, 20);
-    if(labels) radiusToAll(labels);
-    if(inputs) radiusToAll(inputs);
-    if(selects) radiusToAll(selects);
-    if(buttons) radiusToAll(buttons);
 }
 // ===========================================================================================
 

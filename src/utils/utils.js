@@ -45,7 +45,6 @@ function destroySession(req) {
     });
 }
 
-
 async function sendMail(destination, subj, htmlContent) {
     try {
         const mail = {
@@ -65,8 +64,8 @@ async function sendMail(destination, subj, htmlContent) {
 async function sendCodeByMail(mail, type) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
-    const redis = await getRedis();
-    await redis.set(`verify:${mail}`, code, { EX:600 });
+    const { cli } = await getRedis();
+    await cli.set(`verify:${mail}`, code, 'EX', 600);
 
     let mail_body = '';
     let subj = '';

@@ -15,8 +15,3 @@ window.addEventListener('resize', () => fitToScreen(header, main, footer));
 // Control del formulario.
 const form = document.getElementById('page_form');
 if(form) formHandler(form);
-
-const socket = io();
-socket.on('connect', () => {
-    console.log(`Conectado al servidor: socket.id -> ${socket.id}`);
-});
