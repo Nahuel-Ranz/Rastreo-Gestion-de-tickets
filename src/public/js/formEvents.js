@@ -3,6 +3,7 @@ import {
 	submitLogin,
 	submitRegister,
 	submitReSendCode,
+	submitSaveDataForm,
 	submitSetPassword
 } from '/js/submitForms.js';
 import { hideElement } from '/js/utils.js';
@@ -24,11 +25,20 @@ export function submitForm(e, form) {
 						if(result) {
 							const main = form.closest('#main');
 							const mainForm = main.firstElementChild;
-							submitSetPassword(mainForm);
+							submitSaveDataForm(mainForm);
 						}
 					})();
 				break;
 			}
+		break;
+		case "establecer contraseña":
+			const password = form.querySelector('#password').value;
+			const rePassword = form.querySelector('#re-password').value;
+			if(password === rePassword) console.log("LO MISMO")
+			else { console.log("DISTINTO")
+				
+			};
+		break;
 	}
 }
 

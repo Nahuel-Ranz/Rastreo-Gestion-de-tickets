@@ -11,5 +11,6 @@ router.post('/verificar_usuario', registerController.checkNewUser);
 router.post('/verificar_correo', registerController.sendCode);
 router.post('/verificar_codigo', registerController.checkCode);
 router.post('/re-send_code', registerController.reSendCode);
+router.post('/saveNorimalizedData', registerController.saveNormalizedData);
 
 module.exports = router;

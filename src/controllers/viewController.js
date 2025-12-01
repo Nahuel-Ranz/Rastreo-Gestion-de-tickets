@@ -2,7 +2,6 @@ const ejs = require('ejs');
 const { ejsPath, srcPath } = require('../utils/utils');
 const dbQueries = require(`${srcPath}storage/dbQueries`);
 const { getRedis } = require(`${srcPath}storage/connections`);
-const crypto = require('crypto');
 // =================================================================================================================
 async function renderLogin(req, res) {
     try {
@@ -37,10 +36,7 @@ async function renderRegister(req, res) {
 // =================================================================================================================
 async function renderSetPassword(req, res) {
     try {
-        const { cli } = await getRedis();
-        const token = crypto.randomUUID();
-        const cleanData = req.body;
-        await cli.set(`register:${token}`, JSON.stringify(cleanData), 'EX', 300);
+        const { token } =  req.query;
         
         const formContent = await ejs.renderFile(`${ejsPath}components/form_content/set_password.ejs`,
             { ejsPath, token }

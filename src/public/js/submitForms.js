@@ -85,15 +85,21 @@ export function submitReSendCode(mail) {
         .catch(error => console.error(error));
 }
 
+export function submitSaveDataForm(form) {
+    const formData = clearFormData(form);
+
+    axios.post('/saveNorimalizedData', formData)
+        .then(res => {
+            if(!res.data.ok) { alert(res.data.error); return; }
+            window.location.href = res.data.redirect;
+        })
+        .catch( error => console.log( error ));
+}
+
 export function submitSetPassword(form) {
     const formData = clearFormData(form);
 
-    axios.post('/establecer_clave', formData)
-        .then(res => {
-            if(res.data.credential === 'error') { alert(res.data.message); return; }
-            updateInputStates(res.data);
-        })
-        .catch( error => console.log( error ));
+    axios.post('/setPassword')
 }
 
 function updateInputStates(key) {

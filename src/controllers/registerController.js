@@ -1,4 +1,5 @@
 const ejs = require('ejs');
+const crypto = require('crypto');
 const { ejsPath, srcPath } = require('../utils/utils');
 const dbQueries = require(`${srcPath}storage/dbQueries`);
 const { getRedis } = require(`${srcPath}storage/connections`);
@@ -64,4 +65,19 @@ registerController.checkCode = async (req, res) => {
 		return res.json({ ok:false, error:`Error en la verificación del código: ${error}`});
 	}
 };
+
+registerController.saveNormalizedData = async (req, res) => {
+    try {
+        const { cli } = await getRedis();
+        const cleanData = req.body;
+        const token = crypto.randomUUID();
+        
+        await cli.set(`register:${token}`, JSON.stringify(cleanData), 'EX', 300);
+        return res.json({ ok:true, redirect:`/establecer_clave?token=${token}`});
+    } catch ( error ) {
+		console.error(`Ha ocurrido un error al obtener el token de los datos limpios a Redis: ${error}`);
+		return res.json({ ok:false, error:`El token no se ha podido obtener: ${error}`});
+    }
+};
+
 module.exports = registerController;
