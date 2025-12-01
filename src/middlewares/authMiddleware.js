@@ -1,13 +1,31 @@
+const { srcPath } = require('../utils/utils');
+const { getRedis } = require(`${srcPath}storage/connections`);
+
+let cli = null;
+(async () => {
+	const redis = await getRedis();
+	cli = redis.cli;
+})();
+
 module.exports = {
-    isAuthenticated: (req, res, next) => {
-        if(req.session && req.session.userId) return next();
+    isAuthenticated: async (req, res, next) => {
+        const sid = req.cookies?.sid;
+        if(!sid) return res.redirect('/');
         
-        return res.redirect('/');
+        const session = await cli.get(`sess:${sid}`);
+        if(!session) return res.redirect('/');
+
+        req.user = JSON.parse(session);
+        next();
     },
 
-    isGuest: (req, res, next) => {
-        if(req.session && req.session.userId) return res.redirect('/lista_de_espera');
+    isGuest: async (req, res, next) => {
+        const sid = req.cookies?.sid;
+        if(!sid) return next();
 
-        return next();
+        const session = await cli.get(`sess:${sid}`);
+        if(session) return res.redirect('/lista_de_espera');
+
+        next();
     }
 }

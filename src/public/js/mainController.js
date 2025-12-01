@@ -1,4 +1,4 @@
-import { initSocketHandlers } from '/js/socket/socketHandler.js'
+import { initSocket } from '/js/socket/socketHandler.js'
 import { fitToScreen, formHandler } from '/js/utils.js';
 
 // individual layouts
@@ -8,7 +8,7 @@ const footer=document.getElementById('footer');
 
 window.addEventListener('load', () => {
     fitToScreen(header, main, footer);
-    initSocketHandlers();
+    initSocket();
 });
 window.addEventListener('resize', () => fitToScreen(header, main, footer));
 

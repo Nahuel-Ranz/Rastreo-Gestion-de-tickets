@@ -1,4 +1,4 @@
-require('dotenv').config();
+const { express } = require('./envCredential');
 
 const { init: initExpress } = require('./services/expressServices.js');
 const { init: configureRedis } = require('./services/redisServices.js');
@@ -10,5 +10,5 @@ const { server, io } = initSocket(app);
 
 module.exports.io = io
 
-const PORT = process.env.EXPRESS_PORT || 3000;
+const PORT = express.port || 3000;
 server.listen(PORT, () => console.log(`Servidor: http://localhost:${PORT}`));

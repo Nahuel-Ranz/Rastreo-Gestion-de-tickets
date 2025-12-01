@@ -1,4 +1,5 @@
-const dbQueries = require('../storage/dbQueries.js');
+const { srcPath } = require('../utils/utils');
+const dbQueries = require(`${srcPath}storage/dbQueries`);
 
 const limit = 30 * 60 * 1000;
 const min_db_update = 2 * 60 * 1000;

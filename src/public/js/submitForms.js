@@ -5,6 +5,7 @@ import {
     normalizeFormData,
     showElement
 } from '/js/utils.js';
+import { getSocket } from '/js/socket/socket.js';
 
 export function submitLogin(form) {
     const formData = clearFormData(form);
@@ -17,9 +18,26 @@ export function submitLogin(form) {
         .catch( error => console.log( error ));
 }
 
-export function submitConfirmCode(form) {
+export async function submitConfirmCode(form) {
+	const mail = form.querySelector('strong').textContent;
     const formData = clearFormData(form);
-    console.log(formData);
+
+    try {
+        
+        const res = await axios.post('/verificar_codigo',
+            { code:formData.code, mail }
+        );
+        if(!res.data.ok) {
+            if(res.data.error) alert(res.data.error);
+            else updateInputStates(res.data);
+            return false;
+        }
+        
+        return true;
+    } catch(error) {
+        console.error(error);
+        return false;
+    }
 }
 
 export function submitRegister(form) {
@@ -34,12 +52,14 @@ export function submitRegister(form) {
                 axios.post('/verificar_correo', { correo: formData.mail })
                     .then(res => {
                         if(!res.data.ok) {
-                            if(res.data.error) { alert(res.data.error); return; }
-                            else { updateInputStates(res.data); return;}
+                            if(res.data.error) alert(res.data.error);
+                            else updateInputStates(res.data);
+							return;
                         }
                         createElementAfter(form, res.data.modal);
                         import('/js/modal.js')
                             .then( mod => mod.initModal(formData));
+						getSocket().emit('verify_email', { mail:formData.mail });
                     })
                     .catch(error => console.error(error));
             }
@@ -59,9 +79,21 @@ export function submitReSendCode(mail) {
                 inputStates['code'].errorMessage.textContent = res.data.message;
                 inputStates['code'].errorMessage.style.color = 'var(--primary-font-color)';
                 showElement(inputStates['code'].errorMessage);
+				getSocket().emit('verify_email', { mail });
             }
         })
         .catch(error => console.error(error));
+}
+
+export function submitSetPassword(form) {
+    const formData = clearFormData(form);
+
+    axios.post('/establecer_clave', formData)
+        .then(res => {
+            if(res.data.credential === 'error') { alert(res.data.message); return; }
+            updateInputStates(res.data);
+        })
+        .catch( error => console.log( error ));
 }
 
 function updateInputStates(key) {

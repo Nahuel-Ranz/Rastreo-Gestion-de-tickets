@@ -31,5 +31,5 @@ function layoutModal(modal) {
         adjustModal(modal, modalHeader, modalBody, modalFooter);
     });
 
-    radius(modal, 15);
+    radius(modal, 35);
 }

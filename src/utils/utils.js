@@ -1,7 +1,6 @@
 const path = require('path');
-const { getRedis } = require('../storage/connections.js');
-const mailer = require('./Mailer.js');
 
+const srcPath = path.join(__dirname, '../');
 const ejsPath = path.join(__dirname, '../views/partials/');
 
 function isNatural(value) {
@@ -45,50 +44,11 @@ function destroySession(req) {
     });
 }
 
-async function sendMail(destination, subj, htmlContent) {
-    try {
-        const mail = {
-            from: process.env.EMAIL_USER,
-            to: destination,
-            subject: subj,
-            html: htmlContent
-        }
-
-        const info = await mailer.sendMail(mail);
-        console.log(`📨 Correo enviado a ${ destination }: ${ info.response }`);
-    } catch(error) {
-        console.error(`❌ Error al enviar correo a ${ destination }: ${ error }`);
-    }
-}
-
-async function sendCodeByMail(mail, type) {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    const { cli } = await getRedis();
-    await cli.set(`verify:${mail}`, code, 'EX', 600);
-
-    let mail_body = '';
-    let subj = '';
-    switch(type) {
-        case "register":
-            mail_body = `<p>Su código de confimación es: <strong>${code}</strong>.</p><p>El código caducará en 10 minutos</p>`;
-            subj = 'Código de verificación del correo';
-            break;
-        case "re-send_code":
-            mail_body = `<p>Su nuevo código es: <strong>${code}</strong>.</p><p>Caducará en 10 minutos</p>`;
-            subj = 'Reenvío: Código de verificación';
-            break;
-    }
-
-    await sendMail(mail, subj, mail_body);
-}
-
 module.exports = {
     destroySession,
     ejsPath,
     isNatural,
     jsonToObject,
     mergeTickets,
-    sendCodeByMail,
-    sendMail
+    srcPath
 }

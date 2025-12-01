@@ -1,4 +1,9 @@
-require('dotenv').config();
+const { srcPath } = require('../utils/utils');
+const {
+    mysql: mysqlEV,
+    mongo: mongoEV,
+    redis: redisEV
+} = require(`${srcPath}envCredential`);
 
 const mysql2=require('mysql2/promise');
 const { MongoClient } = require('mongodb');
@@ -6,23 +11,23 @@ const Redis = require('ioredis');
 
 // mysql connection.
 const mysql = mysql2.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASS,
-    database: process.env.MYSQL_DB,
-    port: process.env.MYSQL_PORT,
+    host: mysqlEV.host,
+    user: mysqlEV.user,
+    password: mysqlEV.password,
+    database: mysqlEV.db,
+    port: mysqlEV.port,
     multipleStatements: true
 });
 
-// mongodb connection.
-const mongoCli = new MongoClient(process.env.MONGO_URI);
+// mongodb connection (singleton)
+const mongoCli = new MongoClient(mongoEV.uri);
 let mongodb = null;
 
 async function getMongo(){
     if(!mongodb){
         try {
             await mongoCli.connect();
-            mongodb = mongoCli.db(process.env.MONGO_DB);
+            mongodb = mongoCli.db(mongoEV.db);
         } catch(error) {
             console.log("Error de conexión de MongoDB ... ", error);
         }
@@ -36,15 +41,21 @@ let sub = null;
 
 async function getRedis() {
     if(!cli) {
-        cli = new Redis(process.env.REDIS_URL);
+        cli = new Redis(redisEV.url);
         cli.on("connect", () => console.log("Redis conectado (ioredis)."));
-        cli.on("error", (e) => console.error(`Error en ioRedis: ${e}`));
+        cli.on("error", (e) => {
+            console.error(`Error en ioRedis: ${e}`);
+            if(e?.errors) console.log("Sub-errors: ", e.errors);
+        });
     }
     
     if(!sub) {
-        sub = new Redis(process.env.REDIS_URL);
+        sub = new Redis(redisEV.url);
         sub.on("connect", () => console.log("Redis Subscriber conectado (ioredis)."));
-        sub.on("error", (e) => console.error(`Error en ioRedis Subscriber: ${e}`));
+        sub.on("error", (e) => {
+            console.error(`Error en ioRedis - Subscriber: ${e}`);
+            if(e?.errors) console.log("Sub-errors: ", e.errors);
+        });
     }
     return { cli, sub };
 }

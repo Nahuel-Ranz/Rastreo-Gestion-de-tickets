@@ -1,6 +1,7 @@
 const argon2 = require('argon2');
-const dbQueries = require('../storage/dbQueries.js');
 const utils = require('../utils/utils.js');
+const dbQueries = require(`${utils.srcPath}storage/dbQueries`);
+const { getRedis } = require(`${utils.srcPath}storage/connections`);
 
 const userController = {};
 
@@ -16,10 +17,13 @@ userController.login = async (req, res) => {
     const sessionData = await dbQueries.initSession(req, data.id);
     if(!sessionData.ok) return res.json(sessionData);
 
-    req.session.dbSessionId = sessionData.session.id;
-    req.session.userId = sessionData.session.userId;
-    req.session.lastActivity = sessionData.session.last_activity;
-    return res.redirect('/lista_de_espera');
+    const { id, userId, last_activity } = sessionData.session;
+    const { cli } = await getRedis();
+    
+    await cli.set(`sess:${id}`, userId, 'EX', 1800);
+    res.cookie('sid', id, {httpOnly: true});
+    
+    return res.json({ ok:true, redirect:'/lista_de_espera'});
 };
 
 userController.logout = async (req, res) => {

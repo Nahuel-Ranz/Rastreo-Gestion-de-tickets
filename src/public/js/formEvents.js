@@ -2,7 +2,8 @@ import {
 	submitConfirmCode,
 	submitLogin,
 	submitRegister,
-	submitReSendCode
+	submitReSendCode,
+	submitSetPassword
 } from '/js/submitForms.js';
 import { hideElement } from '/js/utils.js';
 
@@ -17,7 +18,16 @@ export function submitForm(e, form) {
 			const mail = form.querySelector('strong').textContent;
 			switch(btn.id){
 				case "re-send_code": submitReSendCode(mail); break;
-				case "confirm": submitConfirmCode(form); break;
+				case "confirm":
+					(async () => {
+						const result = await submitConfirmCode(form);
+						if(result) {
+							const main = form.closest('#main');
+							const mainForm = main.firstElementChild;
+							submitSetPassword(mainForm);
+						}
+					})();
+				break;
 			}
 	}
 }

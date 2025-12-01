@@ -1,12 +1,13 @@
+const { srcPath } = require('../utils/utils');
 const express = require('express');
 const router = express.Router();
-const viewController = require('../controllers/viewController.js');
-const { isAuthenticated, isGuest } = require('../middlewares/authMiddleware.js');
+const viewController = require(`${srcPath}controllers/viewController.js`);
+const { isAuthenticated, isGuest } = require(`${srcPath}middlewares/authMiddleware.js`);
 
 // formularios
-router.get('/', isGuest, viewController.renderLogin);
+router.get('/', isGuest, viewController.renderLogin );
 router.get('/registro', isGuest, viewController.renderRegister );
-router.get('/establecer_clave', isGuest, (req, res) => res.render('forms/set_password', { login:false }));
+router.get('/establecer_clave', isGuest, viewController.renderSetPassword );
 router.get('/recuperar_clave/email', isGuest, (req, res) => res.render('forms/recovery_password/email', { login:false }));
 router.get('/recuperar_clave/clave', isGuest, (req, res) => res.render('forms/recovery_password/key', { login:false }));
 router.get('/recuperar_clave/nueva_clave', isGuest, (req, res) => res.render('forms/recovery_password/new_password', { login:false }));

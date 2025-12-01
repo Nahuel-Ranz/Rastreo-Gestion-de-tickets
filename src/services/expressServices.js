@@ -1,26 +1,26 @@
-
+const { srcPath } = require('../utils/utils');
 const express = require('express');
-const path = require('path');
-const activityMiddleware = require('../middlewares/activityMiddleware');
+const cookieParser = require('cookie-parser');
+const activityMiddleware = require(`${srcPath}middlewares/activityMiddleware`);
 
 let app = null
 function init() {
     if(!app) {
-        global.__root = path.resolve(__dirname, '..');
         app = express();
     
-        app.set('views', path.join(__root, 'views'));
+        app.set('views', `${srcPath}views`);
         app.set('view engine', 'ejs');
         
-        app.use(express.static(path.join(__root, 'public')));
+        app.use(express.static(`${srcPath}public`));
         app.use(express.json());
         app.use(express.urlencoded({ extended:true }));
+        app.use(cookieParser());
         
         app.use(activityMiddleware);
         
-        app.use('/', require('../routes/views'));
-        app.use('/', require('../routes/actions'));
-        app.use(require('../routes/error_handling'));
+        app.use('/', require(`${srcPath}routes/views`));
+        app.use('/', require(`${srcPath}routes/actions`));
+        app.use(require(`${srcPath}routes/error_handling`));
     }
     return app;
 }

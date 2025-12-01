@@ -1,6 +1,8 @@
 const ejs = require('ejs');
-const { ejsPath } = require('../utils/utils.js');
-const dbQueries = require('../storage/dbQueries.js');
+const { ejsPath, srcPath } = require('../utils/utils');
+const dbQueries = require(`${srcPath}storage/dbQueries`);
+const { getRedis } = require(`${srcPath}storage/connections`);
+const crypto = require('crypto');
 // =================================================================================================================
 async function renderLogin(req, res) {
     try {
@@ -9,7 +11,7 @@ async function renderLogin(req, res) {
             { id:'page_form', title:'INICIAR SESIÓN', content: formContent }
         );
     
-        res.render('base.ejs', { title: 'Iniciar Sesión', content: form });
+        res.render('base.ejs', { title:'Iniciar Sesión', content:form, login:false });
     } catch(error) {
         console.error(error);
         res.send('Ha ocurrido un error intentando obtener el formulario de Inicio de Sesión.');
@@ -26,10 +28,31 @@ async function renderRegister(req, res) {
             { id:'page_form', title:'REGISTRARSE', content: formContent }
         );
 
-        res.render('base.ejs', { title: 'Registro', content: form });
+        res.render('base.ejs', { title:'Registro', content:form, login:false });
     } catch(error) {
         console.log(error);
         res.send('Ha ocurrido un error intentando obtener el formulario de Registro.');
+    }
+}
+// =================================================================================================================
+async function renderSetPassword(req, res) {
+    try {
+        const { cli } = await getRedis();
+        const token = crypto.randomUUID();
+        const cleanData = req.body;
+        await cli.set(`register:${token}`, JSON.stringify(cleanData), 'EX', 300);
+        
+        const formContent = await ejs.renderFile(`${ejsPath}components/form_content/set_password.ejs`,
+            { ejsPath, token }
+        );
+        const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
+            { id:'page_form', title:'ESTABLECER CONTRASEÑA', content: formContent }
+        );
+        
+        res.render('base.ejs', { title:'Establecer Contraseña', content:form, login:false });
+    } catch(error) {
+        console.error(error);
+        res.send('Ha ocurrido un error intentando obtener el formulario para establecer la contraseña.');
     }
 }
 // =================================================================================================================
@@ -52,5 +75,6 @@ async function showWaitingList(req, res) {
 module.exports = {
     renderLogin,
     renderRegister,
+    renderSetPassword,
     showWaitingList
 }

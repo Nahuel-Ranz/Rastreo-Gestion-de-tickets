@@ -1,6 +1,8 @@
 const ejs = require('ejs');
-const dbQueries = require('../storage/dbQueries.js');
-const { ejsPath, sendCodeByMail } = require('../utils/utils.js');
+const { ejsPath, srcPath } = require('../utils/utils');
+const dbQueries = require(`${srcPath}storage/dbQueries`);
+const { getRedis } = require(`${srcPath}storage/connections`);
+const { sendCodeByMail } = require(`${srcPath}services/mailerServices`);
 
 const registerController = {}
 
@@ -29,7 +31,7 @@ registerController.sendCode = async (req, res) => {
         );
         
         await sendCodeByMail(correo, 'register');
-        
+
         return res.json({ ok:true, modal });
     } catch ( error ) {
         console.log(`Ha ocurrido un error al intenar envíar el correo: ${error}`);
@@ -41,11 +43,25 @@ registerController.reSendCode = async (req,res) => {
     try {
         await sendCodeByMail(req.body.mail, 're-send_code');
 
-        return res.json({ ok:true, message:'El nuevo código fue enviado a su correo. Caducará en 10 minutos.'});
+        return res.json({ ok:true, message:'El nuevo código fue enviado a su correo. Caducará en 2 minutos.'});
     } catch ( error ) {
-        console.log(`Ha ocurrido un error al intenar re-envíar el correo: ${error}`);
+        console.error(`Ha ocurrido un error al intenar re-envíar el correo: ${error}`);
         return res.json({ ok: false, error:`Error en la re-generación o re-envío del código. ${error}`});
     }
 };
 
+registerController.checkCode = async (req, res) => {
+	try {
+		const { code, mail } = req.body;
+		const { cli } = await getRedis();
+
+		const cod = await cli.get(`verify:${mail}`);
+		if(code === cod) return res.json({ ok: true });
+		
+        return res.json({ ok:false, credential:'code', message:'El código ingresado es incorrecto.'});
+	} catch(error) {
+		console.error(`Ha ocurrido un error al verificar el código introducido: ${error}`);
+		return res.json({ ok:false, error:`Error en la verificación del código: ${error}`});
+	}
+};
 module.exports = registerController;

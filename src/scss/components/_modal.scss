@@ -1,7 +1,7 @@
 .modal_container {
     position: fixed;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     width: 100%;
     height: 100%;
     top:0;
@@ -13,7 +13,7 @@
         background-color: transparent;
         width: clamp(450px, 60%, 800px);
         max-height: 90%;
-        box-shadow: 8px 3px 10px var(--shadow);
+        box-shadow: 0 0 8px var(--shadow);
 
         #close-modal {
             position: absolute;
@@ -35,6 +35,8 @@
 
         header, #modal_body, footer {
             width: var(--full-width-parent);
+            border-left: 1px solid var(--border-tertiary-color);
+            border-right: 1px solid var(--border-tertiary-color);
         }
 
         header {
@@ -42,6 +44,7 @@
             position: absolute;
             top:0;
             justify-content: start;
+            border-top: 1px solid var(--border-tertiary-color);
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             h2 {
@@ -62,6 +65,7 @@
             position: absolute;
             bottom: 0;
             justify-content: space-between;
+            border-bottom: 1px solid var(--border-tertiary-color);
             border-bottom-left-radius: 15px;
             border-bottom-right-radius: 15px;
         }
