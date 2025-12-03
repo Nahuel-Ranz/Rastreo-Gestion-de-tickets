@@ -18,3 +18,8 @@ select * from TicketsAprobados;
 
 
 select * from AreasFacultad;
+select * from Personas;
+delete from Personas where id > 23121;
+select * from Correos;
+select * from Celulares;
+select * from Roles;

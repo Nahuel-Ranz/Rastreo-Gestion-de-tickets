@@ -31,14 +31,8 @@ export function submitForm(e, form) {
 				break;
 			}
 		break;
-		case "establecer contraseña":
-			const password = form.querySelector('#password').value;
-			const rePassword = form.querySelector('#re-password').value;
-			if(password === rePassword) console.log("LO MISMO")
-			else { console.log("DISTINTO")
-				
-			};
-		break;
+		case "establecer contraseña": submitSetPassword(form); break;
+		case "esperando confirmación" : window.location.replace('/'); break;
 	}
 }
 

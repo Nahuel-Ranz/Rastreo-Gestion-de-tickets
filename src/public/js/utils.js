@@ -101,7 +101,14 @@ function fillInputStates(inputs) {
             state: false, input, label, icon, errorMessage, originalErrorMessage, regex
         };
 
-        input.addEventListener('input', () => updateInputState(inputStates[input.id]));
+        input.addEventListener('input', () => {
+            updateInputState(inputStates[input.id]);
+            if(input.id === 'password') {
+                inputStates['re-password'].regex = new RegExp(`^${input.value}$`);
+                updateInputState(inputStates['re-password']);
+                inputStates['token'].state = true;
+            }
+        });
     });
 }
 
@@ -191,12 +198,14 @@ export function parseRegex(reg) {
 }
 
 export function checkObjectState(object, form) {
+    if(!object || Object.keys(object).length === 0) return true;
 
     const names = Array.from(form.elements)
         .map(e => e.name)
         .filter(name => name);
 
-    const isInputType = 'input' in Object.values(object)[0];
+    const firstItem = Object.values(object)[0];
+    const isInputType = firstItem && 'input' in firstItem;
 
     for (const key in object) {
         if(names.includes(key)) {

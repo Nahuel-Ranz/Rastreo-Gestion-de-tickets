@@ -3,26 +3,6 @@ const argon2 = require('argon2');
 const UAParser = require('ua-parser-js');
 const utils = require('../utils/utils.js');
 // ===========================================================================================================================
-async function registerUser(nombre, apellido, dni, fechaNacimiento, celular, correo, areaFacultad, contrasenia) {
-    try {
-        const hash = await argon2.hash(contrasenia, {
-            type: argon2.argon2id,
-            memoryCost: 2 ** 16,
-            timeCost: 4,
-            parallelism: 1
-        });
-
-        await mysql.execute('call registrarUsuario(?,?,?,?,?,?,?,?,?)', [
-            nombre, apellido, dni, fechaNacimiento, new Date(), celular, correo, areaFacultad, hash
-        ]);
-
-        return { ok:true };
-    } catch (error) {
-        console.error('No se pudo registrar el usuario (desde dbQueries): ', error);
-        return { ok:false, error: 'Error al registrar el usuario (desde dbQueries).' };
-    }
-}
-// ===========================================================================================================================
 async function aproveNewUser(id, rol) {
     try {
         await mysql.execute('call aprobarRegistro(?,?)', [ id, rol ]);
@@ -63,15 +43,33 @@ async function rejectNewUser(id) {
     }
 }
 // ===========================================================================================================================
+async function registerUser(nombre, apellido, dni, fechaNacimiento, celular, correo, areaFacultad, contrasenia) {
+    try {
+        const hash = await argon2.hash(contrasenia, {
+            type: argon2.argon2id,
+            memoryCost: 2 ** 16,
+            timeCost: 4,
+            parallelism: 1
+        });
+
+        const [result] = await mysql.query('call registrarUsuario(?,?,?,?,?,?,?,?,?)', [
+            nombre, apellido, dni, fechaNacimiento, new Date(), celular, correo, areaFacultad, hash
+        ]);
+
+        return { ok:true, userId: result[0][0]['userId'] };
+    } catch (error) {
+        console.error('No se pudo registrar el usuario (desde dbQueries): ', error);
+        return { ok:false, error: 'Error al registrar el usuario (desde dbQueries).' };
+    }
+}
+// ===========================================================================================================================
 async function sendMessage(emisor_id, receptor_id, message, ticket_id ) {
     try {
-        const [result] = await mysql.execute('call enviarMensaje(?,?,?,?,?)', [
+        const [result] = await mysql.query('call enviarMensaje(?,?,?,?,?)', [
             emisor_id, receptor_id, message, new Date(), ticket_id
         ]);
 
-        const data = result[0][0]['last_insert_id()'];
-
-        return { ok: true, data };
+        return { ok: true, messageId: result[0][0]['messageId'] };
     } catch (error) {
         console.error(`Error al enviar mensaje (desde dbQueries): `, error);
         return { ok: false, error: `No se pudo enviar el mensaje del ticket ${ticket_id} (desde dbQueries).` };

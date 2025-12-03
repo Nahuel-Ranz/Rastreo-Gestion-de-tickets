@@ -12,8 +12,12 @@ export function submitLogin(form) {
 
     axios.post('/login', formData)
         .then(res => {
-            if(res.data.credential === 'error') { alert(res.data.message); return; }
-            updateInputStates(res.data);
+            if(!res.data.ok) {
+                if(res.data.credential === 'error') { alert(res.data.message); return; }
+                updateInputStates(res.data);
+            } else {
+                window.location.replace(res.data.redirect);
+            }
         })
         .catch( error => console.log( error ));
 }
@@ -98,8 +102,14 @@ export function submitSaveDataForm(form) {
 
 export function submitSetPassword(form) {
     const formData = clearFormData(form);
-
-    axios.post('/setPassword')
+    console.log(formData);
+    
+    axios.post('/setPassword', formData)
+        .then(res => {
+            if(!res.data.ok) { alert(res.data.error); return; }
+            window.location.replace(res.data.redirect);
+        })
+        .catch( error => console.log(error));
 }
 
 function updateInputStates(key) {

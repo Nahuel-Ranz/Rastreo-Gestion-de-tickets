@@ -52,6 +52,23 @@ async function renderSetPassword(req, res) {
     }
 }
 // =================================================================================================================
+async function renderWaitingConfirm(req, res) {
+    try {
+        const { userId } = req.query;
+
+        const formContent = await ejs.renderFile(`${ejsPath}components/form_content/waiting_admin_confirmation.ejs`,
+            { userId, ejsPath }
+        );
+        const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
+            { id:'page_form', title: 'ESPERANDO CONFIRMACIÓN', content: formContent }
+        );
+        res.render('base.ejs', { title:'Esparando Confirmación del Administrador', content: form, login:false });
+    } catch(error) {
+        console.error(error);
+        res.send('Aunque su registro se completó, ocurrió un error al intenter obtener la página de confirmación. Su numero de usuario es: ', userId);
+    }
+}
+// =================================================================================================================
 async function showWaitingList(req, res) {
     
     const up = await dbQueries.getUserPermissions(req.session.userId);
@@ -72,5 +89,6 @@ module.exports = {
     renderLogin,
     renderRegister,
     renderSetPassword,
+    renderWaitingConfirm,
     showWaitingList
 }

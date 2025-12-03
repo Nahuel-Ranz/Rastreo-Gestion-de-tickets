@@ -1,0 +1,19 @@
+<!-- {
+    group: { id:'', input:''},
+    input: { id:'', type:'', req:},
+    label: { id:'', content:''},
+    validation: { regex, error_message }
+} -->
+
+<p>Bienvenido al sistema de gestión de solicitudes de la Secretaría de Extensión Universitaria Rastreo.</p>
+<p>Su registro ha sido completado y sus credenciales serán evaluadas por el administrador, el cual ya ha sido notificado.</p>
+<p>El administrador tomará la desición de aceptar o rechazar su solicitud verificando sus credenciales.</p>
+<p>Este es su Número de Cliente: <strong><%= userId %></strong>, a él estará ligado toda actividad que realice por la página.</p>
+
+<div id="button_group" class="flexRow vp">
+
+    <%- include(`${ejsPath}components/button`, {
+        btn: { id:'confirm', type:'submit', classes:''},
+        content: { name:'Ir a Inicio de Sesión', icon:''}
+    }); %>
+</div>

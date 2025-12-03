@@ -5,7 +5,7 @@
     validation: { regex, error_message }
 -->
 
-<div id="<%= group.id %>" class="input_group flexColumn vp">
+<div id="<%= group.id %>" class="input_group flexColumn vp <%= group.classes %>">
     <div id="<%= group.input %>" class="in flexRow">
         <input
             type="<%= input.type %>"
@@ -14,6 +14,7 @@
             placeholder=" "
             class=""
             <%= input.req ? 'required' : '' %>
+            value="<%= input.value %>"
         />
         <label
             for="<%= input.id %>"

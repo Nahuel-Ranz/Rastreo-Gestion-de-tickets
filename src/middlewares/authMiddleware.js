@@ -15,7 +15,7 @@ module.exports = {
         const session = await cli.get(`sess:${sid}`);
         if(!session) return res.redirect('/');
 
-        req.user = JSON.parse(session);
+        req.userId = JSON.parse(session);
         next();
     },
 

@@ -8,6 +8,7 @@ const { isAuthenticated, isGuest } = require(`${srcPath}middlewares/authMiddlewa
 router.get('/', isGuest, viewController.renderLogin );
 router.get('/registro', isGuest, viewController.renderRegister );
 router.get('/establecer_clave', isGuest, viewController.renderSetPassword );
+router.get('/esperando_confirmacion', isGuest, viewController.renderWaitingConfirm );
 router.get('/recuperar_clave/email', isGuest, (req, res) => res.render('forms/recovery_password/email', { login:false }));
 router.get('/recuperar_clave/clave', isGuest, (req, res) => res.render('forms/recovery_password/key', { login:false }));
 router.get('/recuperar_clave/nueva_clave', isGuest, (req, res) => res.render('forms/recovery_password/new_password', { login:false }));

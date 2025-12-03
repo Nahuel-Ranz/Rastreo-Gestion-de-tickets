@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const { ejsPath, srcPath } = require('../utils/utils');
 const dbQueries = require(`${srcPath}storage/dbQueries`);
 const { getRedis } = require(`${srcPath}storage/connections`);
-const { sendCodeByMail } = require(`${srcPath}services/mailerServices`);
+const { sendMail, sendCodeByMail } = require(`${srcPath}services/mailerServices`);
 
 const registerController = {}
 
@@ -79,5 +79,37 @@ registerController.saveNormalizedData = async (req, res) => {
 		return res.json({ ok:false, error:`El token no se ha podido obtener: ${error}`});
     }
 };
+
+registerController.setPassword = async (req, res) => {
+    try {
+        const { cli } = await getRedis();
+        const { token, password } = req.body;
+        const jsonData = await cli.get(`register:${token}`);
+        const formData = JSON.parse(jsonData);
+        
+        const data = await dbQueries.registerUser(
+            formData.name,
+            formData.last_name,
+            formData.dni, 
+            formData.birth,
+            formData.cel,
+            formData.mail,
+            formData.area_select,
+            password
+        );
+
+        await sendMail(
+            formData.mail,
+            'Número de usuario',
+            `<p>Bienvenido a Rastreo - Secretaría de Extensión Universitaria, su número de usuario es <strong>${data.userId}</strong>.</p>
+            <p>El administrador ha sido notificado de su registro. El analizará sus credenciales y aprobará o rechazará su solicitud según lo considere.</p>`
+        );
+        
+        return res.json({ ok:true, redirect:`/esperando_confirmacion?userId=${data.userId}` });
+    } catch (error) {
+		console.error(`Ha ocurrido un error al intentar registrar el usuario: ${error}`);
+		return res.json({ ok:false, error:`No se pudo registrar el usuario: ${error}`});
+    }
+}
 
 module.exports = registerController;

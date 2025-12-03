@@ -31,26 +31,33 @@ create procedure registrarUsuario(
     in _fechaCreacion datetime,
     in _celular bigint,
     in _correo varchar(250),
-    in _areaFacultad int,
+    in _areaFacultad varchar(30),
     in _contrasenia varchar(255)
 )
 begin
-	declare usuario_id int;
+	declare usuario_id_ int;
+    declare area_facultad_id_ int;
     
     if _celular = '' or _celular = 0  then
 		set _celular = null;
 	end if;
     
+    select id into area_facultad_id_
+    from AreasFacultad
+    where abreviacion = _areaFacultad;
+    
 	insert into Personas(id, nombre, apellido, dni, fechaNacimiento, fechaCreacion, contrasenia, rol_id)
     values(null, _nombre, _apellido, _dni, _fechaNacimiento, _fechaCreacion, _contrasenia, null);
-    set usuario_id = last_insert_id();
+    set usuario_id_ = last_insert_id();
     
     if _celular is not null then
-		insert into Celulares(id, numero, propietario_id) values(null, _celular, usuario_id);
+		insert into Celulares(id, numero, propietario_id) values(null, _celular, usuario_id_);
 	end if;
     
-    insert into Correos(id, correo, propietario_id) values(null, _correo, usuario_id);
-    insert into PersonasProcedenDe(id, persona_id, area_facultad_id) values(null, usuario_id, _areaFacultad);
+    insert into Correos(id, correo, propietario_id) values(null, _correo, usuario_id_);
+    insert into PersonasProcedenDe(id, persona_id, area_facultad_id) values(null, usuario_id_, area_facultad_id_);
+    
+    select usuario_id_ as userId;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
@@ -471,7 +478,7 @@ begin
 	insert into Mensajes(id, emisor_id, receptor_id, mensaje, fecha, ticket_id, estado_id)
 	values(null, _id_emisor, _id_receptor, _mensaje, _fecha, _ticket_id, 9);
     
-    select last_insert_id();
+    select last_insert_id() as messasgeId;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */
