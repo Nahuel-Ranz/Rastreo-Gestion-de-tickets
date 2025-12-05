@@ -1,7 +1,6 @@
 const ejs = require('ejs');
 const { ejsPath, srcPath } = require('../utils/utils');
 const dbQueries = require(`${srcPath}storage/dbQueries`);
-const { getRedis } = require(`${srcPath}storage/connections`);
 // =================================================================================================================
 async function renderLogin(req, res) {
     try {
@@ -69,26 +68,63 @@ async function renderWaitingConfirm(req, res) {
     }
 }
 // =================================================================================================================
-async function showWaitingList(req, res) {
-    
-    const up = await dbQueries.getUserPermissions(req.session.userId);
-    if(!up.ok) return res.render('index', { error: up.error, login:true });
-
-    const tickets = await dbQueries.getTickets(
-        req.session.userId, 1, ''
-    );
-
-    if(!tickets.ok) return res.render('index', { error: tickets.error, login:true });
-    if('status' in tickets) return res.render('index', { status: tickets.status, login:true });
-    
-    // up.data: { full_name, permissions }
-    return res.render('index', { tickets: tickets.tickets, user: up.data, login:true });
+async function renderWaitingList(req, res) {
+	const tickets = [];
+	const options = [
+        { value:'all', content:'Todos'},
+        { value:'unseen', content:'No visto'},
+        { value:'seen', content:'Visto'},
+        { value:'missing', content:'Falta Información'}
+	];
+	
+	try {
+		for(let i = 1; i<10; i++) {
+			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/ticket.ejs`, { id:i }));
+		}
+		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
+			{ title:'Lista de espera', options, ejsPath, content: tickets.join('') }
+		);
+		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
+		
+		res.render('base.ejs', { title: 'Lista de espera', content: collector, nav, login:true });
+	} catch (error) {
+        console.error(error);
+        res.send('Ocurrío un error al intentar obtener los tickets');
+	}
+}
+// =================================================================================================================
+async function renderExecutionQueue(req, res) {
+	const tickets = [];
+	const options = [
+        { value:'all', content:'Todos'},
+        { value:'pending', content:'Pendientes'},
+        { value:'processing', content:'En ejecución'},
+        { value:'finished', content:'Finalizado'},
+        { value:'canceled', content:'Cancelado'},
+        { value:'undone', content:'No realizado'}
+    ];
+	
+	try {
+		for(let i = 1; i<10; i++) {
+			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/ticket.ejs`, { id:i }));
+		}
+		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
+			{ title:'Cola de ejecución', options, ejsPath, content: tickets.join('') }
+		);
+		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
+		
+		res.render('base.ejs', { title: 'Cola de ejecución', content: collector, nav, login:true });
+	} catch (error) {
+        console.error(error);
+        res.send('Ocurrío un error al intentar obtener los tickets');
+	}
 }
 // =================================================================================================================
 module.exports = {
+    renderExecutionQueue,
     renderLogin,
     renderRegister,
     renderSetPassword,
     renderWaitingConfirm,
-    showWaitingList
+	renderWaitingList
 }

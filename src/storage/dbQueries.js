@@ -183,8 +183,12 @@ async function initSession(req, id_user) {
         const device = ua.device.type || 'PC';
         const os = ua.os.name || 'Desconocido';
         const browser = ua.browser.name || 'Desconocido';
-        const ip = req.ip.replace('::ffff:', '') || '0.0.0.0';
+        
+        const ip = req.headers['x-forwarded-for']?.split(',')[0]
+            || req.socket.remoteAddress
+            || '0.0.0.0';
         const date = new Date();
+        if(ip.startsWith('::ffff:')) ip = ip.replace('::ffff', '');
 
         const [result] = await mysql.query('call iniciarSesion(?,?,?,?,?,?,?);', [
             id_user, device, ip, os, browser, date, date

@@ -1,7 +1,7 @@
 <div id="<%= id %>" class="ticket_container flexColumn hp vp">
     <div id="task_and_time" class="task_and_time flexRow">
         <div class="flexRow">
-            <p><strong>TAREA N°:</strong> <span>654</span></p>
+            <p><strong>TAREA N°:</strong> <span><%= id %></span></p>
             <div id="date_and_hour" class="date_and_hour flexColumn">
                 <p><strong>FECHA DE LA SOLICITUD:</strong> <span>Miércoles, 20 de septiembre 2025</span></p>
                 <p><strong>HORA:</strong> <span>05:50 hs.</span></p>
@@ -24,6 +24,13 @@
     </div>
     <div id="task_details" class="task_details flexRow hiddden">
         <p><strong>DETALLES:</strong> ... </p>
+    </div>
+    <div id="task_executer" class="task_executer flexRow hiddden">
+        <p><strong>EJECUTOR:</strong> <span>Ramiro Juarez</span></p>
+    </div>
+    <div id="finished_date_and_hour" class="finished_date_and_hour flexColumn">
+        <p><strong>FECHA DE FINALIZACIÓN:</strong> <span>Miércoles, 20 de septiembre 2025</span></p>
+        <p><strong>HORA:</strong> <span>05:50 hs.</span></p>
     </div>
     <div id="task_state_and_button" class="state flexRow">
         <button>Solicitar Información</button>

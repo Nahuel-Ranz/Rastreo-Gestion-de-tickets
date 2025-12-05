@@ -8,12 +8,12 @@
         list: { id, data:[{desc, icon, url}, ...] }
     }-->
     <div id="<%= id %>" class="dropdown flexColumn">
-        <%- include('components/button', {
+        <%- include(`${ejsPath}components/button`, {
             btn: button.btn,
             content: button.content
         }); %>
         
-        <%- include('dropdowns/link-list', { id: list.id, data: list.data }); %>
+        <%- include(`${ejsPath}dropdowns/link-list`, { id: list.id, data: list.data }); %>
     </div>
 
     <script type="module">

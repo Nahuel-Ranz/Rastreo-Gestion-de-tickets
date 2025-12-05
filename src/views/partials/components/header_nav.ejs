@@ -1,16 +1,17 @@
 <nav id="nav_header" class="flexRow">
-    <%- include("dropdowns/link-dropdown", {
+    <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_notifications",
         button:{
             btn: { id:'button_nav_notifications', type:'', classes:'dropdownSelector nav_font_color_fontSize' },
             content:{name:'', icon:'far fa-bell-slash'},
             min_width: 10
         },
-        list: { id:'list_nav_notifications', data:[{desc:'', icon:'', url:'#'}] }
+        list: { id:'list_nav_notifications', data:[{desc:'', icon:'', url:'#'}] },
+		ejsPath
     }); %>
     <a href="/lista_de_espera" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
     <a href="/cola_de_ejecucion" class="nav_font_color_fontSize">COLA DE EJECUCIÓN</a>
-    <%- include("dropdowns/link-dropdown",{
+    <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_menu",
         button:{
             btn: { id:'button_nav_menu', type:'', classes:'' },
@@ -27,6 +28,7 @@
                 {desc:'Tipos de cuentas', icon:'fas fa-users', url:'tipos_de_cuentas'},
                 {desc:'Cerrar Sesión', icon:'fas fa-right-from-bracket', url:'/'}
             ]
-        }
+        },
+		ejsPath
     }); %>
 </nav>

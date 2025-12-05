@@ -5,8 +5,10 @@ import {
 	submitReSendCode,
 	submitSaveDataForm,
 	submitSetPassword
-} from '/js/submitForms.js';
-import { hideElement } from '/js/utils.js';
+} from '/js/forms/submitForms.js';
+
+import { updateInputState } from '/js/forms/stateController.js';
+import { escapeRegex, hideElement } from '/js/utils.js';
 
 export function submitForm(e, form) {
 	e.preventDefault();
@@ -51,4 +53,18 @@ export function resetForm() {
         selectStates[key].select.classList.remove('correct');
 		hideElement(selectStates[key].icon);
     });
+}
+
+export function focusedSelect(e) {
+	const group = e.parentElement;
+	group.querySelector('label').classList.add('active');
+}
+
+export function settingPassword(input) {
+	const safeRegex = escapeRegex(input.value);
+
+	inputStates['re-password'].regex = new RegExp(`^${safeRegex}$`);
+	updateInputState(inputStates['re-password']);
+
+	inputStates['token'].state = true;
 }

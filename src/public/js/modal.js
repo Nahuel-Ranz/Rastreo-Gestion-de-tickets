@@ -1,11 +1,7 @@
-import {
-    adjustModal,
-    deleteElement,
-    formHandler,
-    radius
-} from '/js/utils.js';
+import { adjustModal, deleteElement, radius } from '/js/utils.js';
+import { formHandler } from '/js/forms/formController.js';
 
-export function initModal(formData) {
+export function initModal() {
     const container = document.getElementById('modal_container');
     if(!container) return;
 

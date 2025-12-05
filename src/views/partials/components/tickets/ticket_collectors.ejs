@@ -1,0 +1,23 @@
+<!-- id, title -->
+
+<div id="ticket_collector" class="flexColumn">
+    <div id="collector_header" class="flexRow">
+        <h1><%= title %></h1>
+        <%- include(`${ejsPath}dropdowns/option-dropdown`, {
+            group: { id:'filtro_group', select:'filtro' },
+            label: { id:'filtro_label', content:'Filtrar por ... ' },
+            options
+        }); %>
+    </div>
+    <div id="collector_list" class="vp" >
+        <%- content %>
+    </div>
+</div>
+
+<script type="module">
+    import { radius } from '/js/utils.js';
+    ((d) => {
+        const list = d.getElementById('collector_list');
+        radius(list, 30);
+    })(document);
+</script>

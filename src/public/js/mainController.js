@@ -1,5 +1,7 @@
-import { initSocket } from '/js/socket/socketHandler.js'
-import { fitToScreen, formHandler } from '/js/utils.js';
+import { fitToScreen } from '/js/utils.js';
+import { formHandler } from '/js/forms/formController.js';
+import { initSocket } from '/js/socket/socketController.js'
+import { ticketHandler } from '/js/tickets/ticketController.js';
 
 // individual layouts
 const header=document.getElementById('header');
@@ -13,5 +15,9 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', () => fitToScreen(header, main, footer));
 
 // Control del formulario.
-const form = document.getElementById('page_form');
+const form = main.querySelector('#page_form');
 if(form) formHandler(form);
+
+// Control de los tickets.
+const ticketContainer = main.querySelector('#ticket_collector');
+if(ticketContainer) ticketHandler(ticketContainer);

@@ -1,10 +1,6 @@
-import {
-    checkObjectState,
-    createElementAfter,
-    hideElement,
-    normalizeFormData,
-    showElement
-} from '/js/utils.js';
+import { createElementAfter, hideElement, showElement } from '/js/utils.js';
+import { normalizeFormData } from '/js/forms/utils.js';
+import { checkObjectState } from '/js/forms/stateController.js';
 import { getSocket } from '/js/socket/socket.js';
 
 export function submitLogin(form) {
@@ -62,7 +58,7 @@ export function submitRegister(form) {
                         }
                         createElementAfter(form, res.data.modal);
                         import('/js/modal.js')
-                            .then( mod => mod.initModal(formData));
+                            .then( mod => mod.initModal());
 						getSocket().emit('verify_email', { mail:formData.mail });
                     })
                     .catch(error => console.error(error));

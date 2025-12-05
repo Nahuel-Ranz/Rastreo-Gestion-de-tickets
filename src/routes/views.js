@@ -15,8 +15,8 @@ router.get('/recuperar_clave/nueva_clave', isGuest, (req, res) => res.render('fo
 router.get('/crear_ticket', isAuthenticated, (req, res) => res.render('forms/new_ticket', { login:true }));
 
 // páginas
-router.get('/lista_de_espera', isAuthenticated, viewController.showWaitingList );
-router.get('/cola_de_ejecucion', isAuthenticated, (req, res) => res.render('execution_queue', { login:true }));
+router.get('/lista_de_espera', isAuthenticated, viewController.renderWaitingList );
+router.get('/cola_de_ejecucion', isAuthenticated, viewController.renderExecutionQueue );
 router.get('/perfil', isAuthenticated, (req, res) => res.render('profile', { login:true }));
 router.get('/estadisticas', isAuthenticated, (req, res) => res.render('dashboard', { login:true }));
 router.get('/configuraciones', isAuthenticated, (req, res) => res.render('settings', { login:true }));

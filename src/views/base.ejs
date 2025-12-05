@@ -5,7 +5,7 @@
         <%- include("partials/head", { title }); %>
     </head>
     <body>
-        <%- include("partials/header"); %>
+        <%- include("partials/header", { nav: typeof nav !== 'undefined' ? nav : '' }); %>
         <main id="main" class="flexRow vp">
             <%- content %>
         </main>
