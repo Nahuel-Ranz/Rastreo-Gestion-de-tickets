@@ -11,17 +11,25 @@
         > css/
             . styles.min.css
         > js/
+            > forms/
+                . formController.js
+                . formEvents.js
+                . stateController.js
+                . submitForms.js
+                . utils.js
             > socket/
                 > namespaces/
                     . chat.namespace.js
                     . general.namespace.js
                     . notifications.namespace.js
                 . socket.js
-                . socketHandler.js
-            . formEvents.js
+                . socketController.js
+            > tickets/
+                . ticketController.js
+                . utils.js
+            . components.js
             . mainController.js
             . modal.js
-            . submitForms.js
             . utils.js
         > media/
             . frre-black.png
@@ -120,26 +128,21 @@
                     . recovery_new_password.ejs
                     . register.ejs
                     . set_password.ejs
-                > ticket_collector_content/
-                    . execution_queue.ejs
-                    . waiting_list.ejs
+                    . waiting_admin_confirmation.ejs
+                > tickets/
+                    . ticket_collectors.ejs
+                    . ticket.ejs
                 . button.ejs
                 . forms.ejs
                 . header_nav.ejs
                 . input_group.ejs
                 . modal.ejs
-                . ticket_collectors.ejs
             > dropdowns/
                 . link-dropdown.ejs
-                . link-list.ejs
                 . option-dropdown.ejs
             > flatpickrs/
                 . birthdate.ejs
                 . event_date.ejs
-            > tickets/
-                . ticket_collector_header.ejs
-                . ticket_collector_list.ejs
-                . ticket.ejs
             . footer.ejs
             . head.ejs
             . header.ejs

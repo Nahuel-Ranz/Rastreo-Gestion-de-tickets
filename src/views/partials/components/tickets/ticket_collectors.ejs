@@ -1,5 +1,3 @@
-<!-- id, title -->
-
 <div id="ticket_collector" class="flexColumn">
     <div id="collector_header" class="flexRow">
         <h1><%= title %></h1>
@@ -13,11 +11,3 @@
         <%- content %>
     </div>
 </div>
-
-<script type="module">
-    import { radius } from '/js/utils.js';
-    ((d) => {
-        const list = d.getElementById('collector_list');
-        radius(list, 30);
-    })(document);
-</script>

@@ -1,26 +1,4 @@
-<!--
-    group: { id, input },
-    input: { id, type, req },
-    label: { id, content }
--->
 <% label.content += ' (año-mes-día)'; %>
-<%- include('components/input_group', { group, input, label }); %>
-
-<script>
-    ((d) => {
-        d.addEventListener('DOMContentLoaded', () => {
-            flatpickr('#<%= input.id %>', {
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                minDate: new Date().fp_incr(7),
-                minuteIncrement: 10,
-                time_24hr: true,
-                disable:[
-                    function(date){
-                        return ([0, 6].includes(date.getDay()));
-                    }
-                ]
-            });
-        })
-    })(document);
-</script>
+<div class="pickr-container event_date">
+    <%- include(`${ejsPath}components/input_group`, { group, input, label}); %>
+</div>

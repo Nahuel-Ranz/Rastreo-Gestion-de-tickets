@@ -40,13 +40,3 @@
         <p><strong>ESTADO:</strong> <span>no visto</span></p>
     </div>
 </div>
-
-<script type="module">
-    import { radius, radiusToAll } from '/js/utils.js';
-    ((d) => {
-        const list = d.getElementById('<%= id %>');
-        const divs = d.querySelectorAll('div');
-
-        radiusToAll(divs, 10);
-    })(document);
-</script>

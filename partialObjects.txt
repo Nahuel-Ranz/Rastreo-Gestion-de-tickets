@@ -1,0 +1,58 @@
+> errors/
+    . 404.ejs: { login }
+> partials/
+    > components/
+        > form_content/
+            . email_validation_code.ejs.........{ ejsPath, correo }
+            . login.ejs.........................{ ejsPath }
+            . recovery_email.ejs................{ ejsPath }
+            . recovery_key.ejs..................{ ejsPath, correo }
+            . recovery_new_password.ejs.........{ ejsPath }
+            . register.ejs......................{ ejsPath, areas }
+            . set_password.ejs..................{ ejsPath, token }
+            . waiting_admin_confirmation.ejs....{ ejsPath, userId }
+        > tickets/
+            . ticket_collectors.ejs.............{ ejsPath, title, options, content }
+            . ticket.ejs........................{ id }
+        . button.ejs............................{
+            btn: {id, type, classes },
+            content: { name, icon }
+        }
+        . forms.ejs.............................{ id, title, content }
+        . header_nav.ejs........................{ ejsPath }
+        . input_group.ejs.......................{
+            group: { id, input, classes },
+            input: { id, type, req, value },
+            label: { id, content },
+            validation: { regex, error_message }
+        }
+        . modal.ejs.............................{ title, content }
+    > dropdowns/
+        . link-dropdown.ejs.....................{
+            id,
+            ejsPath,
+            button: { btn: { id, type, classes }, content: { name, icon } },
+            list: { id, data:[ {desc, icon, url }, ... ] }
+        }
+        . option-dropdown.ejs...................{
+            group: { id, select, req },
+            label: { id, content },
+            options:[{ value, content }, ... ]
+        }
+    > flatpickrs/
+        . birthdate.ejs.........................{
+            ejsPath,
+            group: { id, input, classes },
+            input: { id, type, req, value },
+            label: { id, content }
+        }
+        . event_date.ejs........................{
+            ejsPath,
+            group: { id, input, classes },
+            input: { id, type, req, value },
+            label: { id, content }
+        }
+    . footer.ejs................................{ - }
+    . head.ejs..................................{ title }
+    . header.ejs................................{ nav }
+. base.ejs......................................{ title, nav, content, login }

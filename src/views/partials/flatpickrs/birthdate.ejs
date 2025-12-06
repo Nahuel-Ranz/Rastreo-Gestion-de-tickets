@@ -1,38 +1,4 @@
-<!--
-    group: { id, input },
-    input: { id, type, ejsPath, req },
-    label: { id, content }
--->
 <% label.content += ' (año-mes-día)'; %>
-<div class="pickr-container">
+<div class="pickr-container birthdate">
     <%- include(`${ejsPath}components/input_group`, { group, input, label}); %>
 </div>
-
-<script>
-    ((d) => {
-        d.addEventListener('DOMContentLoaded', () => {
-            const group = d.getElementById('<%= group.id %>');
-            const input = d.getElementById('<%= input.id %>');
-
-            flatpickr('#<%= input.id %>', {
-                dateFormat: 'Y-m-d',
-                maxDate: new Date().fp_incr((-18*365)-5),
-                altFormat: 'd-m-Y',
-                allowInput: false,
-                clickOpens: true,
-                disableMobile: true,
-                onReady: function(selectedDates, dateStr, instance) {
-                    const pickr = instance.calendarContainer;
-                    if (!pickr) return;
-                    
-                    const groupWidth = window.getComputedStyle(group).width;
-                    pickr.style.width = groupWidth;
-                },
-                onOpen: function(selectedDates, dateStr, instance) {
-                    if (!group) return;
-                    instance.calendarContainer.style.width = window.getComputedStyle(group).width;
-                }
-            });
-        });
-    })(document);
-</script>

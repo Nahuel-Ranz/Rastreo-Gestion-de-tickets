@@ -1,7 +1,3 @@
-<!--
-	btn: { id, type, classes },
-	content: { name, icon}
--->
 <button
 	type="<%= btn.type || 'button' %>"
 	id="<%= btn.id %>"
@@ -14,18 +10,3 @@
 		<i class="<%= content.icon %>"></i>
 	<% } %>
 </button>
-
-<script type="module">
-	import { radius } from '/js/utils.js';
-	
-	((d) => {
-		const btn = d.getElementById('<%= btn.id %>');
-		radius(btn);
-	})(document);
-</script>
-
-<!--
-    <button><p></p></button> ||
-    <button><i></i></button> ||
-    <button><p></p><i></i></button>
--->
