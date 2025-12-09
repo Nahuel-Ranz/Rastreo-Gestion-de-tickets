@@ -1,7 +1,6 @@
 const { srcPath } = require('../utils/utils');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const activityMiddleware = require(`${srcPath}middlewares/activityMiddleware`);
 
 let app = null
 function init() {
@@ -15,8 +14,6 @@ function init() {
         app.use(express.json());
         app.use(express.urlencoded({ extended:true }));
         app.use(cookieParser());
-        
-        app.use(activityMiddleware);
         
         app.use('/', require(`${srcPath}routes/views`));
         app.use('/', require(`${srcPath}routes/actions`));

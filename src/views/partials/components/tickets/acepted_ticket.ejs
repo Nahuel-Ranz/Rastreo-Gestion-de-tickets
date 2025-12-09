@@ -3,15 +3,14 @@
         <div class="flexRow">
             <p><strong>TAREA N°:</strong> <span><%= id %></span></p>
             <div id="date_and_hour" class="date_and_hour flexColumn">
-                <p><strong>FECHA DE LA SOLICITUD:</strong> <span>Miércoles, 20 de septiembre 2025</span></p>
+                <p><strong>FECHA:</strong> <span>Miércoles, 20 de septiembre 2025</span></p>
                 <p><strong>HORA:</strong> <span>05:50 hs.</span></p>
             </div>
         </div>
-        <div class="icons flexRow">
-            <i class="far fa-message"></i>
+        <div class="icons flexColumn">
             <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-up"></i>
         </div>
-<!-- (far fa-edit) (far fa-message) (fas fa-chevron-down) (fas fa-chevron-up) -->
     </div>
     <div id="requester" class="requester flexRow hiddden">
         <p><strong>SOLICITANTE:</strong> <span>Sandra Perez</span></p>
@@ -28,14 +27,13 @@
     <div id="task_executer" class="task_executer flexRow hiddden">
         <p><strong>EJECUTOR:</strong> <span>Ramiro Juarez</span></p>
     </div>
-    <div id="finished_date_and_hour" class="finished_date_and_hour flexColumn">
+    <div id="finished_date_and_hour" class="finished_date_and_hour flexRow">
         <p><strong>FECHA DE FINALIZACIÓN:</strong> <span>Miércoles, 20 de septiembre 2025</span></p>
         <p><strong>HORA:</strong> <span>05:50 hs.</span></p>
     </div>
     <div id="task_state_and_button" class="state flexRow">
-        <button>Solicitar Información</button>
-        <button>Confirmar</button>
-        <button>Actualizar</button>
+        <button>Ejecutar</button>
+        <button>Finalizar</button>
         <button>Cancelar</button>
         <p><strong>ESTADO:</strong> <span>no visto</span></p>
     </div>

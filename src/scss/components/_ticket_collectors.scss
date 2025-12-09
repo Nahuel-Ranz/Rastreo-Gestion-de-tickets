@@ -12,17 +12,6 @@
             font-weight: bolder;
             width: 250%;
         }
-        .selectContainer {
-            > label {
-                top: 30%;
-                margin-left: 5px;
-                background-color:  var(--secondary-color);
-            }
-            .choices .choices__inner {
-                margin-top: 2px;
-                background-color: var(--secondary-color);
-            }
-        }
     }
 
     #collector_list {

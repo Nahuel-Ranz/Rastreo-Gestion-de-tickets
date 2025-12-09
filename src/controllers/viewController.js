@@ -9,7 +9,7 @@ async function renderLogin(req, res) {
             { id:'page_form', title:'INICIAR SESIÓN', content: formContent }
         );
     
-        res.render('base.ejs', { title:'Iniciar Sesión', content:form, login:false });
+        res.render('base.ejs', { title:'Iniciar Sesión', content:form });
     } catch(error) {
         console.error(error);
         res.send('Ha ocurrido un error intentando obtener el formulario de Inicio de Sesión.');
@@ -26,7 +26,7 @@ async function renderRegister(req, res) {
             { id:'page_form', title:'REGISTRARSE', content: formContent }
         );
 
-        res.render('base.ejs', { title:'Registro', content:form, login:false });
+        res.render('base.ejs', { title:'Registro', content:form });
     } catch(error) {
         console.log(error);
         res.send('Ha ocurrido un error intentando obtener el formulario de Registro.');
@@ -44,7 +44,7 @@ async function renderSetPassword(req, res) {
             { id:'page_form', title:'ESTABLECER CONTRASEÑA', content: formContent }
         );
         
-        res.render('base.ejs', { title:'Establecer Contraseña', content:form, login:false });
+        res.render('base.ejs', { title:'Establecer Contraseña', content:form });
     } catch(error) {
         console.error(error);
         res.send('Ha ocurrido un error intentando obtener el formulario para establecer la contraseña.');
@@ -61,7 +61,7 @@ async function renderWaitingConfirm(req, res) {
         const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
             { id:'page_form', title: 'ESPERANDO CONFIRMACIÓN', content: formContent }
         );
-        res.render('base.ejs', { title:'Esparando Confirmación del Administrador', content: form, login:false });
+        res.render('base.ejs', { title:'Esparando Confirmación del Administrador', content: form });
     } catch(error) {
         console.error(error);
         res.send('Aunque su registro se completó, ocurrió un error al intenter obtener la página de confirmación. Su numero de usuario es: ', userId);
@@ -79,14 +79,16 @@ async function renderWaitingList(req, res) {
 	
 	try {
 		for(let i = 1; i<10; i++) {
-			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/ticket.ejs`, { id:i }));
+			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/pending_ticket.ejs`,
+                { id:i, ejsPath }
+            ));
 		}
 		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
-			{ title:'Lista de espera', options, ejsPath, content: tickets.join('') }
+			{ title:'Lista de espera', options, ejsPath, tickets: tickets.join('') }
 		);
 		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
 		
-		res.render('base.ejs', { title: 'Lista de espera', content: collector, nav, login:true });
+		res.render('base.ejs', { title: 'Lista de espera', content: collector, nav });
 	} catch (error) {
         console.error(error);
         res.send('Ocurrío un error al intentar obtener los tickets');
@@ -106,14 +108,14 @@ async function renderExecutionQueue(req, res) {
 	
 	try {
 		for(let i = 1; i<10; i++) {
-			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/ticket.ejs`, { id:i }));
+			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/acepted_ticket.ejs`, { id:i }));
 		}
 		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
 			{ title:'Cola de ejecución', options, ejsPath, content: tickets.join('') }
 		);
 		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
 		
-		res.render('base.ejs', { title: 'Cola de ejecución', content: collector, nav, login:true });
+		res.render('base.ejs', { title: 'Cola de ejecución', content: collector, nav });
 	} catch (error) {
         console.error(error);
         res.send('Ocurrío un error al intentar obtener los tickets');

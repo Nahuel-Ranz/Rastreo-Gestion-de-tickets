@@ -6,7 +6,7 @@ import { getSocket } from '/js/socket/socket.js';
 export function submitLogin(form) {
     const formData = clearFormData(form);
 
-    axios.post('/login', formData)
+    axios.post('/login', formData, { withCredentials: true })
         .then(res => {
             if(!res.data.ok) {
                 if(res.data.credential === 'error') { alert(res.data.message); return; }

@@ -1,4 +1,5 @@
 const argon2 = require('argon2');
+const ejs = require('ejs');
 const utils = require('../utils/utils.js');
 const dbQueries = require(`${utils.srcPath}storage/dbQueries`);
 const { getRedis } = require(`${utils.srcPath}storage/connections`);
@@ -6,7 +7,7 @@ const { getRedis } = require(`${utils.srcPath}storage/connections`);
 const userController = {};
 
 userController.login = async (req, res) => {
-    const {credential, pass } = req.body;
+    const { credential, pass } = req.body;
 
     const data = await dbQueries.getArgon2Hash(credential);
     if(!data.ok) return res.json(data);
@@ -17,30 +18,48 @@ userController.login = async (req, res) => {
     const sessionData = await dbQueries.initSession(req, data.id);
     if(!sessionData.ok) return res.json(sessionData);
 
-    const { id, userId, last_activity } = sessionData.session;
+    const { sid, uid, last_activity } = sessionData.session;
     const { cli } = await getRedis();
     
-    await cli.set(`sess:${id}`, userId, 'EX', 1800);
-    res.cookie('sid', id, {httpOnly: true});
+    await cli.set(`sess:${sid}`, uid, 'EX', 1800);
+    res.cookie('sid', sid, {
+        httpOnly: true,
+        maxAge: 1800 * 1000,
+        secure: false,
+        sameSite: 'Lax',
+        path: '/'
+    });
     
     return res.json({ ok:true, redirect:'/lista_de_espera'});
 };
 
 userController.logout = async (req, res) => {
-    const id = req.session?.dbSessionId;
+    const sid = req.cookies?.sid;
+    const { cli } = await getRedis();
 
-    try {
-        await utils.destroySession(req);
-        if(id) {
-            const ans = await dbQueries.closeSession(id);
-            if(!ans.ok) return res.render('index', { error_logout: ans.error });
-        }
+    const modal = await ejs.renderFile(`${utils.ejsPath}components/modal.ejs`,
+        { title:'Sesión', content: '<h1>Sesión Cerrada</h1>' }
+    );
 
-        return res.redirect('/');
-    } catch (error) {
-        console.error('Error al cerrar sesión (desde useController): ', error);
-        return res.render('index', { error_logout: 'No se pudo cerrar la sesión correctamente (desde userController). Intentelo de nuevo!'});
+    const sockets = sid ? await cli.smembers(`sess_socket:${sid}`) : [];
+    for(const id of sockets) io.to(id).emit('force_logout', { modal });
+
+    res.clearCookie('sid', {
+        httpOnly: true,
+        secure:false,
+        sameSite: 'Lax',
+        path: '/'
+    });
+    
+    await cli.del(`sess:${sid}`);
+    await cli.del(`sess_socket:${sid}`);
+
+    if(sid) {
+        const ans = await dbQueries.closeSession(sid);
+        if(!ans.ok) return res.json({ ok:false, error: ans.error});
     }
+
+    return res.json({ ok:true, redirect:'/'});
 };
 
 module.exports = userController;

@@ -35,17 +35,7 @@ function jsonToObject(value) {
     catch { return value; }
 }
 
-function destroySession(req) {
-    return new Promise((resolve, reject) => {
-        req.session.destroy( error => {
-            if (error) reject(error);
-            else resolve();
-        });
-    });
-}
-
 module.exports = {
-    destroySession,
     ejsPath,
     isNatural,
     jsonToObject,

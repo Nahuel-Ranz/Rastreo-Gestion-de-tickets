@@ -23,9 +23,9 @@ async function updateLastActivity(session_id, lastActivity) {
     }
 }
 // ===========================================================================================================================
-async function closeSession(session_id, lastActivity) {
+async function closeSession(sid) {
     try {
-        await mysql.execute('call cerrarSesion(?, ?)', [ session_id, lastActivity ]);
+        await mysql.execute('call cerrarSesion(?, ?)', [ sid, new Date() ]);
         return { ok: true };
     } catch (error) {
         console.error('Error al cerrar la última actividad (desde dbQueries): ', error);
@@ -184,11 +184,11 @@ async function initSession(req, id_user) {
         const os = ua.os.name || 'Desconocido';
         const browser = ua.browser.name || 'Desconocido';
         
-        const ip = req.headers['x-forwarded-for']?.split(',')[0]
+        let ip = req.headers['x-forwarded-for']?.split(',')[0]
             || req.socket.remoteAddress
             || '0.0.0.0';
         const date = new Date();
-        if(ip.startsWith('::ffff:')) ip = ip.replace('::ffff', '');
+        if(ip.startsWith('::ffff:')) { ip = ip.replace('::ffff:', '') };
 
         const [result] = await mysql.query('call iniciarSesion(?,?,?,?,?,?,?);', [
             id_user, device, ip, os, browser, date, date
@@ -200,9 +200,9 @@ async function initSession(req, id_user) {
         return {
             ok: true,
             session: {
-                id: response.session_id,
+                sid: response.session_id,
                 last_activity: response.last_activity,
-                userId: response.user_id
+                uid: response.user_id
             },
         };
     } catch (error) {

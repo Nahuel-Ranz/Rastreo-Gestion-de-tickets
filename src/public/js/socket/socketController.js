@@ -1,4 +1,4 @@
-import { showElement } from '/js/utils.js';
+import { createElementAfter, showElement } from '/js/utils.js';
 import { getSocket } from '/js/socket/socket.js';
 
 export function initSocket() {
@@ -24,26 +24,13 @@ function socketListeners(socket) {
     });
 	
 	socket.on("session_expired", () => window.location.href = '/login');
-	
-    socket.on("chat_message", data => {
-
-    });
-
-    socket.on("notification", data => {
-
-    });
+	socket.on('force_logout', (modal) => {
+		createElementAfter(document.getElementById('main'), modal);
+		import('/js/modal.js')
+			.then( mod => mod.initModal());
+	});
+    socket.on("chat_message", data => { });
+    socket.on("notification", data => { });
 }
 
-function socketEmit(socket) {
-	if(__IS_AUTH__)	{
-		const sid = getCookie('sid');
-		if(sid) socket.emit('bind_session', {sid});
-	}
-}
-
-function getCookie(name) {
-	return document.cookie
-		.split('; ')
-		.find(row => row.startsWith(`${name}=`))
-		?.split('=')[1];
-}
+function socketEmit(socket) { }
