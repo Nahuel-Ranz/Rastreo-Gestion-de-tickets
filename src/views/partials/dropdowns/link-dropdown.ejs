@@ -1,17 +1,10 @@
-    <div id="<%= id %>" class="dropdown flexColumn">
-        <%- include(`${ejsPath}components/button`, {
-            btn: button.btn,
-            content: button.content
-        }); %>
-        
-        <ul id="<%= list.id %>" class="dropdownList flexColumn">
-            <% list.data.forEach(link => { %>
-                <li class="flexColumn">
-                    <a href="<%= link.url %>" class="flexRow">
-                        <p><%= link.desc %></p>
-                        <i class="<%= link.icon %>"></i>
-                    </a>
-                </li>
-            <% }); %>
-        </ul>
-    </div>
+<div id="<%= id %>" class="dropdown flexColumn">
+    <%- include(`${ejsPath}components/button`, {
+        btn: button.btn,
+        content: button.content
+    }); %>
+    
+    <ul class="dropdownList flexColumn">
+        <%- items %>
+    </ul>
+</div>

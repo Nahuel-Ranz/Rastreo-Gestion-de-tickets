@@ -79,14 +79,18 @@ async function renderWaitingList(req, res) {
 	
 	try {
 		for(let i = 1; i<10; i++) {
-			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/pending_ticket.ejs`,
-                { id:i, ejsPath }
-            ));
+			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/pending_ticket.ejs`, { id:i } ));
 		}
 		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
 			{ title:'Lista de espera', options, ejsPath, tickets: tickets.join('') }
 		);
-		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
+
+        const linkMenuOptions = await navBarMenu();
+		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, {
+            ejsPath,
+            linkMenuOptions: linkMenuOptions.join(''),
+            notifications: '<li>No Hay notificaciones aún</li>'
+        });
 		
 		res.render('base.ejs', { title: 'Lista de espera', content: collector, nav });
 	} catch (error) {
@@ -111,15 +115,41 @@ async function renderExecutionQueue(req, res) {
 			tickets.push(await ejs.renderFile(`${ejsPath}components/tickets/acepted_ticket.ejs`, { id:i }));
 		}
 		const collector = await ejs.renderFile(`${ejsPath}components/tickets/ticket_collectors.ejs`,
-			{ title:'Cola de ejecución', options, ejsPath, content: tickets.join('') }
+			{ title:'Cola de ejecución', options, ejsPath, tickets: tickets.join('') }
 		);
-		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, { ejsPath });
+
+        const linkMenuOptions = await navBarMenu();
+		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, {
+            ejsPath,
+            linkMenuOptions: linkMenuOptions.join(''),
+            notifications: '<li>No Hay notificaciones aún</li>'
+        });
 		
 		res.render('base.ejs', { title: 'Cola de ejecución', content: collector, nav });
 	} catch (error) {
         console.error(error);
         res.send('Ocurrío un error al intentar obtener los tickets');
 	}
+}
+// =================================================================================================================
+async function navBarMenu() {
+    const items = [];
+    const data = [
+        {description:'Perfil', icon:'fas fa-user', destination:'/perfil', get:true },
+        {description:'Estadísticas', icon:'fas fa-chart-line', destination:'/estadisticas', get:true },
+        {description:'Configuración', icon:'fas fa-gear', destination:'/configuraciones', get:true },
+        {description:'Notificaciones', icon:'fas fa-envelope', destination:'/notificaciones', get:true },
+        {description:'Tipos de cuentas', icon:'fas fa-users', destination:'/tipos_de_cuentas', get:true },
+        {description:'Cerrar Sesión', icon:'fas fa-right-from-bracket', destination:'logout', get:false }
+    ]
+
+    for(let i of data) {
+        items.push(await ejs.renderFile(`${ejsPath}dropdowns/link-dropdown-item.ejs`,
+            { get:i.get, destination:i.destination, description:i.description, icon:i.icon })
+        );
+    }
+
+    return items || [{get:true, destination:'#', description:'NONE', icon:'fas fa-question-circle'}];
 }
 // =================================================================================================================
 module.exports = {

@@ -12,6 +12,8 @@ export function components() {
     dropdowns(document.querySelectorAll('.dropdown'));
     flatpickrBirthdates(document.querySelectorAll('.pickr-container.birthdate'));
     flatpickrEventDates(document.querySelectorAll('.pickr-container.event_date'));
+
+    //document.getElementById('logout').addEventListener('click', logout);
 }
 
 function dropdowns(dropdowns) {
@@ -30,7 +32,6 @@ function dropdowns(dropdowns) {
             list.classList.toggle('hidden');
         });
     });
-
 }
 
 function flatpickrBirthdates(containers) {

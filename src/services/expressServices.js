@@ -10,16 +10,18 @@ function init() {
         app.set('views', `${srcPath}views`);
         app.set('view engine', 'ejs');
         
-        app.use(express.static(`${srcPath}public`));
         app.use(express.json());
+        app.use(express.static(`${srcPath}public`));
         app.use(express.urlencoded({ extended:true }));
         app.use(cookieParser());
-        
-        app.use('/', require(`${srcPath}routes/views`));
-        app.use('/', require(`${srcPath}routes/actions`));
-        app.use(require(`${srcPath}routes/error_handling`));
     }
     return app;
 }
 
-module.exports = { init }
+function mountRoutes(app, io) {
+    app.use('/', require(`${srcPath}routes/views`)({ io }));
+    app.use('/', require(`${srcPath}routes/actions`)({ io }));
+    app.use(require(`${srcPath}routes/error_handling`));
+}
+
+module.exports = { init, mountRoutes }

@@ -19,7 +19,7 @@
             content: { name, icon }
         }
         . forms.ejs.............................{ id, title, content }
-        . header_nav.ejs........................{ ejsPath }
+        . header_nav.ejs........................{ ejsPath, linkMenuOptions, notifications }
         . input_group.ejs.......................{
             group: { id, input, classes },
             input: { id, type, req, value },
@@ -32,8 +32,9 @@
             id,
             ejsPath,
             button: { btn: { id, type, classes }, content: { name, icon } },
-            list: { id, data:[ {desc, icon, url }, ... ] }
+            items
         }
+		. link-dropdown-item.ejs................{ get, destination, description, icon }
         . option-dropdown.ejs...................{
             group: { id, select, req },
             label: { id, content },

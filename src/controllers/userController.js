@@ -6,7 +6,7 @@ const { getRedis } = require(`${utils.srcPath}storage/connections`);
 
 const userController = {};
 
-userController.login = async (req, res) => {
+userController.login = async (req, res, io) => {
     const { credential, pass } = req.body;
 
     const data = await dbQueries.getArgon2Hash(credential);
@@ -33,7 +33,7 @@ userController.login = async (req, res) => {
     return res.json({ ok:true, redirect:'/lista_de_espera'});
 };
 
-userController.logout = async (req, res) => {
+userController.logout = async (req, res, io) => {
     const sid = req.cookies?.sid;
     const { cli } = await getRedis();
 

@@ -2,10 +2,10 @@
     <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_notifications",
         button:{
-            btn: { id:'button_nav_notifications', type:'', classes:'dropdownSelector nav_font_color_fontSize' },
+            btn: { id:'notifications_btn', type:'', classes:'dropdownSelector nav_font_color_fontSize' },
             content:{name:'', icon:'far fa-bell-slash'}
         },
-        list: { id:'list_nav_notifications', data:[{desc:'', icon:'', url:'#'}] },
+        items: notifications,
 		ejsPath
     }); %>
     <a href="/lista_de_espera" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
@@ -13,20 +13,10 @@
     <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_menu",
         button:{
-            btn: { id:'button_nav_menu', type:'', classes:'' },
+            btn: { id:'menu_btn', type:'', classes:'' },
             content: { name: "Isaías Jonás Ranz Aquino", icon:"far fa-user-circle"}
         },
-        list: {
-            id:"list_nav_menu",
-            data:[
-                {desc:'Perfil', icon:'fas fa-user', url:'/perfil'},
-                {desc:'Estadísticas', icon:'fas fa-chart-line', url:'/estadisticas'},
-                {desc:'Configuración', icon:'fas fa-gear', url:'/configuraciones'},
-                {desc:'Notificaciones', icon:'fas fa-envelope', url:'/notificaciones'},
-                {desc:'Tipos de cuentas', icon:'fas fa-users', url:'tipos_de_cuentas'},
-                {desc:'Cerrar Sesión', icon:'fas fa-right-from-bracket', url:'/logout'}
-            ]
-        },
+        items: linkMenuOptions,
 		ejsPath
     }); %>
 </nav>

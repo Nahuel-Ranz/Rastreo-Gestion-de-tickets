@@ -1,4 +1,4 @@
-import { io } from "/socket.io/socket.io.esm.min.js";
+import { io } from "/vendor/socket.io.esm.min.js";
 
 let socket = null;
 export function getSocket() {
