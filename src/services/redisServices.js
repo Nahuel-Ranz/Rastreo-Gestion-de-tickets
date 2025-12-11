@@ -5,8 +5,8 @@ async function init(io) {
 	const { cli, sub } = await getRedis();
 	
 	await cli.config('SET', 'notify-keyspace-events', 'Ex');
-	
 	await sub.psubscribe('__keyevent@0__:expired');
+	
 	sub.on('pmessage', async (pattern, channel, key) => {
 		
 		// expiración de códigos

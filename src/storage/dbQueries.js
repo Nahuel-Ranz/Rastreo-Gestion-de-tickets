@@ -13,9 +13,9 @@ async function aproveNewUser(id, rol) {
     }
 }
 // ===========================================================================================================================
-async function updateLastActivity(session_id, lastActivity) {
+async function updateLastActivity(sid) {
     try {
-        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ session_id, lastActivity ]);
+        await mysql.execute('call actualizarUltimaActividad(?, ?)', [ sid, new Date() ]);
         return { ok: true };
     } catch (error) {
         console.error('Error al actualizar la última actividad (desde dbQueries): ', error);

@@ -6,7 +6,7 @@ const { getRedis } = require(`${utils.srcPath}storage/connections`);
 
 const userController = {};
 
-userController.login = async (req, res, io) => {
+userController.login = async (req, res) => {
     const { credential, pass } = req.body;
 
     const data = await dbQueries.getArgon2Hash(credential);
@@ -21,7 +21,7 @@ userController.login = async (req, res, io) => {
     const { sid, uid, last_activity } = sessionData.session;
     const { cli } = await getRedis();
     
-    await cli.set(`sess:${sid}`, uid, 'EX', 1800);
+    await cli.set(`sess:${sid}`, JSON.stringify({ uid, last_activity }) , 'EX', 1800);
     res.cookie('sid', sid, {
         httpOnly: true,
         maxAge: 1800 * 1000,
@@ -34,8 +34,8 @@ userController.login = async (req, res, io) => {
 };
 
 userController.logout = async (req, res, io) => {
-    const sid = req.cookies?.sid;
     const { cli } = await getRedis();
+    const sid = req.cookies?.sid;
 
     const modal = await ejs.renderFile(`${utils.ejsPath}components/modal.ejs`,
         { title:'Sesión', content: '<h1>Sesión Cerrada</h1>' }
