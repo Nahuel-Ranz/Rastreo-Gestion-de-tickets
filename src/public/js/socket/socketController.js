@@ -29,6 +29,7 @@ function socketListeners(socket) {
 		import('/js/modal.js')
 			.then( mod => mod.initModal());
 	});
+    socket.on('refresh_cookie', () => axios.get('/ping').catch(()=>{}));
     socket.on("chat_message", data => { });
     socket.on("notification", data => { });
 }

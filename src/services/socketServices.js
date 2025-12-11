@@ -8,72 +8,70 @@ function init(app) {
     const server = http.createServer(app);
     const io = new Server(server);
     
-    use(io);
-    on(io);
+    uses(io);
+    io.on('connection', (socket) => {
+        if(socket.isGuest) onGuest(socket);
+        else onAuthenticated(socket);
+    });
     return { server, io };
 }
 
-function use(io) {
+function uses(io) {
     io.use((socket, next) => {
         const raw = socket.request.headers.cookie;
-        if(!raw) {
-            socket.isGuest = true;
-            return next();
-        }
+        if(!raw) { socket.isGuest = true; return next(); }
 
         const cookies = cookie.parse(raw);
         const sid = cookies.sid;
-
-        if(!sid) {
-            socket.isGuest = true;
-            return next()
-        };
+        if(!sid) { socket.isGuest = true; return next(); }
 
         socket.sid = sid;
         next();
     });
 }
 
-function on(io) {
-    io.on('connection', async (socket) => {
-        if(socket.isGuest) return;
-        
-        const { cli } = await getRedis();
-        const sid = socket.sid;
+async function onGuest(socket) {
+    const { cli } = await getRedis();
 
-        const uid = await cli.get(`sess:${sid}`);
-
-        if(!uid) {
-            socket.disconnect(true);
-            return;
-        }
-
-        await cli.sadd(`sess_socket:${sid}`, socket.id);
-        await cli.expire(`sess_socket:${sid}`, 1800);
-
-        console.log(`Socket: ${socket.id} | vinculado a la sesión: ${sid} `);
-        socketListeners(socket, cli);
+    socket.on('verify_email', async ({ mail }) => {
+        await cli.set(`verify_email:${mail}`, socket.id, 'EX', 130);
     });
 }
 
-function socketListeners(socket, cli) {
+async function onAuthenticated(socket) {
+    const { cli } = await getRedis();
+    if(!saveSessionOnRedis(cli, socket)) return;
 
     socket.on('activity', async () => {
         const sid = socket.sid;
         if(!sid) return;
-
+    
         await cli.expire(`sess:${sid}`, 1800);
         await cli.expire(`sess_socket:${sid}`, 1800);
-    });
 
-    socket.on('verify_email', async ({mail}) => await cli.set(`verify_email:${mail}`, socket.id, 'EX', 130));
+        socket.emit('refresh_cookie');
+    });
+    
     socket.on('disconnect', async (reason) => {
         console.log(`Socket desconectado: ${socket.id}; Razón: ${reason}`);
         const sid = socket.sid;
         if(!sid) return;
-
+    
         await cli.srem(`sess_socket:${sid}`, socket.id);
     });
+}
+
+async function saveSessionOnRedis(cli, socket) {
+    const sid = socket.sid;
+    const uid = await cli.get(`sess:${sid}`);
+    if(!uid) { socket.disconnect(true); return false; }
+
+    await cli.sadd(`sess_socket:${sid}`, socket.id);
+    await cli.expire(`sess_socket:${sid}`, 1800);
+    await cli.expire(`sess:${sid}`, 1800);
+
+    console.log(`Socket: ${socket.id} | vinculado a la sesión: ${sid}`);
+    return true;
 }
 
 module.exports = { init }

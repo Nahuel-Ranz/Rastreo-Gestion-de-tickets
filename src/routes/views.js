@@ -24,5 +24,8 @@ module.exports = ({ io }) => {
     router.get('/notificaciones', isAuthenticated, (req, res) => res.render('notifications', { login:true }));
     router.get('/tipos_de_cuentas', isAuthenticated, (req, res) => res.render('access_control_dashboard', { login:true }));
     
+    // actualizar el tiempo de expiración
+    router.get('/ping', (req, res) => res.sendStatus(200));
+
     return router;
 };

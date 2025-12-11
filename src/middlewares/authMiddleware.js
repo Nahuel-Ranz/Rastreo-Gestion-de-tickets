@@ -12,10 +12,10 @@ module.exports = {
         const sid = req.cookies?.sid;
         if(!sid) return res.redirect('/');
         
-        const session = await cli.get(`sess:${sid}`);
-        if(!session) return res.redirect('/');
+        const uid = await cli.get(`sess:${sid}`);
+        if(!uid) return res.redirect('/');
 
-        req.userId = JSON.parse(session);
+        req.uid = uid;
         next();
     },
 
@@ -23,8 +23,8 @@ module.exports = {
         const sid = req.cookies?.sid;
         if(!sid) return next();
 
-        const session = await cli.get(`sess:${sid}`);
-        if(session) return res.redirect('/lista_de_espera');
+        const uid = await cli.get(`sess:${sid}`);
+        if(uid) return res.redirect('/lista_de_espera');
 
         next();
     }

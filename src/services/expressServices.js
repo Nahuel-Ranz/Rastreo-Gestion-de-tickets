@@ -1,6 +1,7 @@
 const { srcPath } = require('../utils/utils');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const { refreshSessionCookie } = require(`${srcPath}middlewares/updateSessionCookieMiddleware.js`);
 
 let app = null
 function init() {
@@ -14,6 +15,7 @@ function init() {
         app.use(express.static(`${srcPath}public`));
         app.use(express.urlencoded({ extended:true }));
         app.use(cookieParser());
+        app.use(refreshSessionCookie);
     }
     return app;
 }
