@@ -1,8 +1,8 @@
 {
     "c":{
-        "me":["ticket","phone","email","notification"],
+        "me":["ticket","phone","email"],
         "others":["ticket","phone","email"],
-        "general":["user","rol","area"]
+        "general":["rol","area"]
     },
     "r":{
         "ticket":{
@@ -14,35 +14,26 @@
             "me":["id","name","last_name","dni","phones","emails","birthdate","creation_date","rol","origin"],
             "others":["id","name","last_name","dni","phones","emails","birthdate","creation_date","rol","origin"]
         },
-        "session":{
-            "me":["id","user","device","os","browser","init","last_activity","end","status"],
-            "others":["id","user","device","os","browser","init","last_activity","end","status"]
-        },
         "permisos":true,
         "area":true,
-        "statistic":true,
-        "notification":true
+        "statistic":true
     },
     "u":{
         "ticket":{
-            "me":["origin","activity_date","details"],
-            "others":["origin","activity_date","details"]
+            "me":["origin","activity_date","details","status"],
+            "others":["origin","activity_date","details","status"]
         },
         "user":{
             "me":["phones","emails","rol","origin"],
             "others":["phones","emails","rol","origin"]
-        },
-        "session":{
-            "me":["status"],
-            "others":["status"]
         },
         "area":true,
         "permisos":true
     },
     "d":{
         "user":{
-            "me":["account","phones","emails","origin"],
-            "others":["account","phones","emails","origin"]
+            "me":["account","phones","email","origin"],
+            "others":["account","phones","email","origin"]
         },
         "rol":true,
         "area":["email"],

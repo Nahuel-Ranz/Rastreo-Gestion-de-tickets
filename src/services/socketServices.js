@@ -48,6 +48,7 @@ async function onAuthenticated(socket) {
 
 		// Levantamos la sesión desde Redis
 		let sess = await cli.get(`sess:${sid}`);
+        if(!sess) return;
 		sess = JSON.parse(sess);
 
 		// Diferencia de minutos
@@ -55,9 +56,9 @@ async function onAuthenticated(socket) {
 		const last = new Date(sess.last_activity).getTime();
 		const diffMinutes = (now - last) / (1000 * 60);
 		
-		sess.last_activity = new Date.toISOString();
+		sess.last_activity = new Date().toISOString();
 		await cli.set(`sess:${sid}`, JSON.stringify(sess), 'EX', 1800);
-		await cli.expire(`sess_socket:${sid}`, 1800);
+		await cli.expire(`sess_socket:${sid}`, 1860);
 
 		socket.emit('refresh_cookie', { refreshMysql: diffMinutes>=2 });
 	});
@@ -77,7 +78,7 @@ async function saveSessionOnRedis(cli, socket) {
     if(!uid_LastActivity) { socket.disconnect(true); return false; }
 
     await cli.sadd(`sess_socket:${sid}`, socket.id);
-    await cli.expire(`sess_socket:${sid}`, 1800);
+    await cli.expire(`sess_socket:${sid}`, 1860);
     await cli.expire(`sess:${sid}`, 1800);
 
     console.log(`Socket: ${socket.id} | vinculado a la sesión: ${sid}`);

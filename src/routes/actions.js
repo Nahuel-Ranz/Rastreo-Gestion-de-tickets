@@ -4,7 +4,7 @@ module.exports = ({ io }) => {
     const router = express.Router();
     const userController = require(`${srcPath}controllers/userController`);
     const registerController = require(`${srcPath}controllers/registerController`);
-    const { activityController } = require(`${srcPath}controllers/activityController`);
+    const activityController = require(`${srcPath}controllers/activityController`);
     
     router.post('/login', userController.login);
     router.post('/logout', (req, res) => userController.logout(req, res, io));
