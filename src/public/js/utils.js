@@ -33,6 +33,18 @@ export function adjustModal(modal, header, main, footer) {
     main.style.minHeight = (modalHeight-(headerHeight+footerHeight))+ "px";
 }
 
+// horizontal padding
+export function hp(e) {
+    e = getComputedStyle(e);
+    return parseFloat(e.paddingLeft) + parseFloat(e.paddingRight);
+}
+
+// virtical padding
+export function vp(e) {
+    e = getComputedStyle(e);
+    return parseFloat(e.paddingTop) + parseFloat(e.paddingBottom);
+}
+
 // ================= COMPORTAMIENTO ==========================================================
 // cierra todos los menus desplegados en la página.
 export function closeDropdowns() {

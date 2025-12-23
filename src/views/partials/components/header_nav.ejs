@@ -1,20 +1,22 @@
 <nav id="nav_header" class="flexRow">
     <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_notifications",
+        classes:'',
         button:{
-            btn: { id:'notifications_btn', type:'', classes:'dropdownSelector nav_font_color_fontSize' },
+            btn: { id:'notifications_btn', type:'', classes:'' },
             content:{name:'', icon:'far fa-bell-slash'}
         },
         items: notifications,
 		ejsPath
     }); %>
-    <a href="/lista_de_espera" class="nav_font_color_fontSize">TAREAS PENDIENTES</a>
-    <a href="/cola_de_ejecucion" class="nav_font_color_fontSize">COLA DE EJECUCIÓN</a>
+    <a href="/lista_de_espera" class="flexColumn">Tareas Pendientes</a>
+    <a href="/cola_de_ejecucion" class="flexColumn">Cola de Ejecución</a>
     <%- include(`${ejsPath}dropdowns/link-dropdown`, {
         id:"nav_menu",
+        classes:'',
         button:{
             btn: { id:'menu_btn', type:'', classes:'' },
-            content: { name: "Isaías Jonás Ranz Aquino", icon:"far fa-user-circle"}
+            content: { name: fullName, icon:"far fa-user-circle"}
         },
         items: linkMenuOptions,
 		ejsPath

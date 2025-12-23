@@ -1,11 +1,11 @@
-<p>Para proceden en la recuperación de su cuenta, escribir debajo su <strong>número de usuario</strong>, <strong>Email</strong>, <strong>número de celular</strong> o <strong>correo</strong> que haya registrado:</p>
+<p>Para proceder en la recuperación de su cuenta, escriba debajo su <strong>Credencial</strong> con la que se registró:</p>
 
 <%- include(`${ejsPath}components/input_group`, {
     group: { id:'credential_group', input:'credential_input'},
     input: { id:'credential', type:'text', req:true},
     label: { id:'credential_label', content:'Número de usuario, DNI, correo o celular'},
     validation: {
-        regex:/^\s*(?:[\w.%+-]+@(?:[a-z0-9-]+\.)+[a-z]{2,63}|\d{4,10})\s*$/i,
+        regex:/^\s*(?:[\w.%+-]+@(?:[a-z0-9-]+\.)+[a-z]{2,63}|\d{5,10})\s*$/i,
         error_message: 'Dato erróneo o incompleto.'
     }
 }); %>
@@ -13,6 +13,6 @@
 <div id="button_group" class="flexRow vp">
     <%- include(`${ejsPath}components/button`, {
         btn: { id:'enter', type:'submit', classes:''},
-        content: { name:'Enviar clave de recuperación al correo', icon:''}
+        content: { name:'Enviar clave de recuperación al Correo', icon:''}
     }); %>
 </div>

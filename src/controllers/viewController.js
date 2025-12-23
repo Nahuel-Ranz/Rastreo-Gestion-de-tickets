@@ -1,6 +1,7 @@
 const ejs = require('ejs');
 const { ejsPath, srcPath } = require('../utils/utils');
 const dbQueries = require(`${srcPath}storage/dbQueries`);
+const { getRedis } = require(`${srcPath}storage/connections`);
 // =================================================================================================================
 async function renderLogin(req, res) {
     try {
@@ -68,6 +69,45 @@ async function renderWaitingConfirm(req, res) {
     }
 }
 // =================================================================================================================
+async function renderRecoveryPasswordEmail(req, res) {
+    try {
+        const formContent = await ejs.renderFile(`${ejsPath}components/form_content/recovery_email.ejs`,{ ejsPath });
+        const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
+            { id:'page_form', title: 'RECUPERACIÓN DE CONTRASEÑA', content: formContent }
+        );
+        res.render('base.ejs', { title:'Recuperación de la contraseña', content: form });
+    } catch(error) {
+        console.error(error);
+        res.send('No se ha podido cargar el formulario de recuperación de la contraseña: ', error);
+    }
+}
+// =================================================================================================================
+async function renderRecoveryPasswordNewPassword(req, res) {
+    try {
+        const formContent = await ejs.renderFile(`${ejsPath}components/form_content/recovery_new_password.ejs`,{ ejsPath });
+        const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
+            { id:'page_form', title: 'INTRODUZCA SU NUEVA CONTRASEÑA', content: formContent }
+        );
+        res.render('base.ejs', { title:'Recuperación - Nueva Contraseña', content: form });
+    } catch(error) {
+        console.error(error);
+        res.send('Error al cargar el formulario de nueva contraseña: ', error);
+    }
+}
+// =================================================================================================================
+async function renderUpdatedPassword(req, res) {
+    try {
+        const formContent = await ejs.renderFile(`${ejsPath}components/form_content/updated_password.ejs`,{ ejsPath });
+        const form = await ejs.renderFile(`${ejsPath}components/forms.ejs`,
+            { id:'page_form', title: 'CONTRASEÑA ACTUALIZADA', content: formContent }
+        );
+        res.render('base.ejs', { title:'Contraseña Actualizada', content: form });
+    } catch(error) {
+        console.error(error);
+        res.send('Aunque la contraseña ha sido correctamente actualizada, hubo un error al cargar la confirmación: ', error);
+    }
+}
+// =================================================================================================================
 async function renderWaitingList(req, res) {
 	const tickets = [];
 	const options = [
@@ -85,9 +125,11 @@ async function renderWaitingList(req, res) {
 			{ title:'Lista de espera', options, ejsPath, tickets: tickets.join('') }
 		);
 
+        const completedName = await fullName(req);
         const linkMenuOptions = await navBarMenu();
 		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, {
             ejsPath,
+            fullName: completedName,
             linkMenuOptions: linkMenuOptions.join(''),
             notifications: '<li>No Hay notificaciones aún</li>'
         });
@@ -118,9 +160,11 @@ async function renderExecutionQueue(req, res) {
 			{ title:'Cola de ejecución', options, ejsPath, tickets: tickets.join('') }
 		);
 
+        const completedName = await fullName(req);
         const linkMenuOptions = await navBarMenu();
 		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, {
             ejsPath,
+            fullName: completedName,
             linkMenuOptions: linkMenuOptions.join(''),
             notifications: '<li>No Hay notificaciones aún</li>'
         });
@@ -129,6 +173,29 @@ async function renderExecutionQueue(req, res) {
 	} catch (error) {
         console.error(error);
         res.send('Ocurrío un error al intentar obtener los tickets');
+	}
+}
+// =================================================================================================================
+async function renderProfile(req, res) {
+	try {
+
+        const completedName = await fullName(req);
+        const linkMenuOptions = await navBarMenu();
+		const nav = await ejs.renderFile(`${ejsPath}components/header_nav.ejs`, {
+            ejsPath,
+            fullName: completedName,
+            linkMenuOptions: linkMenuOptions.join(''),
+            notifications: '<li>No Hay notificaciones aún</li>'
+        });
+		
+        const card = await ejs.renderFile(`${ejsPath}components/card.ejs`,
+            { id:'card-container', title:'Perfil', content: '<p>Primer Contenido</p>' }
+        );
+
+		res.render('base.ejs', { title: 'Cola de ejecución', content: card, nav });
+	} catch (error) {
+        console.error(error);
+        res.send('Error al intetar obtener los datos del perfil: ', error);
 	}
 }
 // =================================================================================================================
@@ -145,18 +212,33 @@ async function navBarMenu() {
 
     for(let i of data) {
         items.push(await ejs.renderFile(`${ejsPath}dropdowns/link-dropdown-item.ejs`,
-            { get:i.get, destination:i.destination, description:i.description, icon:i.icon })
+            { get:i.get, destination:i.destination, description:i.description, icon:i.icon, ejsPath })
         );
     }
 
     return items || [{get:true, destination:'#', description:'NONE', icon:'fas fa-question-circle'}];
 }
 // =================================================================================================================
+async function fullName(req) {
+    const sid = req.cookies?.sid;
+    if(!sid) return 'Usuario';
+
+    const { cli } = await getRedis();
+    let sess = await cli.get(`sess:${sid}`);
+    sess = JSON.parse(sess);
+
+    return `${sess.name} ${sess.last_name}`;
+}
+// =================================================================================================================
 module.exports = {
     renderExecutionQueue,
     renderLogin,
+    renderProfile,
+    renderRecoveryPasswordEmail,
+    renderRecoveryPasswordNewPassword,
     renderRegister,
     renderSetPassword,
+    renderUpdatedPassword,
     renderWaitingConfirm,
 	renderWaitingList
 }

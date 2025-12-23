@@ -132,7 +132,7 @@ end; // delimiter ;
 drop procedure if exists iniciarSesion;
 delimiter //
 create procedure iniciarSesion(
-	in _usuario_id int,
+	in _uid int,
     in _dispositivo varchar(20),
     in _ip varchar(20),
     in _so varchar(25),
@@ -141,8 +141,6 @@ create procedure iniciarSesion(
     in _ultimaActividad datetime
 )
 begin
-    declare sesion_id_ int default 0;
-    
     declare exit handler for sqlexception
     begin
 		rollback;
@@ -151,12 +149,18 @@ begin
     
     start transaction;
 		insert into Sesiones(id, usuario_id, dispositivo, ip, so, navegador, inicio, ultimaActividad, activa)
-		values(null, _usuario_id, _dispositivo, _ip, _so, _navegador, _inicio, _ultimaActividad, true);
-		set sesion_id_ = last_insert_id();
+		values(null, _uid, _dispositivo, _ip, _so, _navegador, _inicio, _ultimaActividad, true);
     commit;
     
     select
-		true as ok, sesion_id_ as session_id, _ultimaActividad as last_activity, _usuario_id as user_id;
+		true as ok,
+        last_insert_id() as sid,
+        _ultimaActividad as last_activity,
+        _uid as uid,
+        nombre,
+        apellido
+	from Personas
+	where id = _uid;
 end; // delimiter ;
 /* --------------------------------------------------------------------------------------- */
 /* --------------------------------------------------------------------------------------- */

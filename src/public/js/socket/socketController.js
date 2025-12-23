@@ -23,8 +23,12 @@ function socketListeners(socket) {
         showElement(inputStates['code'].errorMessage);
     });
 	
-	socket.on("session_expired", () => window.location.href = '/login');
-	socket.on('force_logout', (modal) => {
+	socket.on("session_expired", ({ destination }) => {
+        alert('Sesión Expirada');
+        window.location.href = destination;
+    });
+
+	socket.on('force_logout', ({ modal }) => {
 		createElementAfter(document.getElementById('main'), modal);
 		import('/js/modal.js')
 			.then( mod => mod.initModal());

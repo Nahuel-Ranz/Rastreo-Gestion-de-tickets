@@ -1,0 +1,6 @@
+@keyframes slideText {
+	0%   { transform: translateX(0); }
+	48%  { transform: translateX(calc(-1 * var(--move))); }
+	52%  { transform: translateX(calc(-1 * var(--move))); }
+	96% { transform: translateX(0); }
+}

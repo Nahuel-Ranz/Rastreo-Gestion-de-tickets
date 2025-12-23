@@ -25,7 +25,7 @@ async function init(io) {
 			const sid = key.replace('sess:', '');
 
 			const sockets = await cli.smembers(`sess_socket:${sid}`);
-			sockets.forEach( id => io.to(id).emit(`session_expired`));
+			io.to(`sess:${sid}`).emit(`session_expired`, { destination:'/' });
 
 			await cli.del(`sess_socket:${sid}`);
 			console.log(`Sesión ${sid} expirada. ${sockets.length} sockets cerrados`);

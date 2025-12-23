@@ -13,15 +13,26 @@ userController.login = async (req, res) => {
     if(!data.ok) return res.json(data);
 
     const verified = await argon2.verify(data.hash, pass);
-    if(!verified) return res.json({ ok:false, credential:'pass', message: 'Contraseña incorrecta' });
+    if(!verified) return res.json({
+        ok:false,
+        credential:'pass',
+        message: 'Contraseña incorrecta'
+    });
 
     const sessionData = await dbQueries.initSession(req, data.id);
     if(!sessionData.ok) return res.json(sessionData);
-
-    const { sid, uid, last_activity } = sessionData.session;
+    
+    
+    const { sid, last_activity, uid, name, last_name } = sessionData.session;
     const { cli } = await getRedis();
     
-    await cli.set(`sess:${sid}`, JSON.stringify({ uid, last_activity }) , 'EX', 1800);
+    let up = await dbQueries.getUserPermissions(uid);
+    await cli.set(`user:${uid}`, JSON.stringify(up.data.permissions), 'EX', 1800);
+
+    await cli.set(`sess:${sid}`, JSON.stringify({
+        uid, name, last_name, last_activity
+    }) , 'EX', 1800);
+    
     res.cookie('sid', sid, {
         httpOnly: true,
         maxAge: 1800 * 1000,
@@ -35,7 +46,7 @@ userController.login = async (req, res) => {
 
 userController.logout = async (req, res, io) => {
     const { cli } = await getRedis();
-    const sid = req.cookies?.sid;
+    const sid = req.cookies?.sid; console.log(`DESDE LOGOUT: ${sid}`);
 
     const modal = await ejs.renderFile(`${utils.ejsPath}components/modal.ejs`,
         { title:'Sesión', content: '<h1>Sesión Cerrada</h1>' }

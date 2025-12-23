@@ -2,18 +2,37 @@ import {
     closeDropdowns,
     closeDropdownsExcept,
     hideElement,
+    hp,
     radiusToAll
 } from '/js/utils.js';
 
 export function components() {
     radiusToAll(document.getElementsByTagName('button'));
+    animateParagraph(document.querySelectorAll('.animated_paragraph'));
 
     document.addEventListener('click', closeDropdowns);
     dropdowns(document.querySelectorAll('.dropdown'));
+
     flatpickrBirthdates(document.querySelectorAll('.pickr-container.birthdate'));
     flatpickrEventDates(document.querySelectorAll('.pickr-container.event_date'));
 
     //document.getElementById('logout').addEventListener('click', logout);
+}
+
+export function resizingComponents() {
+    animateParagraph(document.querySelectorAll('.animated_paragraph'));
+}
+
+function animateParagraph(paragraphs) {
+    paragraphs.forEach( p => {
+        const span = p.querySelector('span');
+
+        const contentWidth = p.clientWidth - hp(p);
+        const textWidth = span.scrollWidth;
+
+        const move = Math.max(0, textWidth - contentWidth);
+        span.style.setProperty('--move', `${move}px`);
+    });
 }
 
 function dropdowns(dropdowns) {

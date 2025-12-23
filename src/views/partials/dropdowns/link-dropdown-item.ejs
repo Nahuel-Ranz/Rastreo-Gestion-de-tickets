@@ -3,7 +3,9 @@
         <%= get ? `href=${destination}` : `id=${destination}` %>
         class="flexRow"
     >
-        <p><%= description %></p>
+        <%- include(`${ejsPath}components/animated_paragraph.ejs`, {
+			paragraph: description
+		}); %>
         <i class="<%= icon %>"></i>
     </a>
 </li>

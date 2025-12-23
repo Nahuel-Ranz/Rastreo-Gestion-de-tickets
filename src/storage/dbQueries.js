@@ -193,16 +193,18 @@ async function initSession(req, id_user) {
         const [result] = await mysql.query('call iniciarSesion(?,?,?,?,?,?,?);', [
             id_user, device, ip, os, browser, date, date
         ]);
-
+        
         const response = result[0][0];
         if(!response.ok) return { ok:false, credential:'error', message: response.error };
 
         return {
             ok: true,
             session: {
-                sid: response.session_id,
+                sid: response.sid,
                 last_activity: response.last_activity,
-                uid: response.user_id
+                uid: response.uid,
+                name: response.nombre,
+                last_name: response.apellido
             },
         };
     } catch (error) {

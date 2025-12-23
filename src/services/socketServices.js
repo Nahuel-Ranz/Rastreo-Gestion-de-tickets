@@ -51,16 +51,14 @@ async function onAuthenticated(socket) {
         if(!sess) return;
 		sess = JSON.parse(sess);
 
-		// Diferencia de minutos
-		const now = Date.now();
-		const last = new Date(sess.last_activity).getTime();
-		const diffMinutes = (now - last) / (1000 * 60);
-		
+        const ok = refreshCookie(sess.last_activity);
 		sess.last_activity = new Date().toISOString();
+
 		await cli.set(`sess:${sid}`, JSON.stringify(sess), 'EX', 1800);
 		await cli.expire(`sess_socket:${sid}`, 1860);
+        await cli.expire(`user:${sess.uid}`, 1800);
 
-		socket.emit('refresh_cookie', { refreshMysql: diffMinutes>=2 });
+		socket.emit('refresh_cookie', { refreshMysql: ok });
 	});
     
     socket.on('disconnect', async (reason) => {
@@ -74,15 +72,29 @@ async function onAuthenticated(socket) {
 
 async function saveSessionOnRedis(cli, socket) {
     const sid = socket.sid;
-    const uid_LastActivity = await cli.get(`sess:${sid}`);
-    if(!uid_LastActivity) { socket.disconnect(true); return false; }
+    let user = await cli.get(`sess:${sid}`);
+    if(!user) { socket.disconnect(true); return false; }
+    user = JSON.parse(user);
+    socket.join(`sess:${sid}`);
 
+    const ok = refreshCookie(user.last_activity);
+    user.last_activity = new Date().toISOString();
+
+    await cli.set(`sess:${sid}`, JSON.stringify(user), 'EX', 1800);
     await cli.sadd(`sess_socket:${sid}`, socket.id);
     await cli.expire(`sess_socket:${sid}`, 1860);
-    await cli.expire(`sess:${sid}`, 1800);
+    await cli.expire(`user:${user.uid}`, 1800);
 
     console.log(`Socket: ${socket.id} | vinculado a la sesión: ${sid}`);
+    socket.emit('refresh_cookie', { refreshMysql: ok });
     return true;
+}
+
+function refreshCookie(last_activity) {
+    const now = Date.now();
+    const last = new Date(last_activity).getTime();
+    const diffMinutes = (now - last) / (1000 * 60);
+    return diffMinutes >= 2;
 }
 
 module.exports = { init }

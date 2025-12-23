@@ -1,12 +1,12 @@
 button {
+    width: 100%;
     border-top: 3px solid var(--border-primary-color);
     border-left: 3px solid var(--border-primary-color);
     border-right: 1px solid var(--border-primary-color);
     border-bottom: 1px solid var(--border-primary-color);
 
-    width: var(--full-width-parent);
-    * { color: var(--primary-font-color);}
-    p { white-space: nowrap;}
+    * { color: var(--primary-font-color); }
+    p { text-align: center; }
 }
 
 button:hover {

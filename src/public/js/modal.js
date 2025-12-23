@@ -5,7 +5,7 @@ export function initModal() {
     const container = document.getElementById('modal_container');
     if(!container) return;
 
-    const modal = container.firstElementChild;
+    const modal = container.getElementById('modal');
     closeModal(container, modal);
     layoutModal(modal);
 
@@ -14,7 +14,7 @@ export function initModal() {
 };
 
 function closeModal(container, modal) {
-    const closer = modal.firstElementChild;
+    const closer = modal.getElementById('close-modal');
     deleteElement(closer, container);
 }
 

@@ -1,10 +1,12 @@
 <button
 	type="<%= btn.type || 'button' %>"
 	id="<%= btn.id %>"
-	class="flexRow vp hp <%= btn.classes %>"
+	class="flexRow <%= btn.classes %>"
 >
 	<% if(content.name) { %>
-		<p><%= content.name %></p>
+		<%- include(`${ejsPath}components/animated_paragraph.ejs`, {
+			paragraph: content.name
+		}); %>
 	<% } %>
 	<% if(content.icon) { %>
 		<i class="<%= content.icon %>"></i>

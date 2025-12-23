@@ -1,0 +1,16 @@
+.animated_paragraph {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: none;
+    overflow: hidden;
+
+    span {
+        display: inline-block;
+        white-space: nowrap;
+        width: fit-content;
+    }
+    &:hover span {
+        animation: slideText 2.5s infinite;
+    }
+}

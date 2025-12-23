@@ -1,16 +1,13 @@
 .dropdown {
     position: relative;
-    width: var(--full-width-parent);
-    .dropdownSelector {   
-    }
+    width: 100%;
+    
     .dropdownList {
         justify-content: start;
         position: absolute;
         top: 100%;
-        width: var(--full-width-parent);
+        width: 100%;
         background-color: transparent;
-        border-top: 2px solid var(--secondary-color);
-        border-bottom: 2px solid var(--secondary-color);
         z-index: 4;
         max-height: 50vh;
         overflow-y: auto;
